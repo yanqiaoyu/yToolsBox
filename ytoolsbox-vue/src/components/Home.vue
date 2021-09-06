@@ -4,35 +4,35 @@
       <div>
         <img src="../assets/cat.png" alt="" class="catImage" />
         <span>我的工具盒</span>
-        <el-button type='warning'>退出</el-button>
       </div>
+      <el-button type="warning" @click="logout">退出</el-button>
     </el-header>
 
     <el-container>
       <el-aside width="200px">
-    <el-menu
-      background-color="#4d505b"
-      text-color="#fff"
-      active-text-color="#ffd04b">
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-s-goods"></i>
-          <span>工具盒</span>
-        </template>
-          <el-menu-item index="1-1">第一个工具</el-menu-item>
-      </el-submenu>
+        <el-menu
+          background-color="#4d505b"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-s-goods"></i>
+              <span>工具盒</span>
+            </template>
+            <el-menu-item index="1-1">第一个工具</el-menu-item>
+          </el-submenu>
 
-      <el-menu-item index="2">
-        <i class="el-icon-setting"></i>
-        <span slot="title">配置</span>
-      </el-menu-item>
+          <el-menu-item index="2">
+            <i class="el-icon-setting"></i>
+            <span slot="title">配置</span>
+          </el-menu-item>
 
-      <el-menu-item index="3">
-        <i class="el-icon-info"></i>
-        <span slot="title">关于我</span>
-      </el-menu-item>
-
-    </el-menu>
+          <el-menu-item index="3">
+            <i class="el-icon-info"></i>
+            <span slot="title">关于我</span>
+          </el-menu-item>
+        </el-menu>
       </el-aside>
 
       <el-main>Main</el-main>
@@ -42,25 +42,28 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       isCollapse: true
     }
   },
   methods: {
-    handleOpen (key, keyPath) {
+    handleOpen(key, keyPath) {
       console.log(key, keyPath)
     },
-    handleClose (key, keyPath) {
+    handleClose(key, keyPath) {
       console.log(key, keyPath)
     },
-    logout () {
+    logout() {
       window.sessionStorage.clear()
       this.$router.push('/login')
+      this.$message({
+        message: '成功退出',
+        type: 'success'
+      })
     }
   }
 }
-
 </script>
 
 <style lang="less" scoped>
@@ -79,10 +82,11 @@ export default {
     to(#07bdf4)
   );
   background: linear-gradient(90deg, #0388e5 0, #07bdf4);
-  display: felx;
+  display: flex;
   justify-content: space-between;
   padding-left: 10;
   font-size: 25px;
+  align-items: center;
   > div {
     display: flex;
     align-items: center;

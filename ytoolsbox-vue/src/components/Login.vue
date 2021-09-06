@@ -12,14 +12,26 @@
 
       <div>
         <!-- 注意这里用到的组件，必须在plugins的elment.js里面导入 -->
-        <el-form class="login_form" :model="loginForm" :rules="rules" ref="login_form_ref">
+        <el-form
+          class="login_form"
+          :model="loginForm"
+          :rules="rules"
+          ref="login_form_ref"
+        >
           <!-- 账号 -->
           <el-form-item prop="name">
-            <el-input prefix-icon="el-icon-user" v-model="loginForm.name"></el-input>
+            <el-input
+              prefix-icon="el-icon-user"
+              v-model="loginForm.name"
+            ></el-input>
           </el-form-item>
           <!-- 密码 -->
           <el-form-item prop="password">
-            <el-input prefix-icon="el-icon-key" v-model="loginForm.password" type="password"></el-input>
+            <el-input
+              prefix-icon="el-icon-key"
+              v-model="loginForm.password"
+              type="password"
+            ></el-input>
           </el-form-item>
           <!-- 按钮区域 -->
           <el-form-item class="login_btn">
@@ -40,7 +52,7 @@
 import qs from 'qs'
 
 export default {
-  data () {
+  data() {
     return {
       loginForm: {
         name: 'admin',
@@ -59,15 +71,18 @@ export default {
     }
   },
   methods: {
-    reset () {
+    reset() {
       // console.log(this)
       this.$refs.login_form_ref.resetFields()
     },
-    login () {
-      this.$refs.login_form_ref.validate(async (valid) => {
+    login() {
+      this.$refs.login_form_ref.validate(async valid => {
         // console.log(valid)
         if (!valid) return
-        const result = await this.$http.post('login', qs.stringify(this.loginForm))
+        const result = await this.$http.post(
+          'login',
+          qs.stringify(this.loginForm)
+        )
         console.log(result.data)
         if (result.data.data.status_code !== 200) {
           this.$message.error('登陆失败')
@@ -75,7 +90,7 @@ export default {
         }
         // alert('登陆成功')
         this.$message({
-          message: '恭喜你，登陆成功',
+          message: '成功登陆',
           type: 'success'
         })
         // 登录成功后，需要保存token至本地
@@ -142,7 +157,7 @@ export default {
 }
 
 // 登录整体表单
-.login_form{
+.login_form {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -152,7 +167,7 @@ export default {
 }
 
 // 登录按钮
-.login_btn{
+.login_btn {
   display: flex;
   justify-content: flex-end;
 }

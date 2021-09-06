@@ -4,6 +4,7 @@
       <div>
         <img src="../assets/cat.png" alt="" class="catImage" />
         <span>我的工具盒</span>
+        <el-button type='warning'>退出</el-button>
       </div>
     </el-header>
 
@@ -52,6 +53,10 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    logout () {
+      window.sessionStorage.clear()
+      this.$router.push('/login')
     }
   }
 }

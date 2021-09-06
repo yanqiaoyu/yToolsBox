@@ -16,24 +16,27 @@ func main() {
 		password := c.PostForm("password")
 		log.Print(name, password)
 
-		if name != "admin" {
-			c.JSON(401, gin.H{
-				"info": "登录失败",
-			})
+		// 账户名密码错误
+		if password != "admin" || name != "admin" {
+			data := map[string]interface{}{
+				"data": map[string]interface{}{
+					"status_code": 401,
+					"message":     "账号密码错误",
+				},
+			}
+			c.JSON(200, data)
 			return
 		}
 
-		if password != "admin" {
-			c.JSON(401, gin.H{
-				"info": "登录失败",
-			})
-			return
+		data := map[string]interface{}{
+			"data": map[string]interface{}{
+				"status_code": 200,
+				"message":     "登录成功",
+				"token":       "123456",
+			},
 		}
 
-		c.JSON(200, gin.H{
-			"name":     name,
-			"password": password,
-		})
+		c.JSON(200, data)
 	})
 	r.Run(":80") // 监听并在 0.0.0.0:80 上启动服务
 }

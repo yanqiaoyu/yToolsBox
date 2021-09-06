@@ -8,7 +8,7 @@ const routes = [
   // 将根路径 '/'，重定向到 '/login'
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/login'
   },
   {
     path: '/login',
@@ -30,6 +30,18 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // 如果将要访问的路径是/login，那么放行
+  if (to.path === '/login') return next()
+
+  // 拿取本地的token
+  const tokenStr = window.sessionStorage.getItem('token')
+  // 如果本地没有token，那么返回登录界面
+  if (!tokenStr) return next('/login')
+  // 如果本地有token，那么放行
+  next()
 })
 
 export default router

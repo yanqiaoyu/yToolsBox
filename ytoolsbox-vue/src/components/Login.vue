@@ -68,13 +68,20 @@ export default {
         // console.log(valid)
         if (!valid) return
         const result = await this.$http.post('login', qs.stringify(this.loginForm))
-        console.log(result)
-        if (result.status !== 200) this.$message.error('登陆')
+        console.log(result.data)
+        if (result.data.data.status_code !== 200) {
+          this.$message.error('登陆失败')
+          return
+        }
         // alert('登陆成功')
         this.$message({
           message: '恭喜你，登陆成功',
           type: 'success'
         })
+        // 登录成功后，需要保存token至本地
+        window.sessionStorage.setItem('token', result.data.data.token)
+        // 编程式路由，跳转页面
+        this.$router.push('/home')
       })
     }
   }

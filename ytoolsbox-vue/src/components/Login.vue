@@ -7,7 +7,7 @@
       <!-- 这个是登录的白色的框的容器 -->
       <div class="login_image">
         <!-- 这个是登录的图片 -->
-        <img src="../assets/logo.png" alt="" />
+        <img src="../assets/cat.png" alt="" />
       </div>
 
       <div>

@@ -44,8 +44,11 @@
 export default {
   data() {
     return {
-      isCollapse: true
+      menuList: []
     }
+  },
+  created() {
+    this.getMenuList()
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -61,6 +64,13 @@ export default {
         message: '成功退出',
         type: 'success'
       })
+    },
+    async getMenuList() {
+      const { data: res } = await this.$http.get('menus')
+      console.log(res)
+      if (res.meta.status_code !== 200)
+        return this.$message.error('获取首页信息失败')
+      this.menuList = res.data
     }
   }
 }

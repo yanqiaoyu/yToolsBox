@@ -10,28 +10,43 @@
 
     <el-container>
       <el-aside width="200px">
+        <div></div>
+        <!-- unique-opened：一次只能有一个子模块 -->
         <el-menu
           background-color="#4d505b"
           text-color="#fff"
-          active-text-color="#ffd04b"
+          active-text-color="#409eff"
+          :unique-opened="true"
         >
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-s-goods"></i>
-              <span>工具盒</span>
-            </template>
-            <el-menu-item index="1-1">第一个工具</el-menu-item>
-          </el-submenu>
+          <template v-for="item in menuList">
+            <el-submenu
+              v-if="item.child.length"
+              :index="item.id + ''"
+              :key="item.id"
+            >
+              <template slot="title">
+                <i :class="iconList[item.id]"></i>
+                <span>{{ item.authName }}</span>
+              </template>
+              <el-menu-item
+                :index="child.id + ''"
+                v-for="child in item.child"
+                :key="child.id"
+              >
+                <template slot="title">
+                  <i :class="childIconList[child.id]"></i>
+                  <span>{{ child.authName }}</span>
+                </template>
+              </el-menu-item>
+            </el-submenu>
 
-          <el-menu-item index="2">
-            <i class="el-icon-setting"></i>
-            <span slot="title">配置</span>
-          </el-menu-item>
-
-          <el-menu-item index="3">
-            <i class="el-icon-info"></i>
-            <span slot="title">关于我</span>
-          </el-menu-item>
+            <el-menu-item v-else :index="item.id + ''" :key="item.id">
+              <template slot="title">
+                <i :class="iconList[item.id]"></i>
+                <span>{{ item.authName }}</span>
+              </template>
+            </el-menu-item>
+          </template>
         </el-menu>
       </el-aside>
 
@@ -44,7 +59,18 @@
 export default {
   data() {
     return {
-      menuList: []
+      menuList: [],
+      // 动态获取icon，当然这里写死了，如果后续新增了，这里也要改
+      iconList: {
+        '0': 'el-icon-view',
+        '1': 'el-icon-s-goods',
+        '2': 'el-icon-setting',
+        '3': 'el-icon-info'
+      },
+      childIconList: {
+        '201': 'el-icon-s-custom',
+        '202': 'el-icon-cpu'
+      }
     }
   },
   created() {
@@ -67,10 +93,12 @@ export default {
     },
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')
-      console.log(res)
+      // console.log(res)
       if (res.meta.status_code !== 200)
         return this.$message.error('获取首页信息失败')
       this.menuList = res.data
+      // console.log(this.menuList)
+      // console.log(this.menuList[0])
     }
   }
 }
@@ -117,6 +145,10 @@ export default {
     to(#3b3e47)
   );
   background: linear-gradient(180deg, #4d505b 0, #3b3e47);
+  // 这个是为了解决子模块展开时对其的问题
+  .el-menu {
+    border-right: none;
+  }
 }
 
 .el-main {
@@ -124,8 +156,16 @@ export default {
 }
 
 .catImage {
-  height: 100%;
+  height: 75%;
   display: flex;
+  // 给这个图片添加一个正方形的灰色边框
+  border: solid #eee;
+  // 把边框变成圆角
+  border-radius: 100%;
+  //图片和边框之间有间距，5px
+  padding: 5px;
+  // 添加阴影
+  box-shadow: 0 0 10px #ddd;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {

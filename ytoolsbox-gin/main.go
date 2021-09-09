@@ -9,19 +9,35 @@ import (
 )
 
 type menus struct {
+	// 存放数据的
 	Data []menus_data `json:"data"`
-	Meta menus_meta   `json:"meta"`
+	// 存放返回值信息的
+	Meta menus_meta `json:"meta"`
 }
 
 type menus_data struct {
-	Id       int    `json:"id"`
-	AuthName string `json:"authname"`
-	Path     string `json:"path"`
+	// 模块的ID
+	Id int `json:"id"`
+	// 模块的名称
+	AuthName string `json:"authName"`
+	// 模块的路径
+	Path string `json:"path"`
+	// 模块的子模块
+	Child_menus []child_menus `json:"child"`
 }
 
 type menus_meta struct {
 	Msg         string `json:"msg"`
 	Status_code int    `json:"status_code"`
+}
+
+type child_menus struct {
+	// 子模块的ID
+	Id int `json:"id"`
+	// 子模块的名称
+	AuthName string `json:"authName"`
+	// 子模块的路径
+	Path string `json:"path"`
 }
 
 func main() {
@@ -57,23 +73,15 @@ func main() {
 	})
 
 	r.GET("/menus", func(c *gin.Context) {
-
-		// data := map[string]menus{
-		// 	"0": menus{0, "能效总览", "dashboard"},
-		// 	"1": menus{1, "工具盒", "toolbox"},
-		// 	"2": menus{2, "全局配置", "globalconfig"},
-		// 	"3": menus{3, "关于", "about"},
-		// 	"meta": map[string]interface{}{
-		// 		"msg":         "suc",
-		// 		"status_code": 200,
-		// 	},
-		// }
 		data := menus{
 			Data: []menus_data{
-				{0, "能效总览", "dashboard"},
-				{1, "工具盒", "toolbox"},
-				{2, "全局配置", "globalconfig"},
-				{3, "关于", "about"},
+				{0, "能效总览", "dashboard", []child_menus{}},
+				{1, "工具盒总览", "toolbox", []child_menus{}},
+				{2, "全局配置", "globalconfig", []child_menus{
+					{201, "用户管理", "userconfig"},
+					{202, "系统管理", "systemconfig"},
+				}},
+				{3, "关于", "about", []child_menus{}},
 			},
 			Meta: menus_meta{
 				Msg:         "suc",

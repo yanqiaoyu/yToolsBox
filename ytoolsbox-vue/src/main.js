@@ -8,7 +8,7 @@ import './assets/css/global.css'
 import axios from 'axios'
 
 // 配置请求的路径
-axios.defaults.baseURL = 'http://localhost/'
+axios.defaults.baseURL = 'http://localhost/api/auth/'
 // axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
   console.log(config)

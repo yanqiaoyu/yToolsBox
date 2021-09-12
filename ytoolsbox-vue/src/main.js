@@ -1,3 +1,11 @@
+/*
+ * @Author: YanQiaoYu
+ * @Github: https://github.com/yanqiaoyu?tab=repositories
+ * @Date: 2021-09-11 23:48:37
+ * @LastEditors: YanQiaoYu
+ * @LastEditTime: 2021-09-12 12:27:09
+ * @FilePath: /ytoolsbox-vue/src/main.js
+ */
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -9,7 +17,6 @@ import axios from 'axios'
 
 // 配置请求的路径
 axios.defaults.baseURL = 'http://localhost/api/auth/'
-// axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
   console.log(config)
   config.headers.Authorization = window.sessionStorage.getItem('token')

@@ -9,14 +9,17 @@
     </el-header>
 
     <el-container>
-      <el-aside width="200px">
-        <div></div>
+      <el-aside :width="isCollapse ? '64px' : '200px'">
+        <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- unique-opened：一次只能有一个子模块 -->
         <el-menu
+          class="el-menu-vertical-demo"
           background-color="#4d505b"
           text-color="#fff"
           active-text-color="#409eff"
           :unique-opened="true"
+          :collapse="isCollapse"
+          :collapse-transition="false"
         >
           <template v-for="item in menuList">
             <el-submenu
@@ -70,7 +73,8 @@ export default {
       childIconList: {
         '201': 'el-icon-s-custom',
         '202': 'el-icon-cpu'
-      }
+      },
+      isCollapse:false
     }
   },
   created() {
@@ -99,7 +103,13 @@ export default {
       this.menuList = res.data
       // console.log(this.menuList)
       // console.log(this.menuList[0])
+    },
+    toggleCollapse() {
+      console.log("展开与收起状态:", this.isCollapse)
+      this.isCollapse = !this.isCollapse
     }
+
+    
   }
 }
 </script>
@@ -172,4 +182,15 @@ export default {
   width: 200px;
   min-height: 400px;
 }
+
+.toggle-button{
+  background-color: #4a5064;
+  font-size: 10px;
+  line-height: 24px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+}
+
 </style>

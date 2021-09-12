@@ -1,130 +1,53 @@
+/*
+ * @Author: YanQiaoYu
+ * @Github: https://github.com/yanqiaoyu
+ * @Date: 2021-03-26 10:43:57
+ * @LastEditors: YanQiaoYu
+ * @LastEditTime: 2021-09-12 12:20:58
+ * @FilePath: /ytoolsbox-gin/main.go
+ */
 package main
 
 import (
-	"log"
-	"net/http"
-	"reflect"
+	"main/common"
+	"main/middleware"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
-type menus struct {
-	// 存放数据的
-	Data []menus_data `json:"data"`
-	// 存放返回值信息的
-	Meta menus_meta `json:"meta"`
-}
-
-type menus_data struct {
-	// 模块的ID
-	Id int `json:"id"`
-	// 模块的名称
-	AuthName string `json:"authName"`
-	// 模块的路径
-	Path string `json:"path"`
-	// 模块的子模块
-	Child_menus []child_menus `json:"child"`
-}
-
-type menus_meta struct {
-	Msg         string `json:"msg"`
-	Status_code int    `json:"status_code"`
-}
-
-type child_menus struct {
-	// 子模块的ID
-	Id int `json:"id"`
-	// 子模块的名称
-	AuthName string `json:"authName"`
-	// 子模块的路径
-	Path string `json:"path"`
-}
-
 func main() {
+	// 1.首先初始化读取配置文件
+	InitConfig()
+	// 2.从配置文件中拿到了配置，那么可以初始化数据库了
+	common.InitDB()
+	// 3.初始化一个服务器
 	r := gin.Default()
-	r.Use(Cors()) //开启中间件 允许使用跨域请求
-	r.POST("/login", func(c *gin.Context) {
-
-		name := c.PostForm("name")
-		password := c.PostForm("password")
-		log.Print(name, password)
-
-		// 账户名密码错误
-		if password != "admin" || name != "admin" {
-			data := map[string]interface{}{
-				"data": map[string]interface{}{
-					"status_code": 401,
-					"message":     "账号密码错误",
-				},
-			}
-			c.JSON(200, data)
-			return
-		}
-
-		data := map[string]interface{}{
-			"data": map[string]interface{}{
-				"status_code": 200,
-				"message":     "登录成功",
-				"token":       "123456",
-			},
-		}
-
-		c.JSON(200, data)
-	})
-
-	r.GET("/menus", func(c *gin.Context) {
-		data := menus{
-			Data: []menus_data{
-				{0, "能效总览", "dashboard", []child_menus{}},
-				{1, "工具盒总览", "toolbox", []child_menus{}},
-				{2, "全局配置", "globalconfig", []child_menus{
-					{201, "用户管理", "userconfig"},
-					{202, "系统管理", "systemconfig"},
-				}},
-				{3, "关于", "about", []child_menus{}},
-			},
-			Meta: menus_meta{
-				Msg:         "suc",
-				Status_code: 200,
-			},
-		}
-
-		c.JSON(200, data)
-	})
-	r.Run(":80") // 监听并在 0.0.0.0:80 上启动服务
+	r.Use(middleware.Cors())
+	// 4.收集所有的路由，统一管理
+	r = CollectRouter(r)
+	// 5.在特定的端口，运行起我们的服务器
+	port := viper.GetString("server.port")
+	if port != "" {
+		panic(r.Run(":" + port))
+	}
+	panic(r.Run())
 }
 
-func Cors() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		method := c.Request.Method
-
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token")
-		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
-		c.Header("Access-Control-Allow-Credentials", "true")
-
-		//放行所有OPTIONS方法
-		if method == "OPTIONS" {
-			c.AbortWithStatus(http.StatusNoContent)
-		}
-		// 处理请求
-		c.Next()
+func InitConfig() {
+	// 获取当前的目录
+	workdir, _ := os.Getwd()
+	// 告诉viper配置文件的名称
+	viper.SetConfigName("application")
+	// 告诉viper配置文件的格式
+	viper.SetConfigType("yml")
+	// 告诉viper配置文件的位置
+	viper.AddConfigPath(workdir + "/config")
+	// 有了名字，后缀，位置，就能确定一个唯一的配置文件了
+	err := viper.ReadInConfig()
+	// 如果读取失败了，利用panic函数让程序主动崩溃
+	if err != nil {
+		panic(err)
 	}
 }
-
-func StructToMapDemo(obj interface{}) map[string]interface{} {
-	obj1 := reflect.TypeOf(obj)
-	obj2 := reflect.ValueOf(obj)
-
-	var data = make(map[string]interface{})
-	for i := 0; i < obj1.NumField(); i++ {
-		data[obj1.Field(i).Name] = obj2.Field(i).Interface()
-	}
-	return data
-}
-
-// func TestStructToMap(){
-// 	student := Student{10, "jqw", 18}
-// 	data := StructToMapDemo(student)
-// 	fmt.Println(data)

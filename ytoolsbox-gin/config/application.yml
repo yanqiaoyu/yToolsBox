@@ -1,0 +1,9 @@
+server:
+  port: 80
+datasource:
+  host: 103.44.241.227
+  port: 5432
+  database: postgres
+  username: postgres
+  password: test123456
+  charset: utf8

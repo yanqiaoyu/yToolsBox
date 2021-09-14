@@ -16,13 +16,16 @@ import './assets/css/global.css'
 import axios from 'axios'
 
 // 配置请求的路径
+// axios.defaults.baseURL = 'http://103.44.241.227/api/auth/'
 axios.defaults.baseURL = 'http://localhost/api/auth/'
+
 axios.interceptors.request.use(config => {
-  console.log(config)
+  // console.log(config)
   config.headers.Authorization = window.sessionStorage.getItem('token')
   // 最后必须return这个config
   return config
 })
+
 // 在Vue的原型上挂载axios，让所有示例都能发送http请求
 Vue.prototype.$http = axios
 

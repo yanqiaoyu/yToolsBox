@@ -20,19 +20,22 @@
           :unique-opened="true"
           :collapse="isCollapse"
           :collapse-transition="false"
+          router
         >
+          <!-- 把index从id改成path，配合组件的router属性，可以直接实现跳转 -->
           <template v-for="item in menuList">
             <el-submenu
               v-if="item.child.length"
-              :index="item.id + ''"
+              :index="'/' + item.path"
               :key="item.id"
             >
               <template slot="title">
                 <i :class="iconList[item.id]"></i>
                 <span>{{ item.authName }}</span>
               </template>
+              <!-- 把index从id改成path，配合组件的router属性，可以直接实现跳转 -->
               <el-menu-item
-                :index="child.id + ''"
+                :index="'/' + child.path"
                 v-for="child in item.child"
                 :key="child.id"
               >
@@ -43,7 +46,9 @@
               </el-menu-item>
             </el-submenu>
 
-            <el-menu-item v-else :index="item.id + ''" :key="item.id">
+            <!-- 把index从id改成path，配合组件的router属性，可以直接实现跳转 -->
+            <!-- <el-menu-item v-else :index="item.id + ''" :key="item.id"> -->
+            <el-menu-item v-else :index="'/'+ item.path" :key="item.id">
               <template slot="title">
                 <i :class="iconList[item.id]"></i>
                 <span>{{ item.authName }}</span>
@@ -53,7 +58,9 @@
         </el-menu>
       </el-aside>
 
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>

@@ -4,3 +4,13 @@ html, body, #app{
     margin: 0;
     padding: 0;
 }
+
+/* 让所有的面包屑路径都与下面的组件有一定的距离 */
+.el-breadcrumb{
+    margin-bottom: 15px;
+}
+
+/* 卡片的一些样式自定义 */
+.el-Card{
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
+}

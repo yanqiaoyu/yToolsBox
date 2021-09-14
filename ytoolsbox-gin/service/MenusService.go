@@ -9,14 +9,13 @@
 package service
 
 import (
-	"log"
 	"main/model"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetMenus(ctx *gin.Context) {
-	log.Print("This is GetMenus Service")
+	// log.Print("This is GetMenus Service")
 
 	data := model.Menus{
 		Data: []model.MenusData{

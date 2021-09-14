@@ -10,7 +10,6 @@
 package controller
 
 import (
-	"log"
 	"main/dto"
 	"main/model"
 	"main/response"
@@ -139,7 +138,7 @@ func Login(ctx *gin.Context) {
 
 	name := ctx.PostForm("name")
 	password := ctx.PostForm("password")
-	log.Print("Login Name is:\n", name, "Login Password is:\n", password)
+	// log.Print("Login Name is:\n", name, "Login Password is:\n", password)
 
 	// 账户名密码错误
 	if password != "admin" || name != "admin" {

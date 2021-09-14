@@ -1,5 +1,26 @@
 import Vue from 'vue'
-import {Message, Form, FormItem, Input, Button, Container, Aside, Main, Header, RadioButton, Menu, Submenu, MenuItemGroup, MenuItem, RadioGroup } from 'element-ui'
+import {
+  Message,
+  Form,
+  FormItem,
+  Input,
+  Button,
+  Container,
+  Aside,
+  Main,
+  Header,
+  RadioButton,
+  Menu,
+  Submenu,
+  MenuItemGroup,
+  MenuItem,
+  RadioGroup,
+  Breadcrumb,
+  BreadcrumbItem,
+  Card,
+  Row,
+  Col
+} from 'element-ui'
 
 Vue.prototype.$message = Message
 Vue.use(RadioGroup)
@@ -17,3 +38,8 @@ Vue.use(Submenu)
 Vue.use(MenuItemGroup)
 Vue.use(MenuItem)
 Vue.use(RadioGroup)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Card)
+Vue.use(Col)
+Vue.use(Row)

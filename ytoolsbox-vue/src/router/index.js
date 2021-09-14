@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
+import User from '../components/user/User.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,7 +25,10 @@ const routes = [
     meta: {
       // 页面标题title
       title: '工具盒管理系统'
-    }
+    },
+    children: [
+      {path: '/userconfig', component: User}
+    ]
   }
 ]
 

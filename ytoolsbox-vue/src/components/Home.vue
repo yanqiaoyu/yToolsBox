@@ -49,10 +49,8 @@
             <!-- 把index从id改成path，配合组件的router属性，可以直接实现跳转 -->
             <!-- <el-menu-item v-else :index="item.id + ''" :key="item.id"> -->
             <el-menu-item v-else :index="'/'+ item.path" :key="item.id">
-              <template slot="title">
-                <i :class="iconList[item.id]"></i>
-                <span>{{ item.authName }}</span>
-              </template>
+              <i :class="iconList[item.id]"></i>
+              <span slot="title">{{ item.authName }}</span>
             </el-menu-item>
           </template>
         </el-menu>

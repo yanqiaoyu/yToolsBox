@@ -19,7 +19,16 @@ import {
   BreadcrumbItem,
   Card,
   Row,
-  Col
+  Col,
+  Table,
+  TableColumn,
+  Switch,
+  Tooltip,
+  Pagination,
+  Timeline,
+  TimelineItem,
+  Backtop,
+  Avatar
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -43,3 +52,12 @@ Vue.use(BreadcrumbItem)
 Vue.use(Card)
 Vue.use(Col)
 Vue.use(Row)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Switch)
+Vue.use(Tooltip)
+Vue.use(Pagination)
+Vue.use(Timeline)
+Vue.use(TimelineItem)
+Vue.use(Backtop)
+Vue.use(Avatar)

@@ -27,6 +27,7 @@ func main() {
 	r.Use(middleware.Cors())
 	// 4.收集所有的路由，统一管理
 	r = CollectRouter(r)
+
 	// 5.在特定的端口，运行起我们的服务器
 	port := viper.GetString("server.port")
 	if port != "" {

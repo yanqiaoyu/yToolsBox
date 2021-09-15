@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import User from '../components/user/User.vue'
+import UpdateLog from '../components/UpdateLog.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -26,8 +27,10 @@ const routes = [
       // 页面标题title
       title: '工具盒管理系统'
     },
+    redirect: '/updatelog',
     children: [
-      {path: '/userconfig', component: User}
+      {path: '/userconfig', component: User, meta: {title: "用户管理与配置"} },
+      {path: '/updatelog', component: UpdateLog, meta:{title: "更新日志"}}
     ]
   }
 ]

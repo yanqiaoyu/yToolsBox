@@ -10,10 +10,6 @@
 package controller
 
 import (
-	"main/dto"
-	"main/model"
-	"main/response"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -122,19 +118,19 @@ import (
 // 	return false
 // }
 
-// 判断登陆的账号是否合法
-func isUserExist() {
+// // 判断登陆的账号是否合法
+// func isUserExist() {
 
-}
+// }
 
-func Info(ctx *gin.Context) {
-	user, _ := ctx.Get("user")
-	response.Success(ctx, "", gin.H{"user": dto.ToUserDTO(user.(model.User))})
-}
+// func Info(ctx *gin.Context) {
+// 	user, _ := ctx.Get("user")
+// 	response.Success(ctx, "", gin.H{"user": dto.ToUserDTO(user.(model.User))})
+// }
 
 func Login(ctx *gin.Context) {
-	// 正常来讲，需要进数据库
-	// 但是目前我们先不入库，直接返回
+	// 正常来讲，需要进数据库查询
+	// 但是目前我们先不处理数据库的逻辑，伪造结果返回
 
 	name := ctx.PostForm("name")
 	password := ctx.PostForm("password")

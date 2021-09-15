@@ -11,7 +11,6 @@ package main
 
 import (
 	"main/controller"
-	"main/middleware"
 	"main/service"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +19,7 @@ import (
 func CollectRouter(r *gin.Engine) *gin.Engine {
 	// r.POST("/api/auth/signup", controller.SignUp)
 	r.POST("/api/auth/login", controller.Login)
-	r.GET("/api/auth/info", middleware.AuthMiddleWare(), controller.Info)
+	// r.GET("/api/auth/info", middleware.AuthMiddleWare(), controller.Info)
 	r.GET("/api/auth/menus", service.GetMenus)
 	r.GET("/api/auth/users", service.GetUsers)
 	return r

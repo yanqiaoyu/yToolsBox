@@ -2,7 +2,9 @@
   <el-container class="home-container">
     <el-header>
       <div>
-        <img src="../assets/cat.png" alt="" class="catImage" />
+        <!-- <img src="../assets/cat.png" alt="" class="catImage" /> -->
+        <!-- 需要require引入资源 -->
+        <el-avatar :size="55" fit="fit" :src="require('../assets/cat.png')"></el-avatar>
         <span>我的工具盒</span>
       </div>
       <el-button type="warning" @click="logout">退出</el-button>
@@ -79,19 +81,15 @@ export default {
         '201': 'el-icon-s-custom',
         '202': 'el-icon-cpu'
       },
-      isCollapse:false
+      isCollapse:false,
+      // imgPath: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+      // imgPath: "../assets/cat.png"
     }
   },
   created() {
     this.getMenuList()
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath)
-    },
     logout() {
       window.sessionStorage.clear()
       this.$router.push('/login')
@@ -102,15 +100,12 @@ export default {
     },
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')
-      // console.log(res)
       if (res.meta.status_code !== 200)
         return this.$message.error('获取首页信息失败')
       this.menuList = res.data
-      // console.log(this.menuList)
-      // console.log(this.menuList[0])
     },
     toggleCollapse() {
-      console.log("展开与收起状态:", this.isCollapse)
+      // console.log("展开与收起状态:", this.isCollapse)
       this.isCollapse = !this.isCollapse
     }
 

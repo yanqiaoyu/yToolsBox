@@ -21,6 +21,6 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.POST("/api/auth/login", controller.Login)
 	// r.GET("/api/auth/info", middleware.AuthMiddleWare(), controller.Info)
 	r.GET("/api/auth/menus", service.GetMenus)
-	r.GET("/api/auth/users", service.GetUsers)
+	r.GET("/api/auth/users", controller.GetAllUser)
 	return r
 }

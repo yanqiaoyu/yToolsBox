@@ -10,6 +10,11 @@
 package controller
 
 import (
+	"main/common"
+	"main/dao"
+	"main/model"
+	"main/service"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -155,7 +160,20 @@ func Login(ctx *gin.Context) {
 			"token":       "123456",
 		},
 	}
-
 	ctx.JSON(200, data)
+}
 
+// 返回所有用户的方法
+func GetAllUser(ctx *gin.Context) {
+	db := common.GetDB()
+	// 获取请求中的所有参数
+	query, pagenum, pagesize, param := service.SplitParam(ctx)
+	// 根据参数，从数据库中请求user条目
+	userList := dao.SelectAllUser(db, query, pagenum, pagesize, param)
+
+	// 构造返回的结构体
+	UserData := model.UsersData{Total: len(userList), Pagenum: pagenum, Users: userList}
+	Meta := model.Meta{Msg: "获取用户成功", Status_code: 200}
+
+	ctx.JSON(200, gin.H{"data": UserData, "meta": Meta})
 }

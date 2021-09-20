@@ -2,16 +2,16 @@
   <div class="login_container">
     <!-- 登录界面 -->
 
-    <!-- 这个是整个页面的容器 -->
+    <!-- 整个页面的容器 -->
     <div class="login_box">
-      <!-- 这个是登录的白色的框的容器 -->
       <div class="login_image">
-        <!-- 这个是登录的图片 -->
+        <!-- 登录的图片 -->
         <img src="../assets/cat.png" alt="" />
       </div>
 
+      <!-- 管理员登录界面 -->
       <div>
-        <!-- 注意这里用到的组件，必须在plugins的elment.js里面导入 -->
+        <!-- 登录的白色的框的容器 -->
         <el-form
           class="login_form"
           :model="loginForm"
@@ -36,7 +36,7 @@
           <!-- 按钮区域 -->
           <el-form-item class="login_btn">
             <el-button type="primary" @click="login">登录</el-button>
-            <el-button type="info" @click="reset">重置为正确账号密码</el-button>
+            <el-button type="success" @click="reset">访客登录</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -162,8 +162,20 @@ export default {
   bottom: 0;
   width: 100%;
   padding: 0 20px;
-  // 假如您需要并排放置两个带边框的框，可通过将 box-sizing 设置为 "border-box"
+  // 假如需要并排放置两个带边框的框，可通过将 box-sizing 设置为 "border-box"
   box-sizing: border-box;
+}
+
+.login_select {
+  // 位置采用绝对位置
+  position: absolute;
+  // 举例顶部和左边都有50%的差距
+  left: 50%;
+  top: 50%;
+  // 然后再向左，向上位移50%
+  transform: translate(-50%, -50%);
+  vertical-align: middle;
+  font-size: 20px;
 }
 
 // 登录按钮

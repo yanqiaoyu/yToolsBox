@@ -19,7 +19,9 @@
 
         <!-- 这个列里面放的是添加用户的框 -->
         <el-col :span="6">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary" @click="dialogVisible = true"
+            >添加用户</el-button
+          >
         </el-col>
       </el-row>
 
@@ -28,12 +30,14 @@
         <!-- 只要添加了type=index，就能序号列 -->
         <el-table-column type="index" label="序号" width="60">
         </el-table-column>
-        <el-table-column prop="username" label="姓名" width="180">
+        <el-table-column prop="username" label="账户名" width="210">
         </el-table-column>
-        <el-table-column prop="email" label="邮箱" width="180">
+        <el-table-column prop="email" label="邮箱" width="430">
         </el-table-column>
-        <el-table-column prop="mobile" label="电话"> </el-table-column>
-        <el-table-column prop="RoleName" label="角色"> </el-table-column>
+        <el-table-column prop="mobile" label="电话" width="430">
+        </el-table-column>
+        <el-table-column prop="role" label="角色" width="140">
+        </el-table-column>
         <!-- 根据实际的数据渲染出一个状态按钮 -->
         <el-table-column label="状态" width="100">
           <template slot-scope="scope">
@@ -72,12 +76,64 @@
       >
       </el-pagination>
     </el-card>
+
+    <!-- 添加用户的提示框 -->
+    <el-dialog
+      title="添加用户"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :close-on-click-modal="false"
+      @close="closeDialog"
+    >
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="60px"
+      >
+        <el-form-item label="账户" prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="ruleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="ruleForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="工号" prop="workNum">
+          <el-input v-model="ruleForm.workNum"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="Phone">
+          <el-input v-model="ruleForm.Phone"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
   data() {
+    var checkEmail = (rule, value, callback) => {
+      const regEmail = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+      if (regEmail.test(value)) {
+        return callback()
+      }
+      callback(new Error('邮箱格式错误'))
+    }
+
+    var checkPhone = (rule, value, callback) => {
+      const regPhone = /^1(3|4|5|7|8)\d{9}$/
+      if (regPhone.test(value)) {
+        return callback()
+      }
+      callback(new Error('手机号格式错误'))
+    }
+
     return {
       // 获取用户的参数列表
       queryInfo: {
@@ -88,7 +144,49 @@ export default {
         pagesize: 5
       },
       userList: [],
-      total: 0
+      total: 0,
+      // 决定添加用户框是否弹出
+      dialogVisible: false,
+      ruleForm: {
+        name: '',
+        password: '',
+        email: '',
+        workNum: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: false, message: '请输入邮箱', trigger: 'blur' },
+          {
+            min: 1,
+            max: 30,
+            message: '长度在 1 到 30 个字符',
+            trigger: 'blur'
+          },
+          { validator: checkEmail, trigger: 'blur' }
+        ],
+        workNum: [
+          { required: false, message: '请输入工号', trigger: 'blur' },
+          { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' }
+        ],
+        Phone: [
+          { required: false, message: '请输入手机号', trigger: 'blur' },
+          {
+            min: 10,
+            max: 18,
+            message: '长度在 10 到 18 个字符',
+            trigger: 'blur'
+          },
+          { validator: checkPhone, trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -118,6 +216,22 @@ export default {
       // console.log(`每页 ${val} 条`)
       this.queryInfo.pagesize = val
       this.GetUsersList()
+    },
+    closeDialog() {
+      this.$refs.ruleForm.resetFields()
+    },
+    addUser() {
+      // console.log('添加用户')
+      this.$refs.ruleForm.validate(valid => {
+        // console.log(valid)
+        if (valid) {
+          this.$message.success('添加成功')
+          this.dialogVisible = false
+        } else {
+          this.$message.error('添加信息验证失败')
+        }
+      })
+      // this.dialogVisible = false
     }
   }
 }

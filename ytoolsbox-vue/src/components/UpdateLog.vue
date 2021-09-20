@@ -18,6 +18,16 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/9/20" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成添加新用户的表单 <br />
+            2. 配合dto和dao使用, 后端的数据库逻辑已完成<br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/15" placement="top">
         <el-card>
           <h4>更新内容</h4>
@@ -25,7 +35,7 @@
             1. 编写好了用户相关的后端service层代码 <br />
             2. 准备引入PostgreSQL，并着手解耦后端代码 <br />
             3. 加入了一个更新日志界面 <br />
-            4. 用ele的avatar组件重新导入了首页的猫猫 <br>
+            4. 用ele的avatar组件重新导入了首页的猫猫 <br />
           </p>
         </el-card>
       </el-timeline-item>

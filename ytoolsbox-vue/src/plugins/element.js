@@ -28,7 +28,8 @@ import {
   Timeline,
   TimelineItem,
   Backtop,
-  Avatar
+  Avatar,
+  Dialog,
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -61,3 +62,4 @@ Vue.use(Timeline)
 Vue.use(TimelineItem)
 Vue.use(Backtop)
 Vue.use(Avatar)
+Vue.use(Dialog)

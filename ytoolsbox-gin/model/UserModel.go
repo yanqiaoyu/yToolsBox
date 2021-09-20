@@ -9,43 +9,24 @@
 
 package model
 
-// {
-//     "data": {
-//         "totalpage": 5,
-//         "pagenum": 4,
-//         "users": [
-//             {
-//                 "id": 25,
-//                 "username": "tige117",
-//                 "mobile": "18616358651",
-//                 "type": 1,
-//                 "email": "tige112@163.com",
-//                 "create_time": "2017-11-09T20:36:26.000Z",
-//                 "mg_state": true, // 当前用户的状态
-//                 "role_name": "炒鸡管理员"
-//             }
-//         ]
-//     },
-//     "meta": {
-//         "msg": "获取成功",
-//         "status": 200
-//     }
-// }
+import "gorm.io/gorm"
 
 type UsersData struct {
-	Total   int    `json:"total"`
-	Pagenum int    `json:"pagenum"`
-	Users   []User `json:"users"`
+	Total   int                      `json:"total"`
+	Pagenum int                      `json:"pagenum"`
+	Users   []map[string]interface{} `json:"users"`
 }
 
 // 在这里定义好表的结构
 type User struct {
-	Id         int    `json:"id"`
-	Username   string `json:"username"`
-	Mobile     string `json:"mobile"`
-	Type       int    `json:"type"`
-	Email      string `json:"email"`
-	CreateTime string `json:"create_time"`
-	MgState    bool   `json:"mgstate"`
-	RoleName   string `josn:"role"`
+	gorm.Model
+	// 用户名需要唯一
+	UserName string `json:"username" gorm:"column:username;unique"`
+	Mobile   string `json:"mobile" gorm:"column:mobile"`
+	Type     int    `json:"type" gorm:"column:type"`
+	Email    string `json:"email" gorm:"column:email"`
+	MgState  bool   `json:"mgstate" gorm:"column:mgstate"`
+	RoleName string `json:"role" gorm:"column:role"`
+	WorkNum  string `json:"worknum" gorm:"column:worknum"`
+	PassWord string `json:"password" gorm:"column:password"`
 }

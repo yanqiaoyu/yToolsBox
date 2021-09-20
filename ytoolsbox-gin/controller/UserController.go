@@ -169,10 +169,10 @@ func GetAllUser(ctx *gin.Context) {
 	// 获取请求中的所有参数
 	query, pagenum, pagesize, param := service.SplitParam(ctx)
 	// 根据参数，从数据库中请求user条目
-	userList := dao.SelectAllUser(db, query, pagenum, pagesize, param)
+	userList, DefaultLength := dao.SelectAllUser(db, query, pagenum, pagesize, param)
 
 	// 构造返回的结构体
-	UserData := model.UsersData{Total: len(userList), Pagenum: pagenum, Users: userList}
+	UserData := model.UsersData{Total: DefaultLength, Pagenum: pagenum, Users: userList}
 	Meta := model.Meta{Msg: "获取用户成功", Status_code: 200}
 
 	ctx.JSON(200, gin.H{"data": UserData, "meta": Meta})

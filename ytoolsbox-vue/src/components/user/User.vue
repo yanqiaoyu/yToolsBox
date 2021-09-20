@@ -198,7 +198,7 @@ export default {
       const { data: res } = await this.$http.get('users', {
         params: this.queryInfo
       })
-      // console.log(res)
+      console.log(res)
       // 获取用户失败
       if (res.meta.status_code !== 200)
         return this.$message.error('获取用户信息失败')

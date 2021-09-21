@@ -7,14 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SplitParam(ctx *gin.Context) (string, int, int, string) {
+func SplitGetAllUserParam(ctx *gin.Context) (string, int, int, string) {
 	query := ctx.Query("query")
 	// 这行属性其实就是当前在第几页
 	pagenum, _ := strconv.Atoi(ctx.Query("pagenum"))
 	// 这行属性其实就是当前每页展示多少条数据
 	pagesize, _ := strconv.Atoi(ctx.Query("pagesize"))
 	param := ctx.Query("param")
-	log.Print("\r\n query:", query, "\r\n pagenum: ", pagenum, "\r\n pagesize: ", pagesize, "\r\n param:", param)
+	// log.Print("\r\n query:", query, "\r\n pagenum: ", pagenum, "\r\n pagesize: ", pagesize, "\r\n param:", param)
 	return query, pagenum, pagesize, param
 }
 
@@ -35,4 +35,21 @@ func CalculateReturnMapLength(pagenum int, pagesize int, userList []map[string]i
 		ArrayEnd = len(userList)
 	}
 	return ArrayStart, ArrayEnd
+}
+
+func SplitPutUserStateParam(ctx *gin.Context) (string, int) {
+	mgstate := ctx.PostForm("mgstate")
+	userID, _ := strconv.Atoi(ctx.PostForm("userID"))
+	// log.Println(mgstate, userID)
+	return mgstate, userID
+}
+
+func SplitPostNewUserParam(ctx *gin.Context) (string, string, string, string, string) {
+	username := ctx.PostForm("username")
+	password := ctx.PostForm("password")
+	mobile := ctx.PostForm("mobile")
+	email := ctx.PostForm("email")
+	worknum := ctx.PostForm("worknum")
+	log.Println(username, password, mobile, email, worknum)
+	return username, password, mobile, email, worknum
 }

@@ -83,7 +83,7 @@ export default {
           'login',
           qs.stringify(this.loginForm)
         )
-        console.log(result.data)
+        // console.log(result.data)
         if (result.data.data.status_code !== 200) {
           this.$message.error('登陆失败')
           return

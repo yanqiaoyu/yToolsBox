@@ -29,4 +29,5 @@ type User struct {
 	RoleName string `json:"role" gorm:"column:role"`
 	WorkNum  string `json:"worknum" gorm:"column:worknum"`
 	PassWord string `json:"password" gorm:"column:password"`
+	RoleID   string `json:"roleid" gorm:"column:roleid"`
 }

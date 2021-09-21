@@ -18,6 +18,17 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/9/21" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成了用户状态更新 <br />
+            2. 解决了一个更新状态后数据库顺序紊乱的问题<br />
+            3. 完成了修改用户信息的功能 <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/20" placement="top">
         <el-card>
           <h4>更新内容</h4>

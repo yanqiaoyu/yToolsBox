@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"log"
 	"main/dto"
 	"main/model"
 	"main/service"
@@ -13,7 +12,14 @@ import (
 func SelectAllUser(db *gorm.DB, query string, pagenum int, pagesize int, param string) ([]map[string]interface{}, int) {
 	struct_userList := []dto.UserDTO{}
 	map_userList := []map[string]interface{}{}
-	db.Model(&model.User{}).Find(&struct_userList)
+	// 不带Query，返回全部
+	// 否则返回like搜索后的结果
+	if query == "" {
+		db.Order("id").Model(&model.User{}).Find(&struct_userList)
+	} else {
+		db.Order("id").Where("username LIKE ?", "%"+query+"%").Model(&model.User{}).Find(&struct_userList)
+	}
+
 	DefaultLength := len(struct_userList)
 
 	// 把一个自定义结构体的array 转换成map的array
@@ -23,10 +29,29 @@ func SelectAllUser(db *gorm.DB, query string, pagenum int, pagesize int, param s
 		map_userList = append(map_userList, map_item)
 	}
 
-	log.Println(map_userList)
-
 	// 计算一下需要如何切割数组
 	ArrayStart, ArrayEnd := service.CalculateReturnMapLength(pagenum, pagesize, map_userList)
 	// 返回切片后的结果
 	return map_userList[ArrayStart:ArrayEnd], DefaultLength
+}
+
+func SelectSpecifiedUser(db *gorm.DB, userID int) dto.UserDTO {
+	struct_userList := dto.UserDTO{}
+	db.Model(&model.User{}).Where("id = ?", userID).Find(&struct_userList)
+	return struct_userList
+}
+
+func UpdateUserState(db *gorm.DB, mgstate string, userID int) {
+	db.Model(&model.User{}).Where("id = ?", userID).Update("mgstate", mgstate)
+}
+
+func UpdateSpecifiedUser(db *gorm.DB, userID int, email string, mobile string) {
+	db.Model(&model.User{}).Where("id = ?", userID).Updates(map[string]interface{}{"email": email, "mobile": mobile})
+}
+
+func InsertNewUser(db *gorm.DB, username string, password string, mobile string, email string, worknum string) (model.User, *gorm.DB) {
+	newUser := model.User{UserName: username, PassWord: password, Mobile: mobile, Email: email, WorkNum: worknum}
+	result := db.Create(&newUser)
+
+	return newUser, result
 }

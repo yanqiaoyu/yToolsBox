@@ -10,10 +10,12 @@
 package controller
 
 import (
+	"log"
 	"main/common"
 	"main/dao"
 	"main/model"
 	"main/service"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -167,7 +169,7 @@ func Login(ctx *gin.Context) {
 func GetAllUser(ctx *gin.Context) {
 	db := common.GetDB()
 	// 获取请求中的所有参数
-	query, pagenum, pagesize, param := service.SplitParam(ctx)
+	query, pagenum, pagesize, param := service.SplitGetAllUserParam(ctx)
 	// 根据参数，从数据库中请求user条目
 	userList, DefaultLength := dao.SelectAllUser(db, query, pagenum, pagesize, param)
 
@@ -176,4 +178,46 @@ func GetAllUser(ctx *gin.Context) {
 	Meta := model.Meta{Msg: "获取用户成功", Status_code: 200}
 
 	ctx.JSON(200, gin.H{"data": UserData, "meta": Meta})
+}
+
+// 返回特定用户的方法
+func GetSpecifiedUser(ctx *gin.Context) {
+	db := common.GetDB()
+	userID, _ := strconv.Atoi(ctx.Param("userID"))
+	// log.Println(userID)
+	struct_userList := dao.SelectSpecifiedUser(db, userID)
+
+	// 构造返回的结构体
+	Meta := model.Meta{Msg: "获取用户成功", Status_code: 200}
+
+	ctx.JSON(200, gin.H{"data": struct_userList, "meta": Meta})
+}
+
+// 更新用户的状态
+func PutUserState(ctx *gin.Context) {
+	db := common.GetDB()
+	mgstate, userID := service.SplitPutUserStateParam(ctx)
+
+	dao.UpdateUserState(db, mgstate, userID)
+}
+
+func PutUserInfo(ctx *gin.Context) {
+	db := common.GetDB()
+	userID, _ := strconv.Atoi(ctx.Param("userID"))
+
+	email := ctx.PostForm("email")
+	mobile := ctx.PostForm("mobile")
+	log.Println(userID, email, mobile)
+	dao.UpdateSpecifiedUser(db, userID, email, mobile)
+}
+
+// 新增用户
+func PostNewUser(ctx *gin.Context) {
+	db := common.GetDB()
+	// 提取参数
+	username, password, mobile, email, worknum := service.SplitPostNewUserParam(ctx)
+	// 写入数据库
+	newUser, result := dao.InsertNewUser(db, username, password, mobile, email, worknum)
+
+	log.Println("newUser:", newUser, "result", result.Error, result.RowsAffected)
 }

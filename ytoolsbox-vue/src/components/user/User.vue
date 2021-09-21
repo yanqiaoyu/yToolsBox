@@ -12,8 +12,18 @@
       <el-row :gutter="20">
         <!-- 这个列里面放的是搜索框 -->
         <el-col :span="6">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input
+            placeholder="请输入用户名"
+            v-model="queryInfo.query"
+            clearable
+            @clear="GetUsersList"
+            @change="GetUsersList"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="GetUsersList"
+            ></el-button>
           </el-input>
         </el-col>
 
@@ -41,14 +51,23 @@
         <!-- 根据实际的数据渲染出一个状态按钮 -->
         <el-table-column label="状态" width="100">
           <template slot-scope="scope">
-            <!-- {{ scope.row.mgstate }} -->
-            <el-switch v-model="scope.row.mgstate"> </el-switch>
+            <!-- 这里用了scope.row获取每一行的数据 -->
+            <el-switch
+              v-model="scope.row.mgstate"
+              @change="userStateChanged(scope.row)"
+            >
+            </el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <template>
+          <template slot-scope="scope">
             <!-- 编辑 -->
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              @click="showEditDialog(scope.row.id)"
+            ></el-button>
             <!-- 删除 -->
             <el-button type="danger" icon="el-icon-delete" circle></el-button>
             <!-- 分配角色 -->
@@ -65,6 +84,7 @@
         </el-table-column>
       </el-table>
 
+      <!-- 分页功能 -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -91,8 +111,8 @@
         ref="ruleForm"
         label-width="60px"
       >
-        <el-form-item label="账户" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+        <el-form-item label="账户" prop="username">
+          <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="ruleForm.password"></el-input>
@@ -100,11 +120,11 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="工号" prop="workNum">
-          <el-input v-model="ruleForm.workNum"></el-input>
+        <el-form-item label="工号" prop="worknum">
+          <el-input v-model="ruleForm.worknum"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="Phone">
-          <el-input v-model="ruleForm.Phone"></el-input>
+        <el-form-item label="手机号" prop="mobile">
+          <el-input v-model="ruleForm.mobile"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -112,10 +132,42 @@
         <el-button type="primary" @click="addUser">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 修改用户的提示框 -->
+    <el-dialog
+      title="修改用户"
+      :visible.sync="editUserDialogVisibleL"
+      width="30%"
+      :close-on-click-modal="false"
+      @close="closeEditDialog"
+    >
+      <el-form
+        :model="editRuleForm"
+        :rules="editUserRules"
+        ref="editUserForm"
+        label-width="70px"
+      >
+        <el-form-item label="账户名" prop="username">
+          <el-input v-model="editRuleForm.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="editRuleForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="mobile">
+          <el-input v-model="editRuleForm.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeEditDialog">取 消</el-button>
+        <el-button type="primary" @click="editUser">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import qs from 'qs'
+
 export default {
   data() {
     var checkEmail = (rule, value, callback) => {
@@ -147,14 +199,22 @@ export default {
       total: 0,
       // 决定添加用户框是否弹出
       dialogVisible: false,
+      editUserDialogVisibleL: false,
       ruleForm: {
-        name: '',
+        username: '',
         password: '',
         email: '',
-        workNum: ''
+        worknum: '',
+        mobile: ''
       },
+      // editRuleForm: {
+      //   username: '',
+      //   email: '',
+      //   mobile: ''
+      // },
+      editRuleForm: {},
       rules: {
-        name: [
+        username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
         ],
@@ -172,11 +232,33 @@ export default {
           },
           { validator: checkEmail, trigger: 'blur' }
         ],
-        workNum: [
+        worknum: [
           { required: false, message: '请输入工号', trigger: 'blur' },
           { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' }
         ],
-        Phone: [
+        mobile: [
+          { required: false, message: '请输入手机号', trigger: 'blur' },
+          {
+            min: 10,
+            max: 18,
+            message: '长度在 10 到 18 个字符',
+            trigger: 'blur'
+          },
+          { validator: checkPhone, trigger: 'blur' }
+        ]
+      },
+      editUserRules: {
+        email: [
+          { required: false, message: '请输入邮箱', trigger: 'blur' },
+          {
+            min: 1,
+            max: 30,
+            message: '长度在 1 到 30 个字符',
+            trigger: 'blur'
+          },
+          { validator: checkEmail, trigger: 'blur' }
+        ],
+        mobile: [
           { required: false, message: '请输入手机号', trigger: 'blur' },
           {
             min: 10,
@@ -193,12 +275,12 @@ export default {
     this.GetUsersList()
   },
   methods: {
+    // 请求用户接口
     async GetUsersList() {
-      // console.log("获取用户列表被调用了")
       const { data: res } = await this.$http.get('users', {
         params: this.queryInfo
       })
-      console.log(res)
+      // console.log(res)
       // 获取用户失败
       if (res.meta.status_code !== 200)
         return this.$message.error('获取用户信息失败')
@@ -207,24 +289,45 @@ export default {
       this.userList = res.data.users
       this.total = res.data.total
     },
+    // 翻页
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`)
       this.queryInfo.pagenum = val
       this.GetUsersList()
     },
+    // 改变每页大小
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`)
       this.queryInfo.pagesize = val
       this.GetUsersList()
     },
+    // 关闭添加用户的对话框，重置对话框状态
     closeDialog() {
       this.$refs.ruleForm.resetFields()
     },
+    // 访问修改用户状态的接口
+    async userStateChanged(userinfo) {
+      await this.$http.put(
+        'users/state',
+        qs.stringify({
+          mgstate: userinfo.mgstate,
+          userID: userinfo.id
+        })
+      )
+      // console.log(userinfo.id)
+    },
+    // 访问添加用户的接口
     addUser() {
       // console.log('添加用户')
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate(async valid => {
         // console.log(valid)
         if (valid) {
+          const { data: res } = await this.$http.post(
+            'users',
+            qs.stringify(this.ruleForm)
+          )
+          console.log(res)
+
           this.$message.success('添加成功')
           this.dialogVisible = false
         } else {
@@ -232,6 +335,35 @@ export default {
         }
       })
       // this.dialogVisible = false
+    },
+    async showEditDialog(id) {
+      const { data: res } = await this.$http.get('users/' + id)
+      this.editUserDialogVisibleL = true
+      // console.log(id)
+      this.editRuleForm = res.data
+    },
+    closeEditDialog() {
+      this.$refs.editUserForm.resetFields()
+      this.editUserDialogVisibleL = false
+    },
+    editUser() {
+      this.$refs.editUserForm.validate(async valid => {
+        if (!valid) return
+        console.log(this.editRuleForm)
+        await this.$http.put(
+          'users/' + this.editRuleForm.id,
+          qs.stringify({
+            email: this.editRuleForm.email,
+            mobile: this.editRuleForm.mobile
+          })
+        )
+        this.GetUsersList()
+        this.editUserDialogVisibleL = false
+        this.$message({
+          message: '更新信息成功',
+          type: 'success'
+        })
+      })
     }
   }
 }

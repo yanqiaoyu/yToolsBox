@@ -15,9 +15,14 @@ import './assets/css/global.css'
 // 导入axios发送ajax请求
 import axios from 'axios'
 
-// 配置请求的路径
-// axios.defaults.baseURL = 'http://103.44.241.227/api/auth/'
-axios.defaults.baseURL = 'http://localhost/api/auth/'
+console.log(process.env)
+
+// 测试，生产环境，不同的请求的路径
+if (process.env.NODE_ENV == 'production') {
+  axios.defaults.baseURL = 'http://103.44.241.227/api/auth/'
+} else {
+  axios.defaults.baseURL = 'http://localhost/api/auth/'
+}
 
 axios.interceptors.request.use(config => {
   // console.log(config)

@@ -18,6 +18,13 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/9/22" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>1. 完成了删除用户的功能 <br /></p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/21" placement="top">
         <el-card>
           <h4>更新内容</h4>

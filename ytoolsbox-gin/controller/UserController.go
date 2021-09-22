@@ -180,7 +180,7 @@ func GetAllUser(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"data": UserData, "meta": Meta})
 }
 
-// 返回特定用户的方法
+// 返回特定用户的状态
 func GetSpecifiedUser(ctx *gin.Context) {
 	db := common.GetDB()
 	userID, _ := strconv.Atoi(ctx.Param("userID"))
@@ -220,4 +220,17 @@ func PostNewUser(ctx *gin.Context) {
 	newUser, result := dao.InsertNewUser(db, username, password, mobile, email, worknum)
 
 	log.Println("newUser:", newUser, "result", result.Error, result.RowsAffected)
+}
+
+// 删除特定用户
+func DeleteSpecifiedUser(ctx *gin.Context) {
+	db := common.GetDB()
+	userID, _ := strconv.Atoi(ctx.Param("userID"))
+	// log.Println(userID)
+	struct_userList := dao.DeleteSpecifiedUser(db, userID)
+
+	// 构造返回的结构体
+	Meta := model.Meta{Msg: "获取用户成功", Status_code: 200}
+
+	ctx.JSON(200, gin.H{"data": struct_userList, "meta": Meta})
 }

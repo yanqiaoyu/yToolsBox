@@ -33,5 +33,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.PUT("/api/auth/users/:userID", controller.PutUserInfo)
 	// 新增用户
 	r.POST("/api/auth/users", controller.PostNewUser)
+	// 删除用户
+	r.DELETE("/api/auth/users/:userID", controller.DeleteSpecifiedUser)
 	return r
 }

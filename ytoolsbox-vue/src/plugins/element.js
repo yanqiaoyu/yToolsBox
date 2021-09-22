@@ -30,6 +30,7 @@ import {
   Backtop,
   Avatar,
   Dialog,
+  MessageBox
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -63,3 +64,5 @@ Vue.use(TimelineItem)
 Vue.use(Backtop)
 Vue.use(Avatar)
 Vue.use(Dialog)
+Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm

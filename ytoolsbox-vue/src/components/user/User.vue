@@ -69,7 +69,12 @@
               @click="showEditDialog(scope.row.id)"
             ></el-button>
             <!-- 删除 -->
-            <el-button type="danger" icon="el-icon-delete" circle></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click="deleteUser(scope.row.id)"
+            ></el-button>
             <!-- 分配角色 -->
             <el-tooltip
               class="item"
@@ -330,6 +335,7 @@ export default {
 
           this.$message.success('添加成功')
           this.dialogVisible = false
+          this.GetUsersList()
         } else {
           this.$message.error('添加信息验证失败')
         }
@@ -364,6 +370,30 @@ export default {
           type: 'success'
         })
       })
+    },
+    deleteUser(id) {
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // console.log(id)
+          await this.$http.delete('users/' + id)
+
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+
+          this.GetUsersList()
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     }
   }
 }

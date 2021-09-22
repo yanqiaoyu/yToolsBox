@@ -41,6 +41,12 @@ func SelectSpecifiedUser(db *gorm.DB, userID int) dto.UserDTO {
 	return struct_userList
 }
 
+func DeleteSpecifiedUser(db *gorm.DB, userID int) model.User {
+	struct_user := model.User{}
+	db.Delete(&struct_user, userID)
+	return struct_user
+}
+
 func UpdateUserState(db *gorm.DB, mgstate string, userID int) {
 	db.Model(&model.User{}).Where("id = ?", userID).Update("mgstate", mgstate)
 }

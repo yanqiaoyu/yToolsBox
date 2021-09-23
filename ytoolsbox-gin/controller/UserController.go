@@ -17,6 +17,7 @@ import (
 	"main/model"
 	"main/response"
 	"main/service"
+	"main/util"
 
 	"net/http"
 	"strconv"
@@ -150,7 +151,7 @@ func Login(ctx *gin.Context) {
 	}
 
 	if !dao.IsUserExist(db, loginParam.UserName) {
-		response.Fail(ctx, nil, map[string]interface{}{
+		response.Fail(ctx, nil, gin.H{
 			"status_code": 400,
 			"message":     "账户不存在",
 		})
@@ -158,17 +159,22 @@ func Login(ctx *gin.Context) {
 	}
 
 	if loginParam.UserName != "admin" || loginParam.Password != "admin" {
-		response.Fail(ctx, nil, map[string]interface{}{
+		response.Fail(ctx, nil, gin.H{
 			"status_code": 400,
 			"message":     "账户或密码错误",
 		})
 		return
 	}
 
-	response.Success(ctx, map[string]interface{}{"token": "123456"}, map[string]interface{}{
-		"status_code": 200,
-		"message":     "登录成功",
-	})
+	var msg struct {
+		StatusCode int    `json:"status_code"`
+		Message    string `json:"message"`
+	}
+
+	msg.StatusCode = 200
+	msg.Message = "登录成功"
+
+	response.Success(ctx, gin.H{"token": "123456"}, util.Struct2MapViaJson(msg))
 }
 
 // 返回所有用户的方法

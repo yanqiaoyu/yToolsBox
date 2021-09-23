@@ -13,8 +13,12 @@ import (
 	"log"
 	"main/common"
 	"main/dao"
+	"main/dto"
 	"main/model"
+	"main/response"
 	"main/service"
+
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -136,33 +140,35 @@ import (
 // }
 
 func Login(ctx *gin.Context) {
-	// 正常来讲，需要进数据库查询
-	// 但是目前我们先不处理数据库的逻辑，伪造结果返回
+	db := common.GetDB()
+	loginParam := dto.LoginDTO{}
 
-	name := ctx.PostForm("name")
-	password := ctx.PostForm("password")
-	// log.Print("Login Name is:\n", name, "Login Password is:\n", password)
+	// 模型绑定获取参数
+	err := ctx.ShouldBind(&loginParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 
-	// 账户名密码错误
-	if password != "admin" || name != "admin" {
-		data := map[string]interface{}{
-			"data": map[string]interface{}{
-				"status_code": 401,
-				"message":     "账号密码错误",
-			},
-		}
-		ctx.JSON(200, data)
+	if !dao.IsUserExist(db, loginParam.UserName) {
+		response.Fail(ctx, nil, map[string]interface{}{
+			"status_code": 400,
+			"message":     "账户不存在",
+		})
 		return
 	}
 
-	data := map[string]interface{}{
-		"data": map[string]interface{}{
-			"status_code": 200,
-			"message":     "登录成功",
-			"token":       "123456",
-		},
+	if loginParam.UserName != "admin" || loginParam.Password != "admin" {
+		response.Fail(ctx, nil, map[string]interface{}{
+			"status_code": 400,
+			"message":     "账户或密码错误",
+		})
+		return
 	}
-	ctx.JSON(200, data)
+
+	response.Success(ctx, map[string]interface{}{"token": "123456"}, map[string]interface{}{
+		"status_code": 200,
+		"message":     "登录成功",
+	})
 }
 
 // 返回所有用户的方法

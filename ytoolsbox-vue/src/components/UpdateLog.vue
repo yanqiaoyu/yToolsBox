@@ -18,6 +18,16 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/9/23" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 参考gin的官方文档，使用模型绑定复写了参数解析的业务 <br />
+            2. 重写登录的逻辑 <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/22" placement="top">
         <el-card>
           <h4>更新内容</h4>

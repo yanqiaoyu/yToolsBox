@@ -79,13 +79,13 @@ export default {
       this.$refs.login_form_ref.validate(async valid => {
         // console.log(valid)
         if (!valid) return
-        const result = await this.$http.post(
+        const { data: res } = await this.$http.post(
           'login',
           qs.stringify(this.loginForm)
         )
-        // console.log(result.data)
-        if (result.data.data.status_code !== 200) {
-          this.$message.error('登陆失败')
+        console.log(res)
+        if (res.meta.status_code !== 200) {
+          this.$message.error(res.meta.message)
           return
         }
         // alert('登陆成功')
@@ -94,7 +94,7 @@ export default {
           type: 'success'
         })
         // 登录成功后，需要保存token至本地
-        window.sessionStorage.setItem('token', result.data.data.token)
+        window.sessionStorage.setItem('token', res.data.token)
         // 编程式路由，跳转页面
         this.$router.push('/home')
       })

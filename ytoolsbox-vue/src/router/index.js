@@ -4,6 +4,7 @@ import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import User from '../components/user/User.vue'
 import UpdateLog from '../components/UpdateLog.vue'
+import Rights from '../components/power/Rights.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -30,7 +31,8 @@ const routes = [
     redirect: '/updatelog',
     children: [
       {path: '/userconfig', component: User, meta: {title: "用户管理与配置"} },
-      {path: '/updatelog', component: UpdateLog, meta:{title: "更新日志"}}
+      {path: '/updatelog', component: UpdateLog, meta:{title: "更新日志"}},
+      {path: '/systemconfig', component: Rights, meta:{title: "权限管理"}}
     ]
   }
 ]

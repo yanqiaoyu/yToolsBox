@@ -30,9 +30,9 @@ const routes = [
     },
     redirect: '/updatelog',
     children: [
-      {path: '/userconfig', component: User, meta: {title: "用户管理与配置"} },
+      {path: '/users', component: User, meta: {title: "用户管理与配置"} },
       {path: '/updatelog', component: UpdateLog, meta:{title: "更新日志"}},
-      {path: '/systemconfig', component: Rights, meta:{title: "权限管理"}}
+      {path: '/rights', component: Rights, meta:{title: "权限管理"}}
     ]
   }
 ]

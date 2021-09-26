@@ -18,6 +18,16 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/9/26" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成了所有功能的模型绑定重写 <br />
+            2. 后端新增权限管理 <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/23" placement="top">
         <el-card>
           <h4>更新内容</h4>

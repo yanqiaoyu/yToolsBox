@@ -12,7 +12,6 @@ package common
 import (
 	"fmt"
 	"main/model"
-	"strconv"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
@@ -53,6 +52,7 @@ func InitDB() *gorm.DB {
 // 初始化所有表
 func InitAllTabls(db *gorm.DB) {
 	InitUserTabel(db)
+	InitRightsTabel(db)
 }
 
 // 初始化用户表
@@ -80,28 +80,18 @@ func InitUserTabel(db *gorm.DB) {
 		},
 	}
 
-	// 填充一些测试数据，后续需要删掉
-	T_or_F := true
-	for i := 1; i <= 10; i++ {
-
-		if i%3 == 0 {
-			T_or_F = true
-		} else {
-			T_or_F = false
-		}
-
-		UserList = append(UserList, model.User{
-			UserName: "测试用户" + strconv.Itoa(i),
-			Mobile:   "18616350000",
-			Type:     1,
-			Email:    "123@321.com",
-			MgState:  T_or_F, // 当前用户的状态
-			RoleName: "管理员",
-		})
-	}
-
 	db.AutoMigrate(&model.User{})
 	db.Create(&UserList)
+}
+
+// 初始化权限表
+func InitRightsTabel(db *gorm.DB) {
+	RightsList := []model.Rights{
+		{AuthName: "首页", Level: 1, Pid: 0, Path: "home"},
+	}
+
+	db.AutoMigrate(&model.Rights{})
+	db.Create(&RightsList)
 }
 
 func GetDB() *gorm.DB {

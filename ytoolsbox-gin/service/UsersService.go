@@ -1,12 +1,5 @@
 package service
 
-import (
-	"log"
-	"strconv"
-
-	"github.com/gin-gonic/gin"
-)
-
 func CalculateReturnMapLength(pagenum int, pagesize int, userList []map[string]interface{}) (int, int) {
 	ArrayStart := 0
 	ArrayEnd := 0
@@ -24,21 +17,4 @@ func CalculateReturnMapLength(pagenum int, pagesize int, userList []map[string]i
 		ArrayEnd = len(userList)
 	}
 	return ArrayStart, ArrayEnd
-}
-
-func SplitPutUserStateParam(ctx *gin.Context) (string, int) {
-	mgstate := ctx.PostForm("mgstate")
-	userID, _ := strconv.Atoi(ctx.PostForm("userID"))
-	// log.Println(mgstate, userID)
-	return mgstate, userID
-}
-
-func SplitPostNewUserParam(ctx *gin.Context) (string, string, string, string, string) {
-	username := ctx.PostForm("username")
-	password := ctx.PostForm("password")
-	mobile := ctx.PostForm("mobile")
-	email := ctx.PostForm("email")
-	worknum := ctx.PostForm("worknum")
-	log.Println(username, password, mobile, email, worknum)
-	return username, password, mobile, email, worknum
 }

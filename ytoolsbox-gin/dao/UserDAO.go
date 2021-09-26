@@ -10,9 +10,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func SelectAllUser(db *gorm.DB, query string, pagenum int, pagesize int, param string) ([]map[string]interface{}, int) {
+// func SelectAllUser(db *gorm.DB, query string, pagenum int, pagesize int, param string) ([]map[string]interface{}, int) {
+func SelectAllUser(db *gorm.DB, obj dto.GetAllUserDTOReq) ([]map[string]interface{}, int) {
 	struct_userList := []dto.UserDTO{}
 	map_userList := []map[string]interface{}{}
+	query := obj.Query
+	pagenum := obj.Pagenum
+	pagesize := obj.Pagesize
+
 	// 不带Query，返回全部
 	// 否则返回like搜索后的结果
 	if query == "" {
@@ -36,7 +41,7 @@ func SelectAllUser(db *gorm.DB, query string, pagenum int, pagesize int, param s
 	return map_userList[ArrayStart:ArrayEnd], DefaultLength
 }
 
-func SelectSpecifiedUser(db *gorm.DB, userID int) dto.UserDTO {
+func SelectSpecifiedUser(db *gorm.DB, userID int64) dto.UserDTO {
 	struct_userList := dto.UserDTO{}
 	db.Model(&model.User{}).Where("id = ?", userID).Find(&struct_userList)
 	return struct_userList
@@ -48,12 +53,12 @@ func DeleteSpecifiedUser(db *gorm.DB, userID int) model.User {
 	return struct_user
 }
 
-func UpdateUserState(db *gorm.DB, mgstate string, userID int) {
-	db.Model(&model.User{}).Where("id = ?", userID).Update("mgstate", mgstate)
+func UpdateUserState(db *gorm.DB, PutUserStateDTOReq dto.PutUserStateDTOReq) {
+	db.Model(&model.User{}).Where("id = ?", PutUserStateDTOReq.UserID).Update("mgstate", PutUserStateDTOReq.Mgstate)
 }
 
-func UpdateSpecifiedUser(db *gorm.DB, userID int, email string, mobile string) {
-	db.Model(&model.User{}).Where("id = ?", userID).Updates(map[string]interface{}{"email": email, "mobile": mobile})
+func UpdateSpecifiedUser(db *gorm.DB, PutUserInfoDTOReq dto.PutUserInfoDTOReq, GetSpecifiedUserDTOReq dto.GetSpecifiedUserDTOReq) {
+	db.Model(&model.User{}).Where("id = ?", GetSpecifiedUserDTOReq.UserID).Updates(map[string]interface{}{"email": PutUserInfoDTOReq.Email, "mobile": PutUserInfoDTOReq.Mobile})
 }
 
 func InsertNewUser(db *gorm.DB, username string, password string, mobile string, email string, worknum string) (model.User, *gorm.DB) {

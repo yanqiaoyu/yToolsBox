@@ -11,12 +11,6 @@ package model
 
 import "gorm.io/gorm"
 
-type UsersData struct {
-	Total   int                      `json:"total"`
-	Pagenum int                      `json:"pagenum"`
-	Users   []map[string]interface{} `json:"users"`
-}
-
 // 在这里定义好表的结构
 type User struct {
 	gorm.Model

@@ -36,7 +36,7 @@
           <!-- 按钮区域 -->
           <el-form-item class="login_btn">
             <el-button type="primary" @click="login">登录</el-button>
-            <el-button type="success" @click="reset">访客登录</el-button>
+            <el-button type="success" @click="guestLogin">访客登录</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -58,6 +58,10 @@ export default {
         name: 'admin',
         password: 'admin'
       },
+      guestLoginForm: {
+        name: 'guest',
+        password: 'guest'
+      },
       rules: {
         name: [
           { required: true, message: '请输入账号名称', trigger: 'blur' },
@@ -71,24 +75,38 @@ export default {
     }
   },
   methods: {
-    reset() {
-      // console.log(this)
-      this.$refs.login_form_ref.resetFields()
-    },
-    login() {
+    guestLogin() {
       this.$refs.login_form_ref.validate(async valid => {
-        // console.log(valid)
         if (!valid) return
         const { data: res } = await this.$http.post(
           'login',
           qs.stringify(this.loginForm)
         )
-        console.log(res)
         if (res.meta.status_code !== 200) {
           this.$message.error(res.meta.message)
           return
         }
-        // alert('登陆成功')
+        this.$message({
+          message: '成功登陆',
+          type: 'success'
+        })
+        // 登录成功后，需要保存token至本地
+        window.sessionStorage.setItem('token', res.data.token)
+        // 编程式路由，跳转页面
+        this.$router.push('/home')
+      })
+    },
+    login() {
+      this.$refs.login_form_ref.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post(
+          'login',
+          qs.stringify(this.loginForm)
+        )
+        if (res.meta.status_code !== 200) {
+          this.$message.error(res.meta.message)
+          return
+        }
         this.$message({
           message: '成功登陆',
           type: 'success'
@@ -104,9 +122,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// lang=less，使得代码样式支持less语法
-// scope限定样式只在当前组件生效
-
 // 登录页面的整个容器
 .login_container {
   background-color: #2b4b6b;

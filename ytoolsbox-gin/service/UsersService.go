@@ -7,17 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SplitGetAllUserParam(ctx *gin.Context) (string, int, int, string) {
-	query := ctx.Query("query")
-	// 这行属性其实就是当前在第几页
-	pagenum, _ := strconv.Atoi(ctx.Query("pagenum"))
-	// 这行属性其实就是当前每页展示多少条数据
-	pagesize, _ := strconv.Atoi(ctx.Query("pagesize"))
-	param := ctx.Query("param")
-	// log.Print("\r\n query:", query, "\r\n pagenum: ", pagenum, "\r\n pagesize: ", pagesize, "\r\n param:", param)
-	return query, pagenum, pagesize, param
-}
-
 func CalculateReturnMapLength(pagenum int, pagesize int, userList []map[string]interface{}) (int, int) {
 	ArrayStart := 0
 	ArrayEnd := 0

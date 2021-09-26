@@ -11,9 +11,13 @@ package util
 import (
 	"encoding/json"
 	"fmt"
+	"main/dto"
+	"main/response"
 	"math/rand"
 	"reflect"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -43,4 +47,43 @@ func Struct2MapViaJson(obj interface{}) map[string]interface{} {
 	m := make(map[string]interface{})
 	json.Unmarshal(data, &m)
 	return m
+}
+
+// 封装了一层模型绑定 Param
+func ResolveParam(ctx *gin.Context, obj interface{}) error {
+	err := ctx.ShouldBind(obj)
+	if err != nil {
+		msg := dto.FailResponseMeta{}
+		msg.StatusCode = 400
+		msg.Message = "必填字段为空"
+		response.Fail(ctx, nil, Struct2MapViaJson(msg))
+		return err
+	}
+	return nil
+}
+
+// 封装了一层模型绑定 Query
+func ResolveQuery(ctx *gin.Context, obj interface{}) error {
+	err := ctx.ShouldBindQuery(obj)
+	if err != nil {
+		msg := dto.FailResponseMeta{}
+		msg.StatusCode = 400
+		msg.Message = "必填字段为空"
+		response.Fail(ctx, nil, Struct2MapViaJson(msg))
+		return err
+	}
+	return nil
+}
+
+// 封装了一层模型绑定 URI
+func ResolveURI(ctx *gin.Context, obj interface{}) error {
+	err := ctx.ShouldBindUri(obj)
+	if err != nil {
+		msg := dto.FailResponseMeta{}
+		msg.StatusCode = 400
+		msg.Message = "必填字段为空"
+		response.Fail(ctx, nil, Struct2MapViaJson(msg))
+		return err
+	}
+	return nil
 }

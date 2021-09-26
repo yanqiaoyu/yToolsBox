@@ -19,7 +19,7 @@ func GetMenus(ctx *gin.Context) {
 		Data: []model.MenusData{
 			{Id: 1, AuthName: "首页", Path: "home", ChildMenus: []model.ChildMenus{}},
 			{Id: 2, AuthName: "能效总览", Path: "dashboard", ChildMenus: []model.ChildMenus{}},
-			{Id: 3, AuthName: "工具盒总览", Path: "toolbox", ChildMenus: []model.ChildMenus{}},
+			{Id: 3, AuthName: "工具盒", Path: "toolbox", ChildMenus: []model.ChildMenus{}},
 			{Id: 4, AuthName: "全局配置", Path: "globalconfig", ChildMenus: []model.ChildMenus{
 				{Id: 401, AuthName: "用户管理", Path: "users"},
 				{Id: 402, AuthName: "权限管理", Path: "rights"},

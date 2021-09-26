@@ -5,6 +5,9 @@ import Home from '../components/Home.vue'
 import User from '../components/user/User.vue'
 import UpdateLog from '../components/UpdateLog.vue'
 import Rights from '../components/power/Rights.vue'
+import ToolBox from '../components/ToolBox.vue'
+import About from '../components/About.vue'
+import DashBoard from '../components/DashBoard.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -30,9 +33,12 @@ const routes = [
     },
     redirect: '/updatelog',
     children: [
-      {path: '/users', component: User, meta: {title: "用户管理与配置"} },
-      {path: '/updatelog', component: UpdateLog, meta:{title: "更新日志"}},
-      {path: '/rights', component: Rights, meta:{title: "权限管理"}}
+      { path: '/users', component: User, meta: { title: '用户管理' } },
+      { path: '/updatelog', component: UpdateLog, meta: { title: '更新日志' } },
+      { path: '/rights', component: Rights, meta: { title: '权限管理' } },
+      { path: '/toolbox', component: ToolBox, meta: { title: '工具盒' } },
+      { path: '/about', component: About, meta: { title: '关于' } },
+      { path: '/dashboard', component: DashBoard, meta: { title: '能效总览' } }
     ]
   }
 ]

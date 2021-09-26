@@ -61,8 +61,8 @@ func UpdateSpecifiedUser(db *gorm.DB, PutUserInfoDTOReq dto.PutUserInfoDTOReq, G
 	db.Model(&model.User{}).Where("id = ?", GetSpecifiedUserDTOReq.UserID).Updates(map[string]interface{}{"email": PutUserInfoDTOReq.Email, "mobile": PutUserInfoDTOReq.Mobile})
 }
 
-func InsertNewUser(db *gorm.DB, username string, password string, mobile string, email string, worknum string) (model.User, *gorm.DB) {
-	newUser := model.User{UserName: username, PassWord: password, Mobile: mobile, Email: email, WorkNum: worknum}
+func InsertNewUser(db *gorm.DB, PostNewUserReq dto.PostNewUserReq) (model.User, *gorm.DB) {
+	newUser := model.User{UserName: PostNewUserReq.UserName, PassWord: PostNewUserReq.PassWord, Mobile: PostNewUserReq.Mobile, Email: PostNewUserReq.Email, WorkNum: PostNewUserReq.WorkNum}
 	result := db.Create(&newUser)
 
 	return newUser, result

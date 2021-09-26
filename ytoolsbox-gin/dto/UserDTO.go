@@ -38,3 +38,11 @@ type PutUserInfoDTOReq struct {
 	Email  string `form:"email"`
 	Mobile string `form:"mobile"`
 }
+
+type PostNewUserReq struct {
+	UserName string `form:"username" binding:"required"`
+	PassWord string `form:"password" binding:"required"`
+	Mobile   string `form:"mobile"`
+	Email    string `form:"email"`
+	WorkNum  string `form:"worknum"`
+}

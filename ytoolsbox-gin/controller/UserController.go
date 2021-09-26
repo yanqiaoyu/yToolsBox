@@ -10,16 +10,12 @@
 package controller
 
 import (
-	"log"
 	"main/common"
 	"main/dao"
 	"main/dto"
 	"main/model"
 	"main/response"
-	"main/service"
 	"main/util"
-
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -76,8 +72,8 @@ func PutUserState(ctx *gin.Context) {
 func PutUserInfo(ctx *gin.Context) {
 	db := common.GetDB()
 
+	// 这里用了2个结构体，是因为一个参数在url中，剩下的参数在form-data中
 	PutUserInfoDTOReq := dto.PutUserInfoDTOReq{}
-
 	GetSpecifiedUserDTOReq := dto.GetSpecifiedUserDTOReq{}
 
 	if util.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
@@ -94,23 +90,26 @@ func PutUserInfo(ctx *gin.Context) {
 // 新增用户
 func PostNewUser(ctx *gin.Context) {
 	db := common.GetDB()
+	PostNewUserReq := dto.PostNewUserReq{}
 	// 提取参数
-	username, password, mobile, email, worknum := service.SplitPostNewUserParam(ctx)
+	if util.ResolveParam(ctx, &PostNewUserReq) != nil {
+		return
+	}
 	// 写入数据库
-	newUser, result := dao.InsertNewUser(db, username, password, mobile, email, worknum)
-
-	log.Println("newUser:", newUser, "result", result.Error, result.RowsAffected)
+	dao.InsertNewUser(db, PostNewUserReq)
 }
 
 // 删除特定用户
 func DeleteSpecifiedUser(ctx *gin.Context) {
 	db := common.GetDB()
-	userID, _ := strconv.Atoi(ctx.Param("userID"))
-	// log.Println(userID)
-	struct_userList := dao.DeleteSpecifiedUser(db, userID)
+	GetSpecifiedUserDTOReq := dto.GetSpecifiedUserDTOReq{}
+
+	if util.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
+		return
+	}
+	struct_userList := dao.DeleteSpecifiedUser(db, int(GetSpecifiedUserDTOReq.UserID))
 
 	// 构造返回的结构体
-	Meta := model.Meta{Msg: "获取用户成功", Status_code: 200}
-
-	ctx.JSON(200, gin.H{"data": struct_userList, "meta": Meta})
+	Meta := model.Meta{Msg: "删除用户成功", Status_code: 200}
+	response.Success(ctx, util.Struct2MapViaJson(struct_userList), util.Struct2MapViaJson(Meta))
 }

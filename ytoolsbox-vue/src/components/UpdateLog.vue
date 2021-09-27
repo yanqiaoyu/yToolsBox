@@ -18,6 +18,16 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/9/27" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 开始进行工具盒核心功能的编写 <br />
+            2. 在熊少的帮助下，改善了工具盒的布局与样式 <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/26" placement="top">
         <el-card>
           <h4>更新内容</h4>

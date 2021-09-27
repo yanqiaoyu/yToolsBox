@@ -32,7 +32,9 @@ import {
   Dialog,
   MessageBox,
   Tag,
-  Image
+  Image,
+  Divider,
+  Rate
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -68,5 +70,7 @@ Vue.use(Avatar)
 Vue.use(Dialog)
 Vue.use(Tag)
 Vue.use(Image)
+Vue.use(Divider)
+Vue.use(Rate)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

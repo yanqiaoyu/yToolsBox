@@ -62,14 +62,14 @@
 
         <div class="text_container">
           <div class="rate_title">
-            <span class="tool-title">工具名称</span>
+            <span class="tool-title" title="工具名称123">工具名称123</span>
             <el-rate
               v-model="value"
               disabled
               text-color="#ff9900"
               score-template="{value}"
+              class="el-rate"
             >
-              >
             </el-rate>
           </div>
 
@@ -140,6 +140,11 @@ export default {
   font-weight: bold;
   height: 21px;
   display: inline-block;
+  overflow: hidden;
+  font-size: 18px;
+  width: 100px; /*一定要设置宽度，或者元素内含的百分比*/
+  white-space: nowrap; /*文本不换行*/
+  text-overflow: ellipsis; /*ellipsis:文本溢出显示省略号（...）；clip：不显示省略标记（...），而是简单的裁切*/
 }
 
 .line.el-divider--horizontal {
@@ -164,5 +169,9 @@ export default {
 
 .star-rate {
   display: inline-block;
+}
+
+.el-rate {
+  padding-top: 2px;
 }
 </style>

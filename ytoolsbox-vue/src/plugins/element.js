@@ -34,7 +34,12 @@ import {
   Tag,
   Image,
   Divider,
-  Rate
+  Rate,
+  Alert,
+  Step,
+  Steps,
+  Select,
+  Option
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -72,5 +77,10 @@ Vue.use(Tag)
 Vue.use(Image)
 Vue.use(Divider)
 Vue.use(Rate)
+Vue.use(Alert)
+Vue.use(Step)
+Vue.use(Steps)
+Vue.use(Select)
+Vue.use(Option)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

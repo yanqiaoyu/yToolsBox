@@ -5,6 +5,7 @@ import {
   FormItem,
   Input,
   Button,
+  ButtonGroup,
   Container,
   Aside,
   Main,
@@ -48,6 +49,7 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
 Vue.use(Button)
+Vue.use(ButtonGroup)
 Vue.use(Container)
 Vue.use(Aside)
 Vue.use(Main)

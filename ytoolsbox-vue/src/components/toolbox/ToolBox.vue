@@ -52,8 +52,14 @@
         shadow="hover"
       >
         <div class="image_container">
-          <el-image
+          <!-- <el-image
             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            class="image"
+            fit="scale-down"
+          >
+          </el-image> -->
+          <el-image
+            :src="require('../../assets/users.png')"
             class="image"
             fit="scale-down"
           >
@@ -62,7 +68,11 @@
 
         <div class="text_container">
           <div class="rate_title">
-            <span class="tool-title" title="工具名称123">工具名称123</span>
+            <span
+              class="tool-title"
+              title="工具名称123111111111111111111111111111"
+              >工具名称123111111111111111111111111111</span
+            >
             <el-rate
               v-model="value"
               disabled
@@ -85,7 +95,12 @@
         @click.native="addTool"
       >
         <div class="image_container">
-          <el-image class="image"> </el-image>
+          <el-image
+            fit="scale-down"
+            class="image"
+            :src="require('../../assets/add.png')"
+          >
+          </el-image>
         </div>
 
         <div style="padding: 14px;">
@@ -115,7 +130,7 @@ export default {
 
 <style lang="less" scoped>
 .toolbox {
-  width: 255px;
+  width: 310px;
   height: 350px;
   display: inline-block;
   margin: 6px 6px;
@@ -127,7 +142,7 @@ export default {
 
 .image_container {
   height: 225px;
-  width: 255px;
+  width: 310px;
 }
 
 .image {
@@ -142,7 +157,7 @@ export default {
   display: inline-block;
   overflow: hidden;
   font-size: 18px;
-  width: 100px; /*一定要设置宽度，或者元素内含的百分比*/
+  width: 150px; /*一定要设置宽度，或者元素内含的百分比*/
   white-space: nowrap; /*文本不换行*/
   text-overflow: ellipsis; /*ellipsis:文本溢出显示省略号（...）；clip：不显示省略标记（...），而是简单的裁切*/
 }
@@ -163,7 +178,7 @@ export default {
   font-weight: bold;
   height: 21px;
   width: 30%;
-  margin: 0 auto;
+  margin: 0 108px;
   display: block;
 }
 

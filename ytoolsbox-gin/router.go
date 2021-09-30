@@ -39,5 +39,8 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 
 	// 获取权限
 	r.GET(URL_Prefix+"/rights", controller.GetRights)
+
+	// 添加新工具
+	r.POST(URL_Prefix+"/tools", controller.PostNewTool)
 	return r
 }

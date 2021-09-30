@@ -42,7 +42,7 @@ func InitDB() *gorm.DB {
 		panic("fail to connect to postgres, error" + err.Error())
 	}
 
-	InitAllTabls(db)
+	InitAllTables(db)
 
 	DB = db
 	return db
@@ -50,13 +50,20 @@ func InitDB() *gorm.DB {
 }
 
 // 初始化所有表
-func InitAllTabls(db *gorm.DB) {
-	InitUserTabel(db)
-	InitRightsTabel(db)
+func InitAllTables(db *gorm.DB) {
+	InitUserTable(db)
+	InitRightsTable(db)
+	InitToolsTable(db)
+}
+
+func InitToolsTable(db *gorm.DB) {
+
+	db.AutoMigrate(&model.Tool{})
+
 }
 
 // 初始化用户表
-func InitUserTabel(db *gorm.DB) {
+func InitUserTable(db *gorm.DB) {
 	UserList := []model.User{
 
 		// 默认的超级管理员
@@ -85,7 +92,7 @@ func InitUserTabel(db *gorm.DB) {
 }
 
 // 初始化权限表
-func InitRightsTabel(db *gorm.DB) {
+func InitRightsTable(db *gorm.DB) {
 	RightsList := []model.Rights{
 		{AuthName: "首页", Level: 0, Pid: 0, Path: "home"},
 		{AuthName: "能效总览", Level: 1, Pid: 0, Path: "dashboard"},

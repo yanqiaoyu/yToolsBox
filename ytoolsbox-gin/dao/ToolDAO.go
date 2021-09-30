@@ -1,17 +1,14 @@
 package dao
 
 import (
-	"log"
 	"main/dto"
 	"main/model"
 
 	"gorm.io/gorm"
 )
 
-func InsertNewTool(db *gorm.DB, PostNewTolReq dto.PostNewToolDTOReq) {
-	newTool := model.Tool{}
-	log.Println(newTool)
-	// result := db.Create(&newTool)
+func InsertNewTool(db *gorm.DB, PostNewToolReq dto.PostNewToolDTOReq) *gorm.DB {
 
-	// return result
+	result := db.Model(&model.Tool{}).Create(&PostNewToolReq)
+	return result
 }

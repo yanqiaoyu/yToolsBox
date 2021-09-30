@@ -1,7 +1,8 @@
 package controller
 
 import (
-	"log"
+	"main/common"
+	"main/dao"
 	"main/dto"
 	"main/util"
 
@@ -10,14 +11,14 @@ import (
 
 // 新增一个工具
 func PostNewTool(ctx *gin.Context) {
-	// db := common.GetDB()
+	db := common.GetDB()
 	PostNewToolReq := dto.PostNewToolDTOReq{}
 	// 提取参数
 	if util.ResolveParam(ctx, &PostNewToolReq) != nil {
 		return
 	}
-	log.Println(PostNewToolReq)
+
 	// 写入数据库
-	// dao.InsertNewTool(db, PostNewToolReq)
+	dao.InsertNewTool(db, PostNewToolReq)
 
 }

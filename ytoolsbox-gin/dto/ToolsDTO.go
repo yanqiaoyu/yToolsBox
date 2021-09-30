@@ -1,10 +1,13 @@
 package dto
 
+import "gorm.io/gorm"
+
 type PostNewToolDTOReq struct {
+	gorm.Model
 	// 工具类型：脚本，容器
 	ToolType string `form:"toolType" json:"toolType" binding:"required"`
 	// 镜像名称
-	ToolDockerImageName string `form:"toolDockerImageName" json:"toolDockerImageName" binding:"required"`
+	ToolDockerImageName string `form:"toolDockerImageName" json:"toolDockerImageName"`
 	// 工具名称
 	ToolName string `form:"toolName" json:"toolName" binding:"required"`
 	// 工具运行需要的参数

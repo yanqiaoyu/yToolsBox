@@ -377,7 +377,10 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.post('tools', qs.stringify(this.toolForm))
+          this.$http.post(
+            'tools',
+            qs.stringify({ ...this.toolForm, toolRunCMD: this.finalCMD })
+          )
 
           this.$message({
             type: 'success',

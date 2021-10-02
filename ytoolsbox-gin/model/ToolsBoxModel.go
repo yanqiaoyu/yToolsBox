@@ -8,6 +8,10 @@ type Tool struct {
 	ToolType string `form:"toolType" json:"toolType" gorm:"column:toolType" binding:"required"`
 	// 镜像名称
 	ToolDockerImageName string `form:"toolDockerImageName" json:"toolDockerImageName" gorm:"column:toolDockerImageName"`
+	// 脚本工具的名称
+	ToolScriptName string `form:"toolScriptName" json:"toolScriptName" gorm:"column:toolScriptName"`
+	// 脚本的存放路径
+	ToolScriptPath string `form:"toolScriptPath" json:"toolScriptPath" gorm:"column:toolScriptPath"`
 	// 工具名称
 	ToolName string `form:"toolName" json:"toolName" gorm:"column:toolName" binding:"required"`
 	// 工具运行需要的参数
@@ -35,4 +39,14 @@ type Tool struct {
 	ToolAuthor string `form:"toolAuthor" json:"toolAuthor" gorm:"column:toolAuthor" binding:"required"`
 	// 作者联系方式
 	ToolAuthorMobile string `form:"toolAuthorMobile" json:"toolAuthorMobile" gorm:"column:toolAuthorMobile"`
+}
+
+type ToolConfig struct {
+	gorm.Model
+	// 配置名称
+	ToolConfigName string `form:"toolConfigName" json:"toolConfigName" gorm:"column:toolConfigName"`
+	// 配置描述
+	ToolConfigDesc string `form:"toolConfigDesc" json:"toolConfigDesc" gorm:"column:toolConfigDesc"`
+	// 工具ID
+	ToolID int `form:"toolID" json:"toolID" gorm:"column:toolID"`
 }

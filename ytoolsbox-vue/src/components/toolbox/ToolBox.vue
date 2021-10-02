@@ -96,7 +96,7 @@
             </el-tooltip>
           </div>
           <div class="toolTags">
-            <el-tag type="info">{{ tool.toolType }}</el-tag>
+            <el-tag type="info">{{ tool.toolType === 'container' ? '容器' : '脚本' }}</el-tag>
             <el-tag type="success">作者:{{ tool.toolAuthor }}</el-tag>
           </div>
         </div>

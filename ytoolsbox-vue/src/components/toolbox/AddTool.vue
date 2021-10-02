@@ -84,6 +84,45 @@
             </el-form-item>
           </div>
 
+          <!-- 选择了脚本工具，出现这个 -->
+          <div v-if="toolForm.toolType == 'script'">
+            <el-form-item label="脚本名称" prop="toolScriptName">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolScriptName"
+                placeholder="脚本名称, eg:hello-world.sh"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="脚本绝对路径" prop="toolScriptPath">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolScriptPath"
+                placeholder="脚本绝对路径,不含文件名 eg:/tmp/XXX/"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="运行参数" prop="toolOptions">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                type="textarea"
+                v-model="toolForm.toolOptions"
+                style="width:450px"
+                :autosize="{ minRows: 8, maxRows: 10 }"
+                placeholder="工具运行时需要传入的参数"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="最终执行语句" prop="toolRunCMD">
+              <el-input
+                type="textarea"
+                :value="finalScriptCMD"
+                style="width:450px"
+                :disabled="true"
+                :autosize="{ minRows: 8, maxRows: 10 }"
+              ></el-input>
+            </el-form-item>
+          </div>
+
           <!-- 工具名称的输入框 -->
           <el-form-item label="工具名称" prop="toolName">
             <el-input
@@ -237,6 +276,8 @@ export default {
       toolForm: {
         toolType: '',
         toolDockerImageName: '',
+        toolScriptName: '',
+        toolScriptPath: '',
         toolName: '',
         toolAuthor: '',
         toolAuthorMobile: '',
@@ -255,6 +296,12 @@ export default {
         ],
         toolDockerImageName: [
           { required: true, message: '请输入Docker镜像名称', trigger: 'blur' },
+        ],
+        toolScriptName: [
+          { required: true, message: '请输入脚本名称', trigger: 'blur' },
+        ],
+        toolScriptPath: [
+          { required: true, message: '请输入脚本绝对路径', trigger: 'blur' },
         ],
         toolName: [
           { required: true, message: '请填写工具名称', trigger: 'blur' },
@@ -316,6 +363,15 @@ export default {
         toolOptions +
         ' ' +
         toolDockerImageName
+
+      return toolRunCMD
+    },
+    finalScriptCMD() {
+      let { toolRunCMD, toolScriptName, toolScriptPath, toolOptions } =
+        this.toolForm
+
+      toolRunCMD =
+        'sh' + ' ' + toolScriptPath + toolScriptName + ' ' + toolOptions
 
       return toolRunCMD
     },

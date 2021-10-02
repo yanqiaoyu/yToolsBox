@@ -20,7 +20,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 返回所有用户的方法
+// 返回所有用户
 func GetAllUser(ctx *gin.Context) {
 	db := common.GetDB()
 	GetAllerUserReqParam := dto.GetAllUserDTOReq{}

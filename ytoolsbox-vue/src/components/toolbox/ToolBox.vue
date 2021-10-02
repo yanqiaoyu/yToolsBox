@@ -18,9 +18,7 @@
         line-height: 40px;
         color: #1989fa;
       }"
-      >
-        UP
-      </div>
+      >UP</div>
     </el-backtop>
 
     <!-- 底部背景卡片 -->
@@ -45,45 +43,38 @@
 
       <!-- 已有的工具卡片 -->
       <el-card
-        v-for="o in 5"
-        :key="o"
+        v-for="tool in toolsList"
+        :key="tool.id"
         :body-style="{ padding: '0px' }"
         class="toolbox"
         shadow="hover"
       >
         <div class="image_container">
-          <!-- <el-image
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-            class="image"
-            fit="scale-down"
-          >
-          </el-image> -->
-          <el-image
-            :src="require('../../assets/users.png')"
-            class="image"
-            fit="scale-down"
-          >
-          </el-image>
+          <el-image :src="require('../../assets/users.png')" class="image" fit="scale-down"></el-image>
         </div>
 
         <div class="text_container">
           <div class="rate_title">
-            <span
-              class="tool-title"
-              title="工具名称123111111111111111111111111111"
-              >工具名称123111111111111111111111111111</span
-            >
+            <span class="tool-title" :title="tool.toolName">{{ tool.toolName }}</span>
             <el-rate
               v-model="value"
               disabled
               text-color="#ff9900"
               score-template="{value}"
               class="el-rate"
-            >
-            </el-rate>
+            ></el-rate>
           </div>
 
           <el-divider class="line"></el-divider>
+          <div class="toolsDesc">
+            <el-tooltip class="item" effect="dark" :content="tool.toolDesc" placement="bottom">
+              <span>{{ tool.toolDesc }}</span>
+            </el-tooltip>
+          </div>
+          <div class="toolTags">
+            <el-tag type="info">{{ tool.toolType }}</el-tag>
+            <el-tag type="success">作者:{{ tool.toolAuthor }}</el-tag>
+          </div>
         </div>
       </el-card>
 
@@ -95,12 +86,7 @@
         @click.native="addTool"
       >
         <div class="image_container">
-          <el-image
-            fit="scale-down"
-            class="image"
-            :src="require('../../assets/add.png')"
-          >
-          </el-image>
+          <el-image fit="scale-down" class="image" :src="require('../../assets/add.png')"></el-image>
         </div>
 
         <div style="padding: 14px;">
@@ -116,15 +102,29 @@ export default {
   data() {
     return {
       currentDate: new Date(),
-      value: 3.7
+      value: 3.7,
+      toolsList: [],
+      totalTools: 0,
     }
+  },
+  created() {
+    this.GetToolsList()
   },
   methods: {
     addTool() {
-      console.log('新增工具')
       this.$router.push('/toolbox/add')
-    }
-  }
+    },
+    async GetToolsList() {
+      const { data: res } = await this.$http.get('tools')
+      console.log(res)
+      if (res.meta.status_code !== 200)
+        return this.$message.error('获取工具列表失败')
+
+      // 成功了就开始赋值
+      this.toolsList = res.data.tools
+      this.totalTools = res.data.total
+    },
+  },
 }
 </script>
 
@@ -135,10 +135,6 @@ export default {
   display: inline-block;
   margin: 6px 6px;
 }
-
-/* .text_container {
-  display: flex;
-} */
 
 .image_container {
   height: 225px;
@@ -188,5 +184,45 @@ export default {
 
 .el-rate {
   padding-top: 2px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: '';
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+}
+
+.toolsDesc {
+  font-size: 12px;
+  margin-left: 16px;
+  margin-right: 8px;
+  height: 20px;
+  width: 277px;
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 官方文档给出的tag之间设置空隙的方法
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+
+.toolTags {
+  height: 50px;
+  width: 95%;
+  position: relative;
+  text-align: right;
+  margin-top: 10px;
 }
 </style>

@@ -11,12 +11,7 @@
     <el-card>
       <!-- 步骤条 -->
       <el-steps :active="activeIndex" finish-status="success" align-center>
-        <el-step
-          class="stepClass"
-          v-for="(step, index) in stepList"
-          :key="index"
-          :title="step"
-        ></el-step>
+        <el-step class="stepClass" v-for="(step, index) in stepList" :key="index" :title="step"></el-step>
       </el-steps>
     </el-card>
 
@@ -28,20 +23,9 @@
 
     <el-card style="width:70%;margin:0 auto">
       <!-- 引导信息 -->
-      <el-alert
-        :title="stepList[activeIndex]"
-        type="success"
-        center
-        :closable="false"
-      >
-      </el-alert>
+      <el-alert :title="stepList[activeIndex]" type="success" center :closable="false"></el-alert>
 
-      <el-form
-        :model="toolForm"
-        :rules="toolRules"
-        ref="addToolForm"
-        label-width="130px"
-      >
+      <el-form :model="toolForm" :rules="toolRules" ref="addToolForm" label-width="130px">
         <!-- 填写工具信息 -->
         <div
           v-if="activeIndex === 0 || activeIndex === stepList.length - 1"
@@ -75,10 +59,7 @@
                 content="这里的名称与拉取镜像挂钩 例如:填写hello-world,后续拉取时会执行 docker pull hello-world"
                 placement="top-start"
               >
-                <i
-                  class="header-icon el-icon-info"
-                  style="margin-left:10px"
-                ></i>
+                <i class="header-icon el-icon-info" style="margin-left:10px"></i>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="运行参数" prop="toolOptions">
@@ -215,30 +196,27 @@
       <div style="text-align: right;">
         <el-button-group>
           <div v-if="activeIndex === 0">
-            <el-button disabled type="primary" icon="el-icon-arrow-left"
-              >上一步</el-button
-            >
-            <el-button type="primary" @click="nextStep"
-              >下一步<i class="el-icon-arrow-right el-icon--right"></i
-            ></el-button>
+            <el-button disabled type="primary" icon="el-icon-arrow-left">上一步</el-button>
+            <el-button type="primary" @click="nextStep">
+              下一步
+              <i class="el-icon-arrow-right el-icon--right"></i>
+            </el-button>
           </div>
 
           <div v-else-if="activeIndex === stepList.length - 1">
-            <el-button type="primary" icon="el-icon-arrow-left" @click="preStep"
-              >上一步</el-button
-            >
-            <el-button type="primary" @click="PostNewTool"
-              >确认提交 <i class="el-icon-check"></i
-            ></el-button>
+            <el-button type="primary" icon="el-icon-arrow-left" @click="preStep">上一步</el-button>
+            <el-button type="primary" @click="PostNewTool">
+              确认提交
+              <i class="el-icon-check"></i>
+            </el-button>
           </div>
 
           <div v-else>
-            <el-button type="primary" icon="el-icon-arrow-left"
-              >上一步</el-button
-            >
-            <el-button type="primary" @click="nextStep"
-              >下一步<i class="el-icon-arrow-right el-icon--right"></i
-            ></el-button>
+            <el-button type="primary" icon="el-icon-arrow-left">上一步</el-button>
+            <el-button type="primary" @click="nextStep">
+              下一步
+              <i class="el-icon-arrow-right el-icon--right"></i>
+            </el-button>
           </div>
         </el-button-group>
       </div>
@@ -266,55 +244,55 @@ export default {
         toolRemoteIP: '',
         toolRemoteSSH_Port: '',
         toolRemoteSSH_Account: '',
-        toolRemoteSSH_Password: ''
+        toolRemoteSSH_Password: '',
       },
       toolRules: {
         toolType: [
-          { required: true, message: '请选择工具类型', trigger: 'change' }
+          { required: true, message: '请选择工具类型', trigger: 'change' },
         ],
         toolDockerImageName: [
-          { required: true, message: '请输入Docker镜像名称', trigger: 'blur' }
+          { required: true, message: '请输入Docker镜像名称', trigger: 'blur' },
         ],
         toolName: [
           { required: true, message: '请填写工具名称', trigger: 'blur' },
-          { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' }
+          { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' },
         ],
         toolDesc: [
-          { min: 0, max: 100, message: '100个字符内', trigger: 'blur' }
+          { min: 0, max: 100, message: '100个字符内', trigger: 'blur' },
         ],
         toolRemoteIP: [
-          { required: true, message: '请填写远程环境的IP', trigger: 'blur' }
+          { required: true, message: '请填写远程环境的IP', trigger: 'blur' },
         ],
         toolRemoteSSH_Port: [
           {
             required: true,
             message: '请填写远程环境的SSH端口',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Account: [
           {
             required: true,
             message: '请填写远程环境的SSH账号',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Password: [
           {
             required: true,
             message: '请填写远程环境的SSH密码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolAuthor: [
           {
             required: true,
             message: '请填写作者名称',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' }
-        ]
-      }
+          { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' },
+        ],
+      },
     }
   },
   computed: {
@@ -337,7 +315,7 @@ export default {
         toolDockerImageName
 
       return toolRunCMD
-    }
+    },
   },
   methods: {
     clickStep(index) {
@@ -353,7 +331,7 @@ export default {
     },
     nextStep() {
       console.log(this.$refs)
-      this.$refs.addToolForm.validate(valid => {
+      this.$refs.addToolForm.validate((valid) => {
         if (valid) {
           if (this.activeIndex == this.stepList.length - 1) {
             return
@@ -374,7 +352,7 @@ export default {
       this.$confirm('参数确认无误, 确认新增此工具?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       })
         .then(() => {
           this.$http.post(
@@ -384,7 +362,7 @@ export default {
 
           this.$message({
             type: 'success',
-            message: '添加工具成功!'
+            message: '添加工具成功!',
           })
 
           this.$router.push('/toolbox')
@@ -392,11 +370,11 @@ export default {
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '添加工具失败'
+            message: '添加工具失败',
           })
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

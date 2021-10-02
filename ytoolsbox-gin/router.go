@@ -42,5 +42,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 
 	// 添加新工具
 	r.POST(URL_Prefix+"/tools", controller.PostNewTool)
+	// 查询所有工具
+	r.GET(URL_Prefix+"/tools", controller.GetAllTools)
 	return r
 }

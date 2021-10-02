@@ -27,7 +27,13 @@
       <el-row :gutter="20">
         <!-- 这个列里面放的是搜索框 -->
         <el-col :span="6">
-          <el-input placeholder="请输入工具名称" clearable>
+          <el-input
+            placeholder="请输入工具名称"
+            clearable
+            v-model="queryInfo.query"
+            @clear="GetToolsList"
+            @change="GetToolsList"
+          >
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
@@ -48,21 +54,39 @@
         :body-style="{ padding: '0px' }"
         class="toolbox"
         shadow="hover"
+        @click.native="toToolContent(tool)"
       >
-        <div class="image_container">
-          <el-image :src="require('../../assets/users.png')" class="image" fit="scale-down"></el-image>
+        <div v-if="tool.toolType === 'container'" class="image_container">
+          <el-image :src="require('../../assets/container.png')" class="image" fit="scale-down"></el-image>
+        </div>
+        <div v-if="tool.toolType === 'script'" class="image_container">
+          <el-image :src="require('../../assets/script.png')" class="image" fit="scale-down"></el-image>
         </div>
 
         <div class="text_container">
           <div class="rate_title">
             <span class="tool-title" :title="tool.toolName">{{ tool.toolName }}</span>
-            <el-rate
-              v-model="value"
-              disabled
-              text-color="#ff9900"
-              score-template="{value}"
-              class="el-rate"
-            ></el-rate>
+            <!-- 只有被评分过的工具，才会显示评分 -->
+            <div v-if="tool.toolRate != 0 || tool.toolRateCount != 0">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="'平均分:'+tool.toolRate+'分 '+'评分人数:'+tool.toolRateCount+'人'"
+                placement="top"
+              >
+                <el-rate
+                  v-model="tool.toolRate"
+                  disabled
+                  text-color="#ff9900"
+                  score-template="{value}"
+                  class="el-rate"
+                ></el-rate>
+              </el-tooltip>
+            </div>
+            <!-- 否则显示暂无评分 -->
+            <div v-else>
+              <span>暂无评分</span>
+            </div>
           </div>
 
           <el-divider class="line"></el-divider>
@@ -102,9 +126,12 @@ export default {
   data() {
     return {
       currentDate: new Date(),
-      value: 3.7,
+      value: 0,
       toolsList: [],
       totalTools: 0,
+      queryInfo: {
+        query: '',
+      },
     }
   },
   created() {
@@ -115,14 +142,21 @@ export default {
       this.$router.push('/toolbox/add')
     },
     async GetToolsList() {
-      const { data: res } = await this.$http.get('tools')
-      console.log(res)
+      const { data: res } = await this.$http.get('tools', {
+        params: this.queryInfo,
+      })
+      // console.log(res)
       if (res.meta.status_code !== 200)
         return this.$message.error('获取工具列表失败')
 
       // 成功了就开始赋值
       this.toolsList = res.data.tools
       this.totalTools = res.data.total
+    },
+    // 工具详情跳转
+    toToolContent(tool) {
+      // console.log(tool)
+      this.$router.push({ path: 'toolbox/tool', query: { toolInfo: tool } })
     },
   },
 }

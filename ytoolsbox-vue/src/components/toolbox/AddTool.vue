@@ -195,14 +195,16 @@
       <!-- 上一步与下一步 -->
       <div style="text-align: right;">
         <el-button-group>
+          <!-- 在第一步 -->
           <div v-if="activeIndex === 0">
-            <el-button disabled type="primary" icon="el-icon-arrow-left">上一步</el-button>
+            <el-button type="primary" icon="el-icon-arrow-left" @click="back2ToolBoxPage">取消</el-button>
             <el-button type="primary" @click="nextStep">
               下一步
               <i class="el-icon-arrow-right el-icon--right"></i>
             </el-button>
           </div>
 
+          <!-- 在最后一步 -->
           <div v-else-if="activeIndex === stepList.length - 1">
             <el-button type="primary" icon="el-icon-arrow-left" @click="preStep">上一步</el-button>
             <el-button type="primary" @click="PostNewTool">
@@ -211,6 +213,7 @@
             </el-button>
           </div>
 
+          <!-- 在中间 -->
           <div v-else>
             <el-button type="primary" icon="el-icon-arrow-left">上一步</el-button>
             <el-button type="primary" @click="nextStep">
@@ -373,6 +376,9 @@ export default {
             message: '添加工具失败',
           })
         })
+    },
+    back2ToolBoxPage() {
+      this.$router.push('/toolbox')
     },
   },
 }

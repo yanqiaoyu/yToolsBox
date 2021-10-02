@@ -19,44 +19,29 @@
             @clear="GetUsersList"
             @change="GetUsersList"
           >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="GetUsersList"
-            ></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="GetUsersList"></el-button>
           </el-input>
         </el-col>
 
         <!-- 这个列里面放的是添加用户的框 -->
         <el-col :span="6">
-          <el-button type="primary" @click="dialogVisible = true"
-            >添加用户</el-button
-          >
+          <el-button type="primary" @click="dialogVisible = true">添加用户</el-button>
         </el-col>
       </el-row>
 
       <!-- 用户列表展示区 -->
       <el-table :data="userList" stripe border style="width: 100%">
         <!-- 只要添加了type=index，就能序号列 -->
-        <el-table-column type="index" label="序号" width="60">
-        </el-table-column>
-        <el-table-column prop="username" label="账户名" width="210">
-        </el-table-column>
-        <el-table-column prop="email" label="邮箱" width="430">
-        </el-table-column>
-        <el-table-column prop="mobile" label="电话" width="430">
-        </el-table-column>
-        <el-table-column prop="role" label="角色" width="140">
-        </el-table-column>
+        <el-table-column type="index" label="序号" width="60"></el-table-column>
+        <el-table-column prop="username" label="账户名" width="210"></el-table-column>
+        <el-table-column prop="email" label="邮箱" width="430"></el-table-column>
+        <el-table-column prop="mobile" label="电话" width="430"></el-table-column>
+        <el-table-column prop="role" label="角色" width="140"></el-table-column>
         <!-- 根据实际的数据渲染出一个状态按钮 -->
         <el-table-column label="状态" width="100">
           <template slot-scope="scope">
             <!-- 这里用了scope.row获取每一行的数据 -->
-            <el-switch
-              v-model="scope.row.mgstate"
-              @change="userStateChanged(scope.row)"
-            >
-            </el-switch>
+            <el-switch v-model="scope.row.mgstate" @change="userStateChanged(scope.row)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -69,12 +54,7 @@
               @click="showEditDialog(scope.row.id)"
             ></el-button>
             <!-- 删除 -->
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              circle
-              @click="deleteUser(scope.row.id)"
-            ></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="deleteUser(scope.row.id)"></el-button>
             <!-- 分配角色 -->
             <el-tooltip
               class="item"
@@ -98,8 +78,7 @@
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
-      >
-      </el-pagination>
+      ></el-pagination>
     </el-card>
 
     <!-- 添加用户的提示框 -->
@@ -110,12 +89,7 @@
       :close-on-click-modal="false"
       @close="closeDialog"
     >
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="60px"
-      >
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="60px">
         <el-form-item label="账户" prop="username">
           <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
@@ -146,12 +120,7 @@
       :close-on-click-modal="false"
       @close="closeEditDialog"
     >
-      <el-form
-        :model="editRuleForm"
-        :rules="editUserRules"
-        ref="editUserForm"
-        label-width="70px"
-      >
+      <el-form :model="editRuleForm" :rules="editUserRules" ref="editUserForm" label-width="70px">
         <el-form-item label="账户名" prop="username">
           <el-input v-model="editRuleForm.username" disabled></el-input>
         </el-form-item>
@@ -198,7 +167,7 @@ export default {
         // 这行属性其实就是当前在第几页
         pagenum: 1,
         // 这行属性其实就是当前每页展示多少条数据，这里最好与page-sizes里面的第一个元素值保持一致，否则在刷新的时候会出Bug
-        pagesize: 5
+        pagesize: 5,
       },
       userList: [],
       total: 0,
@@ -210,7 +179,7 @@ export default {
         password: '',
         email: '',
         worknum: '',
-        mobile: ''
+        mobile: '',
       },
       // editRuleForm: {
       //   username: '',
@@ -221,11 +190,21 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          {
+            min: 2,
+            max: 10,
+            message: '长度在 2 到 10 个字符',
+            trigger: 'blur',
+          },
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
+          {
+            min: 6,
+            max: 10,
+            message: '长度在 6 到 10 个字符',
+            trigger: 'blur',
+          },
         ],
         email: [
           { required: false, message: '请输入邮箱', trigger: 'blur' },
@@ -233,13 +212,18 @@ export default {
             min: 1,
             max: 30,
             message: '长度在 1 到 30 个字符',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { validator: checkEmail, trigger: 'blur' }
+          { validator: checkEmail, trigger: 'blur' },
         ],
         worknum: [
           { required: false, message: '请输入工号', trigger: 'blur' },
-          { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' }
+          {
+            min: 5,
+            max: 10,
+            message: '长度在 5 到 10 个字符',
+            trigger: 'blur',
+          },
         ],
         mobile: [
           { required: false, message: '请输入手机号', trigger: 'blur' },
@@ -247,10 +231,10 @@ export default {
             min: 10,
             max: 18,
             message: '长度在 10 到 18 个字符',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { validator: checkPhone, trigger: 'blur' }
-        ]
+          { validator: checkPhone, trigger: 'blur' },
+        ],
       },
       editUserRules: {
         email: [
@@ -259,9 +243,9 @@ export default {
             min: 1,
             max: 30,
             message: '长度在 1 到 30 个字符',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { validator: checkEmail, trigger: 'blur' }
+          { validator: checkEmail, trigger: 'blur' },
         ],
         mobile: [
           { required: false, message: '请输入手机号', trigger: 'blur' },
@@ -269,11 +253,11 @@ export default {
             min: 10,
             max: 18,
             message: '长度在 10 到 18 个字符',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { validator: checkPhone, trigger: 'blur' }
-        ]
-      }
+          { validator: checkPhone, trigger: 'blur' },
+        ],
+      },
     }
   },
   created() {
@@ -283,7 +267,7 @@ export default {
     // 请求用户接口
     async GetUsersList() {
       const { data: res } = await this.$http.get('users', {
-        params: this.queryInfo
+        params: this.queryInfo,
       })
       // console.log(res)
       // 获取用户失败
@@ -316,7 +300,7 @@ export default {
         'users/state',
         qs.stringify({
           mgstate: userinfo.mgstate,
-          userID: userinfo.id
+          userID: userinfo.id,
         })
       )
       // console.log(userinfo.id)
@@ -324,7 +308,7 @@ export default {
     // 访问添加用户的接口
     addUser() {
       // console.log('添加用户')
-      this.$refs.ruleForm.validate(async valid => {
+      this.$refs.ruleForm.validate(async (valid) => {
         // console.log(valid)
         if (valid) {
           const { data: res } = await this.$http.post(
@@ -353,21 +337,21 @@ export default {
       this.editUserDialogVisibleL = false
     },
     editUser() {
-      this.$refs.editUserForm.validate(async valid => {
+      this.$refs.editUserForm.validate(async (valid) => {
         if (!valid) return
         console.log(this.editRuleForm)
         await this.$http.put(
           'users/' + this.editRuleForm.id,
           qs.stringify({
             email: this.editRuleForm.email,
-            mobile: this.editRuleForm.mobile
+            mobile: this.editRuleForm.mobile,
           })
         )
         this.GetUsersList()
         this.editUserDialogVisibleL = false
         this.$message({
           message: '更新信息成功',
-          type: 'success'
+          type: 'success',
         })
       })
     },
@@ -375,7 +359,7 @@ export default {
       this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       })
         .then(async () => {
           // console.log(id)
@@ -383,7 +367,7 @@ export default {
 
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: '删除成功!',
           })
 
           this.GetUsersList()
@@ -391,11 +375,11 @@ export default {
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消删除',
           })
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -16,6 +16,18 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/2" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成了工具详情展示的可携带参数跳转
+            <br />2. 完成了工具搜索的功能
+            <br />3. 优化了后端查询工具的逻辑
+            <br />4. 优化了新增工具的一些逻辑与样式
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/30" placement="top">
         <el-card>
           <h4>更新内容</h4>

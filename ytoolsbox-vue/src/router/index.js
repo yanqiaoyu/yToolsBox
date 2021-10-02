@@ -9,6 +9,7 @@ import ToolBox from '../components/toolbox/ToolBox.vue'
 import About from '../components/About.vue'
 import DashBoard from '../components/DashBoard.vue'
 import AddTool from '../components/toolbox/AddTool.vue'
+import ToolContent from '../components/toolbox/ToolContent.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -40,7 +41,8 @@ const routes = [
       { path: '/toolbox', component: ToolBox, meta: { title: '工具盒' } },
       { path: '/about', component: About, meta: { title: '关于' } },
       { path: '/dashboard', component: DashBoard, meta: { title: '能效总览' } },
-      { path: '/toolbox/add', component: AddTool, meta: { title: '添加工具' } }
+      { path: '/toolbox/add', component: AddTool, meta: { title: '添加工具' } },
+      { path: '/toolbox/tool', component: ToolContent, meta: { title: '工具详情' } },
     ]
   }
 ]

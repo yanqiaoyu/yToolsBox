@@ -54,12 +54,17 @@ func InitAllTables(db *gorm.DB) {
 	InitUserTable(db)
 	InitRightsTable(db)
 	InitToolsTable(db)
+	InitToolsConfigTable(db)
 }
 
+// 初始化工具基础信息表
 func InitToolsTable(db *gorm.DB) {
-
 	db.AutoMigrate(&model.Tool{})
+}
 
+// 初始化工具配置信息表
+func InitToolsConfigTable(db *gorm.DB) {
+	db.AutoMigrate(&model.ToolConfig{})
 }
 
 // 初始化用户表

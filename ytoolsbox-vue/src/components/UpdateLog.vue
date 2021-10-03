@@ -16,6 +16,18 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/3" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 修复了一个错误处理的Bug
+            <br />2. 优化工具的库表结构，现在分为工具基本信息与工具配置信息两张表
+            <br />3. 配合后端的优化，优化前端的新增工具的步骤
+            <br />4. 改用内联查询优化后端的查询逻辑
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/2" placement="top">
         <el-card>
           <h4>更新内容</h4>

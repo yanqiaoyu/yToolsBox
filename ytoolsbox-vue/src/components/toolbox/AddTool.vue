@@ -26,9 +26,57 @@
       <el-alert :title="stepList[activeIndex]" type="success" center :closable="false"></el-alert>
 
       <el-form :model="toolForm" :rules="toolRules" ref="addToolForm" label-width="130px">
-        <!-- 填写工具信息 -->
+        <!-- 填写工具基本信息 -->
         <div
           v-if="activeIndex === 0 || activeIndex === stepList.length - 1"
+          style="margin-top:10px;margin-left:20%"
+        >
+          <!-- 工具名称的输入框 -->
+          <el-form-item label="工具名称" prop="toolName">
+            <el-input
+              :disabled="activeIndex == stepList.length - 1"
+              v-model="toolForm.toolName"
+              placeholder="给工具起个名字,名字唯一"
+              style="width:450px"
+            ></el-input>
+          </el-form-item>
+
+          <!-- 工具简介的输入框 -->
+          <el-form-item label="工具简介" prop="toolDesc">
+            <el-input
+              :disabled="activeIndex == stepList.length - 1"
+              type="textarea"
+              v-model="toolForm.toolDesc"
+              style="width:450px"
+              :autosize="{ minRows: 8, maxRows: 20 }"
+              placeholder="简要的介绍一下这个工具"
+            ></el-input>
+          </el-form-item>
+
+          <!-- 作者名称的输入框 -->
+          <el-form-item label="作者名称" prop="toolAuthor">
+            <el-input
+              :disabled="activeIndex == stepList.length - 1"
+              v-model="toolForm.toolAuthor"
+              placeholder="留下作者的名称"
+              style="width:450px"
+            ></el-input>
+          </el-form-item>
+
+          <!-- 作者联系方式的输入框 -->
+          <el-form-item label="联系方式" prop="toolAuthorMobile">
+            <el-input
+              :disabled="activeIndex == stepList.length - 1"
+              v-model="toolForm.toolAuthorMobile"
+              placeholder="留下作者的联系方式"
+              style="width:450px"
+            ></el-input>
+          </el-form-item>
+        </div>
+
+        <!-- 填写工具配置信息 -->
+        <div
+          v-if="activeIndex === 1 || activeIndex === stepList.length - 1"
           style="margin-top:10px;margin-left:20%"
         >
           <el-form-item label="工具类型" prop="toolType">
@@ -86,19 +134,80 @@
 
           <!-- 选择了脚本工具，出现这个 -->
           <div v-if="toolForm.toolType == 'script'">
+            <el-form-item>
+              <el-upload
+                style="width:450px"
+                class="upload-demo"
+                ref="upload"
+                action="https://1"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :auto-upload="false"
+                :limit="1"
+                :on-change="handleBeforeUpload"
+                accept=".py, .sh"
+              >
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button
+                  style="margin-left: 10px;"
+                  size="small"
+                  type="success"
+                  @click="submitUpload"
+                >上传到服务器</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传一个py或者sh文件，且不超过10MB</div>
+              </el-upload>
+            </el-form-item>
+
             <el-form-item label="脚本名称" prop="toolScriptName">
               <el-input
-                :disabled="activeIndex == stepList.length - 1"
+                :disabled="true"
                 v-model="toolForm.toolScriptName"
-                placeholder="脚本名称, eg:hello-world.sh"
+                placeholder="脚本名称"
                 style="width:450px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="脚本绝对路径" prop="toolScriptPath">
+
+            <el-form-item label="Python版本" v-if="isPythonScript" prop="toolPythonVersion">
+              <!-- Python版本下拉框 -->
+              <el-select
+                :disabled="activeIndex == stepList.length - 1"
+                placeholder="请选择Python版本"
+                v-model="toolForm.toolPythonVersion"
+                style="width:450px"
+              >
+                <el-option label="python2" value="python2"></el-option>
+                <el-option label="python2.7" value="python2.7"></el-option>
+                <el-option label="python3" value="python3"></el-option>
+                <el-option label="python3.6" value="python3.6"></el-option>
+                <el-option label="python3.7" value="python3.7"></el-option>
+                <el-option label="python3.8" value="python3.8"></el-option>
+                <el-option label="python3.9" value="python3.9"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="Shell版本" v-if="isShellScript" prop="toolShellVersion">
+              <!-- Shell版本下拉框 -->
+              <el-select
+                :disabled="activeIndex == stepList.length - 1"
+                placeholder="请选择Shell版本"
+                v-model="toolForm.toolShellVersion"
+                style="width:450px"
+              >
+                <el-option label="sh" value="sh"></el-option>
+                <el-option label="bash" value="bash"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item
+              v-if="toolForm.toolExecuteLocation == 'remote'"
+              label="脚本绝对路径"
+              prop="toolScriptPath"
+            >
               <el-input
                 :disabled="activeIndex == stepList.length - 1"
                 v-model="toolForm.toolScriptPath"
-                placeholder="脚本绝对路径,不含文件名 eg:/tmp/XXX/"
+                placeholder="脚本在远程环境的绝对路径,不含文件名 eg:/tmp/"
                 style="width:450px"
               ></el-input>
             </el-form-item>
@@ -122,16 +231,6 @@
               ></el-input>
             </el-form-item>
           </div>
-
-          <!-- 工具名称的输入框 -->
-          <el-form-item label="工具名称" prop="toolName">
-            <el-input
-              :disabled="activeIndex == stepList.length - 1"
-              v-model="toolForm.toolName"
-              placeholder="给工具起个名字"
-              style="width:450px"
-            ></el-input>
-          </el-form-item>
 
           <!-- 选择执行位置的开关 -->
           <el-form-item>
@@ -190,44 +289,6 @@
               ></el-input>
             </el-form-item>
           </div>
-
-          <!-- 工具简介的输入框 -->
-          <el-form-item label="工具简介" prop="toolDesc">
-            <el-input
-              :disabled="activeIndex == stepList.length - 1"
-              type="textarea"
-              v-model="toolForm.toolDesc"
-              style="width:450px"
-              :autosize="{ minRows: 8, maxRows: 20 }"
-              placeholder="简要的介绍一下这个工具"
-            ></el-input>
-          </el-form-item>
-        </div>
-
-        <!-- 填写作者信息 -->
-        <div
-          v-if="activeIndex === 1 || activeIndex === stepList.length - 1"
-          style="margin-top:10px;margin-left:20%"
-        >
-          <!-- 作者名称的输入框 -->
-          <el-form-item label="作者名称" prop="toolAuthor">
-            <el-input
-              :disabled="activeIndex == stepList.length - 1"
-              v-model="toolForm.toolAuthor"
-              placeholder="留下作者的名称"
-              style="width:450px"
-            ></el-input>
-          </el-form-item>
-
-          <!-- 作者联系方式的输入框 -->
-          <el-form-item label="作者手机号" prop="toolAuthorMobile">
-            <el-input
-              :disabled="activeIndex == stepList.length - 1"
-              v-model="toolForm.toolAuthorMobile"
-              placeholder="留下作者的联系方式"
-              style="width:450px"
-            ></el-input>
-          </el-form-item>
         </div>
       </el-form>
 
@@ -254,7 +315,7 @@
 
           <!-- 在中间 -->
           <div v-else>
-            <el-button type="primary" icon="el-icon-arrow-left">上一步</el-button>
+            <el-button type="primary" icon="el-icon-arrow-left" @click="preStep">上一步</el-button>
             <el-button type="primary" @click="nextStep">
               下一步
               <i class="el-icon-arrow-right el-icon--right"></i>
@@ -272,23 +333,28 @@ export default {
   data() {
     return {
       activeIndex: 0,
-      stepList: ['工具信息', '作者信息', '完成'],
+      stepList: ['工具基础信息', '工具配置信息', '完成'],
       toolForm: {
+        // 工具基本信息,放在tools表里面
+        toolName: '',
+        toolDesc: '',
+        toolAuthor: '',
+        toolAuthorMobile: '',
+
+        // 工具配置信息,放在toolsconfig表里面
         toolType: '',
         toolDockerImageName: '',
         toolScriptName: '',
         toolScriptPath: '',
-        toolName: '',
-        toolAuthor: '',
-        toolAuthorMobile: '',
         toolOptions: '',
         toolRunCMD: '',
-        toolDesc: '',
         toolExecuteLocation: 'local',
         toolRemoteIP: '',
         toolRemoteSSH_Port: '',
         toolRemoteSSH_Account: '',
         toolRemoteSSH_Password: '',
+        toolPythonVersion: '',
+        toolShellVersion: '',
       },
       toolRules: {
         toolType: [
@@ -298,7 +364,7 @@ export default {
           { required: true, message: '请输入Docker镜像名称', trigger: 'blur' },
         ],
         toolScriptName: [
-          { required: true, message: '请输入脚本名称', trigger: 'blur' },
+          { required: true, message: '请输入脚本名称', trigger: 'input' },
         ],
         toolScriptPath: [
           { required: true, message: '请输入脚本绝对路径', trigger: 'blur' },
@@ -342,7 +408,25 @@ export default {
           },
           { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' },
         ],
+        toolPythonVersion: [
+          {
+            required: true,
+            message: '请选择Python解释器版本',
+            trigger: 'blur',
+          },
+        ],
+        toolShellVersion: [
+          {
+            required: true,
+            message: '请选择Shell解释器版本',
+            trigger: 'blur',
+          },
+        ],
       },
+
+      fileList: [],
+      isPythonScript: false,
+      isShellScript: false,
     }
   },
   computed: {
@@ -367,11 +451,32 @@ export default {
       return toolRunCMD
     },
     finalScriptCMD() {
-      let { toolRunCMD, toolScriptName, toolScriptPath, toolOptions } =
-        this.toolForm
+      let {
+        toolRunCMD,
+        toolScriptName,
+        toolScriptPath,
+        toolOptions,
+        toolPythonVersion,
+        toolShellVersion,
+      } = this.toolForm
 
-      toolRunCMD =
-        'sh' + ' ' + toolScriptPath + toolScriptName + ' ' + toolOptions
+      if (this.isPythonScript) {
+        toolRunCMD =
+          toolPythonVersion +
+          ' ' +
+          toolScriptPath +
+          toolScriptName +
+          ' ' +
+          toolOptions
+      } else {
+        toolRunCMD =
+          toolShellVersion +
+          ' ' +
+          toolScriptPath +
+          toolScriptName +
+          ' ' +
+          toolOptions
+      }
 
       return toolRunCMD
     },
@@ -389,7 +494,6 @@ export default {
       this.activeIndex -= 1
     },
     nextStep() {
-      console.log(this.$refs)
       this.$refs.addToolForm.validate((valid) => {
         if (valid) {
           if (this.activeIndex == this.stepList.length - 1) {
@@ -413,18 +517,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       })
-        .then(() => {
-          this.$http.post(
+        .then(async () => {
+          const { data: res } = await this.$http.post(
             'tools',
             qs.stringify({ ...this.toolForm, toolRunCMD: this.finalCMD })
           )
 
-          this.$message({
-            type: 'success',
-            message: '添加工具成功!',
-          })
-
-          this.$router.push('/toolbox')
+          console.log(res.data)
+          if (res.meta.status_code == 200) {
+            this.$message({
+              type: 'success',
+              message: '添加工具成功!',
+            })
+            this.$router.push('/toolbox')
+          } else if (res.meta.message == '不允许重复的工具名称') {
+            this.$message.error('工具名称重复')
+          }
         })
         .catch(() => {
           this.$message({
@@ -435,6 +543,57 @@ export default {
     },
     back2ToolBoxPage() {
       this.$router.push('/toolbox')
+    },
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    handleRemove(file, fileList) {
+      this.isPythonScript = false
+      this.isShellScript = false
+      this.toolForm.toolScriptName = ''
+      console.log(this.isPythonScript)
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    },
+    // 过滤文件格式，文件大小
+    handleBeforeUpload(file) {
+      let suffix = ''
+      try {
+        var fileArr = file.name.split('.')
+        suffix = fileArr[fileArr.length - 1]
+        console.log(suffix)
+        if (suffix != 'py' && suffix != 'sh') {
+          this.$message.error('上传文件类型错误')
+          this.$refs.upload.clearFiles()
+          return
+        }
+      } catch (err) {
+        console.log(err)
+        this.$message.error('文件异常')
+        this.$refs.upload.clearFiles()
+        return
+      }
+
+      // 是py脚本，就要允许选择Python的版本
+      if (suffix == 'py') {
+        this.isPythonScript = true
+        this.isShellScript = false
+      } else if (suffix == 'sh') {
+        this.isPythonScript = false
+        this.isShellScript = true
+      }
+
+      // Math.ceil 向上取整
+      // console.log(Math.ceil(file.size / 1024 / 1024))
+      if (Math.ceil(file.size / 1024 / 1024) > 10) {
+        this.$message.error('上传文件必须小于10MB')
+        this.$refs.upload.clearFiles()
+        return
+      }
+
+      this.toolForm.toolScriptName = file.name
     },
   },
 }

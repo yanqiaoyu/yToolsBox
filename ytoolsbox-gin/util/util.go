@@ -53,9 +53,7 @@ func Struct2MapViaJson(obj interface{}) map[string]interface{} {
 func ResolveParam(ctx *gin.Context, obj interface{}) error {
 	err := ctx.ShouldBind(obj)
 	if err != nil {
-		msg := dto.FailResponseMeta{}
-		msg.StatusCode = 400
-		msg.Message = "必填字段为空"
+		msg := dto.FailResponseMeta{StatusCode: 400, Message: "必填字段为空"}
 		response.Fail(ctx, nil, Struct2MapViaJson(msg))
 		return err
 	}
@@ -66,9 +64,7 @@ func ResolveParam(ctx *gin.Context, obj interface{}) error {
 func ResolveQuery(ctx *gin.Context, obj interface{}) error {
 	err := ctx.ShouldBindQuery(obj)
 	if err != nil {
-		msg := dto.FailResponseMeta{}
-		msg.StatusCode = 400
-		msg.Message = "必填字段为空"
+		msg := dto.FailResponseMeta{StatusCode: 400, Message: "必填字段为空"}
 		response.Fail(ctx, nil, Struct2MapViaJson(msg))
 		return err
 	}
@@ -79,9 +75,7 @@ func ResolveQuery(ctx *gin.Context, obj interface{}) error {
 func ResolveURI(ctx *gin.Context, obj interface{}) error {
 	err := ctx.ShouldBindUri(obj)
 	if err != nil {
-		msg := dto.FailResponseMeta{}
-		msg.StatusCode = 400
-		msg.Message = "必填字段为空"
+		msg := dto.FailResponseMeta{StatusCode: 400, Message: "必填字段为空"}
 		response.Fail(ctx, nil, Struct2MapViaJson(msg))
 		return err
 	}

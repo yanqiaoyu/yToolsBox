@@ -11,4 +11,4 @@
 *.~undo-tree
 
 # Mac file
-.DS_Store
+*.DS_Store

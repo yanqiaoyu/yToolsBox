@@ -12,7 +12,6 @@ package common
 import (
 	"fmt"
 	"main/model"
-	"strconv"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
@@ -43,7 +42,7 @@ func InitDB() *gorm.DB {
 		panic("fail to connect to postgres, error" + err.Error())
 	}
 
-	InitAllTabls(db)
+	InitAllTables(db)
 
 	DB = db
 	return db
@@ -51,12 +50,25 @@ func InitDB() *gorm.DB {
 }
 
 // 初始化所有表
-func InitAllTabls(db *gorm.DB) {
-	InitUserTabel(db)
+func InitAllTables(db *gorm.DB) {
+	InitUserTable(db)
+	InitRightsTable(db)
+	InitToolsTable(db)
+	InitToolsConfigTable(db)
+}
+
+// 初始化工具基础信息表
+func InitToolsTable(db *gorm.DB) {
+	db.AutoMigrate(&model.Tool{})
+}
+
+// 初始化工具配置信息表
+func InitToolsConfigTable(db *gorm.DB) {
+	db.AutoMigrate(&model.ToolConfig{})
 }
 
 // 初始化用户表
-func InitUserTabel(db *gorm.DB) {
+func InitUserTable(db *gorm.DB) {
 	UserList := []model.User{
 
 		// 默认的超级管理员
@@ -80,28 +92,23 @@ func InitUserTabel(db *gorm.DB) {
 		},
 	}
 
-	// 填充一些测试数据，后续需要删掉
-	T_or_F := true
-	for i := 1; i <= 10; i++ {
-
-		if i%3 == 0 {
-			T_or_F = true
-		} else {
-			T_or_F = false
-		}
-
-		UserList = append(UserList, model.User{
-			UserName: "测试用户" + strconv.Itoa(i),
-			Mobile:   "18616350000",
-			Type:     1,
-			Email:    "123@321.com",
-			MgState:  T_or_F, // 当前用户的状态
-			RoleName: "管理员",
-		})
-	}
-
 	db.AutoMigrate(&model.User{})
 	db.Create(&UserList)
+}
+
+// 初始化权限表
+func InitRightsTable(db *gorm.DB) {
+	RightsList := []model.Rights{
+		{AuthName: "首页", Level: 0, Pid: 0, Path: "home"},
+		{AuthName: "能效总览", Level: 1, Pid: 0, Path: "dashboard"},
+		{AuthName: "工具盒", Level: 1, Pid: 0, Path: "toolbox"},
+		{AuthName: "全局配置", Level: 2, Pid: 0, Path: "config"},
+		{AuthName: "用户管理", Level: 2, Pid: 4, Path: "users"},
+		{AuthName: "权限管理", Level: 2, Pid: 4, Path: "rights"},
+	}
+
+	db.AutoMigrate(&model.Rights{})
+	db.Create(&RightsList)
 }
 
 func GetDB() *gorm.DB {

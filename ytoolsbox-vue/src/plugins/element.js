@@ -5,6 +5,7 @@ import {
   FormItem,
   Input,
   Button,
+  ButtonGroup,
   Container,
   Aside,
   Main,
@@ -30,7 +31,19 @@ import {
   Backtop,
   Avatar,
   Dialog,
-  MessageBox
+  MessageBox,
+  Tag,
+  Image,
+  Divider,
+  Rate,
+  Alert,
+  Step,
+  Steps,
+  Select,
+  Option,
+  Tabs,
+  TabPane,
+  Upload
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -39,6 +52,7 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
 Vue.use(Button)
+Vue.use(ButtonGroup)
 Vue.use(Container)
 Vue.use(Aside)
 Vue.use(Main)
@@ -64,5 +78,17 @@ Vue.use(TimelineItem)
 Vue.use(Backtop)
 Vue.use(Avatar)
 Vue.use(Dialog)
+Vue.use(Tag)
+Vue.use(Image)
+Vue.use(Divider)
+Vue.use(Rate)
+Vue.use(Alert)
+Vue.use(Step)
+Vue.use(Steps)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(Upload)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

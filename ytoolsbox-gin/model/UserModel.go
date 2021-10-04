@@ -11,12 +11,6 @@ package model
 
 import "gorm.io/gorm"
 
-type UsersData struct {
-	Total   int                      `json:"total"`
-	Pagenum int                      `json:"pagenum"`
-	Users   []map[string]interface{} `json:"users"`
-}
-
 // 在这里定义好表的结构
 type User struct {
 	gorm.Model
@@ -25,8 +19,8 @@ type User struct {
 	Mobile   string `json:"mobile" gorm:"column:mobile"`
 	Type     int    `json:"type" gorm:"column:type"`
 	Email    string `json:"email" gorm:"column:email"`
-	MgState  bool   `json:"mgstate" gorm:"column:mgstate"`
-	RoleName string `json:"role" gorm:"column:role"`
+	MgState  bool   `json:"mgstate" gorm:"column:mgstate;default:1"`
+	RoleName string `json:"role" gorm:"column:role;default:'访客'"`
 	WorkNum  string `json:"worknum" gorm:"column:worknum"`
 	PassWord string `json:"password" gorm:"column:password"`
 	RoleID   string `json:"roleid" gorm:"column:roleid"`

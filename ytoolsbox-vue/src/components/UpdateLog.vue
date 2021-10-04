@@ -12,16 +12,96 @@
         line-height: 40px;
         color: #1989fa;
       }"
-      >
-        UP
-      </div>
+      >UP</div>
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/4" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 解决一个主键重复的Bug
+            <br />2.工具详情->工具配置界面已经可以正常显示
+            <br />3.初步完成配置的编辑样式,暂时搁置编辑配置的功能,开发最为重要的后端执行工具逻辑
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/10/3" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 修复了一个错误处理的Bug
+            <br />2. 优化工具的库表结构，现在分为工具基本信息与工具配置信息两张表
+            <br />3. 配合后端的优化，优化前端的新增工具的步骤
+            <br />4. 改用内联查询优化后端的查询逻辑
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/10/2" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成了工具详情展示的可携带参数跳转
+            <br />2. 完成了工具搜索的功能
+            <br />3. 优化了后端查询工具的逻辑
+            <br />4. 优化了新增工具的一些逻辑与样式
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/9/30" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成了前端添加工具的内容
+            <br />2. 完成了后端添加工具的逻辑
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/9/27" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 开始进行工具盒核心功能的编写
+            <br />2. 在熊少的帮助下，改善了工具盒的布局与样式
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/9/26" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成了所有功能的模型绑定重写
+            <br />2. 后端新增权限管理
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/9/23" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 参考gin的官方文档，使用模型绑定复写了参数解析的业务
+            <br />2. 重写登录的逻辑
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/9/22" placement="top">
         <el-card>
           <h4>更新内容</h4>
-          <p>1. 完成了删除用户的功能 <br /></p>
+          <p>
+            1. 完成了删除用户的功能
+            <br />
+          </p>
         </el-card>
       </el-timeline-item>
 
@@ -29,9 +109,10 @@
         <el-card>
           <h4>更新内容</h4>
           <p>
-            1. 完成了用户状态更新 <br />
-            2. 解决了一个更新状态后数据库顺序紊乱的问题<br />
-            3. 完成了修改用户信息的功能 <br />
+            1. 完成了用户状态更新
+            <br />2. 解决了一个更新状态后数据库顺序紊乱的问题
+            <br />3. 完成了修改用户信息的功能
+            <br />
           </p>
         </el-card>
       </el-timeline-item>
@@ -40,8 +121,9 @@
         <el-card>
           <h4>更新内容</h4>
           <p>
-            1. 完成添加新用户的表单 <br />
-            2. 配合dto和dao使用, 后端的数据库逻辑已完成<br />
+            1. 完成添加新用户的表单
+            <br />2. 配合dto和dao使用, 后端的数据库逻辑已完成
+            <br />
           </p>
         </el-card>
       </el-timeline-item>
@@ -50,10 +132,11 @@
         <el-card>
           <h4>更新内容</h4>
           <p>
-            1. 编写好了用户相关的后端service层代码 <br />
-            2. 准备引入PostgreSQL，并着手解耦后端代码 <br />
-            3. 加入了一个更新日志界面 <br />
-            4. 用ele的avatar组件重新导入了首页的猫猫 <br />
+            1. 编写好了用户相关的后端service层代码
+            <br />2. 准备引入PostgreSQL，并着手解耦后端代码
+            <br />3. 加入了一个更新日志界面
+            <br />4. 用ele的avatar组件重新导入了首页的猫猫
+            <br />
           </p>
         </el-card>
       </el-timeline-item>
@@ -71,7 +154,10 @@
       <el-timeline-item timestamp="2021/9/10" placement="top">
         <el-card>
           <h4>更新内容</h4>
-          <p>1. 优化后端的架构，复写了前端需要用到的接口 <br /></p>
+          <p>
+            1. 优化后端的架构，复写了前端需要用到的接口
+            <br />
+          </p>
         </el-card>
       </el-timeline-item>
 
@@ -79,8 +165,9 @@
         <el-card>
           <h4>更新内容</h4>
           <p>
-            1. 添加gin的后端代码 <br />
-            2. 前端的主页部分绘制完成 <br />
+            1. 添加gin的后端代码
+            <br />2. 前端的主页部分绘制完成
+            <br />
           </p>
         </el-card>
       </el-timeline-item>
@@ -89,8 +176,9 @@
         <el-card>
           <h4>更新内容</h4>
           <p>
-            1. init工具盒项目 <br />
-            2. 搭建好vue相关环境 <br />
+            1. init工具盒项目
+            <br />2. 搭建好vue相关环境
+            <br />
           </p>
         </el-card>
       </el-timeline-item>

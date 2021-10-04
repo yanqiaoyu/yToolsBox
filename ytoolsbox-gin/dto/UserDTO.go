@@ -2,11 +2,6 @@ package dto
 
 import "time"
 
-// type UserDTO struct {
-// 	Name      string `json:"name"`
-// 	TelePhone string `json:"telephone"`
-// }
-
 type UserDTO struct {
 	ID         string    `json:"id" gorm:"column:id"`
 	UserName   string    `json:"username" gorm:"column:username;unique"`
@@ -18,9 +13,36 @@ type UserDTO struct {
 	CreateTime time.Time `json:"createtime" gorm:"column:created_at"`
 }
 
-// func ToUserDTO(user model.User) UserDTO {
-// 	return UserDTO{
-// 		Name:      user.Account,
-// 		TelePhone: user.Phone,
-// 	}
-// }
+type GetAllUserDTOReq struct {
+	Query    string `json:"query" form:"query" `
+	Pagenum  int    `json:"pagenum" form:"pagenum" binding:"required"`
+	Pagesize int    `json:"pagesize" form:"pagesize" binding:"required"`
+}
+
+type GetAllUserDTOResp struct {
+	Total   int                      `json:"total"`
+	Pagenum int                      `json:"pagenum"`
+	Users   []map[string]interface{} `json:"users"`
+}
+
+type GetSpecifiedUserDTOReq struct {
+	UserID int64 `uri:"userID" binding:"required"`
+}
+
+type PutUserStateDTOReq struct {
+	Mgstate string `form:"mgstate" binding:"required"`
+	UserID  int64  `form:"userID" binding:"required"`
+}
+
+type PutUserInfoDTOReq struct {
+	Email  string `form:"email"`
+	Mobile string `form:"mobile"`
+}
+
+type PostNewUserReq struct {
+	UserName string `form:"username" binding:"required"`
+	PassWord string `form:"password" binding:"required"`
+	Mobile   string `form:"mobile"`
+	Email    string `form:"email"`
+	WorkNum  string `form:"worknum"`
+}

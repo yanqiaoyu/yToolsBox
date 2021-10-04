@@ -15,17 +15,16 @@ import (
 )
 
 func GetMenus(ctx *gin.Context) {
-	// log.Print("This is GetMenus Service")
-
 	data := model.Menus{
 		Data: []model.MenusData{
-			{Id: 0, AuthName: "能效总览", Path: "dashboard", ChildMenus: []model.ChildMenus{}},
-			{Id: 1, AuthName: "工具盒总览", Path: "toolbox", ChildMenus: []model.ChildMenus{}},
-			{Id: 2, AuthName: "全局配置", Path: "globalconfig", ChildMenus: []model.ChildMenus{
-				{Id: 201, AuthName: "用户管理", Path: "userconfig"},
-				{Id: 202, AuthName: "系统管理", Path: "systemconfig"},
+			{Id: 1, AuthName: "首页", Path: "home", ChildMenus: []model.ChildMenus{}},
+			{Id: 2, AuthName: "能效总览", Path: "dashboard", ChildMenus: []model.ChildMenus{}},
+			{Id: 3, AuthName: "工具盒", Path: "toolbox", ChildMenus: []model.ChildMenus{}},
+			{Id: 4, AuthName: "全局配置", Path: "globalconfig", ChildMenus: []model.ChildMenus{
+				{Id: 401, AuthName: "用户管理", Path: "users"},
+				{Id: 402, AuthName: "权限管理", Path: "rights"},
 			}},
-			{Id: 3, AuthName: "关于", Path: "about", ChildMenus: []model.ChildMenus{}},
+			{Id: 5, AuthName: "关于", Path: "about", ChildMenus: []model.ChildMenus{}},
 		},
 		Meta: model.MenusMeta{
 			Msg:         "suc",

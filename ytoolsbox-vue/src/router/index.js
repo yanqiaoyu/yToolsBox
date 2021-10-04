@@ -4,6 +4,12 @@ import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import User from '../components/user/User.vue'
 import UpdateLog from '../components/UpdateLog.vue'
+import Rights from '../components/power/Rights.vue'
+import ToolBox from '../components/toolbox/ToolBox.vue'
+import About from '../components/About.vue'
+import DashBoard from '../components/DashBoard.vue'
+import AddTool from '../components/toolbox/AddTool.vue'
+import ToolContent from '../components/toolbox/ToolContent.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -29,8 +35,14 @@ const routes = [
     },
     redirect: '/updatelog',
     children: [
-      {path: '/userconfig', component: User, meta: {title: "用户管理与配置"} },
-      {path: '/updatelog', component: UpdateLog, meta:{title: "更新日志"}}
+      { path: '/users', component: User, meta: { title: '用户管理' } },
+      { path: '/updatelog', component: UpdateLog, meta: { title: '更新日志' } },
+      { path: '/rights', component: Rights, meta: { title: '权限管理' } },
+      { path: '/toolbox', component: ToolBox, meta: { title: '工具盒' } },
+      { path: '/about', component: About, meta: { title: '关于' } },
+      { path: '/dashboard', component: DashBoard, meta: { title: '能效总览' } },
+      { path: '/toolbox/add', component: AddTool, meta: { title: '添加工具' } },
+      { path: '/toolbox/tool', component: ToolContent, meta: { title: '工具详情' } },
     ]
   }
 ]

@@ -156,7 +156,10 @@ export default {
     // 工具详情跳转
     toToolContent(tool) {
       // console.log(tool)
-      this.$router.push({ path: 'toolbox/tool', query: { toolInfo: tool } })
+      this.$router.push({
+        path: 'toolbox/tool',
+        query: { toolID: tool.id, toolName: tool.toolName },
+      })
     },
   },
 }

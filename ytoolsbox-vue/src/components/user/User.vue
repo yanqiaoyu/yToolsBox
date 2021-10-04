@@ -115,7 +115,7 @@
     <!-- 修改用户的提示框 -->
     <el-dialog
       title="修改用户"
-      :visible.sync="editUserDialogVisibleL"
+      :visible.sync="editUserDialogVisible"
       width="30%"
       :close-on-click-modal="false"
       @close="closeEditDialog"
@@ -173,7 +173,7 @@ export default {
       total: 0,
       // 决定添加用户框是否弹出
       dialogVisible: false,
-      editUserDialogVisibleL: false,
+      editUserDialogVisible: false,
       ruleForm: {
         username: '',
         password: '',
@@ -328,13 +328,13 @@ export default {
     },
     async showEditDialog(id) {
       const { data: res } = await this.$http.get('users/' + id)
-      this.editUserDialogVisibleL = true
+      this.editUserDialogVisible = true
       // console.log(id)
       this.editRuleForm = res.data
     },
     closeEditDialog() {
       this.$refs.editUserForm.resetFields()
-      this.editUserDialogVisibleL = false
+      this.editUserDialogVisible = false
     },
     editUser() {
       this.$refs.editUserForm.validate(async (valid) => {
@@ -348,7 +348,7 @@ export default {
           })
         )
         this.GetUsersList()
-        this.editUserDialogVisibleL = false
+        this.editUserDialogVisible = false
         this.$message({
           message: '更新信息成功',
           type: 'success',

@@ -16,6 +16,17 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/4" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 解决一个主键重复的Bug
+            <br />2.工具详情->工具配置界面已经可以正常显示
+            <br />3.初步完成配置的编辑样式,暂时搁置编辑配置的功能,开发最为重要的后端执行工具逻辑
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/3" placement="top">
         <el-card>
           <h4>更新内容</h4>

@@ -87,7 +87,7 @@ func GetSpecifiedToolConfig(ctx *gin.Context) {
 	// log.Println(configList)
 
 	// 构造返回的结构体
-	ToolData := dto.GetSpecifiedToolConfigDTOResp{Total: len(configList), ToolConfig: configList}
+	ToolData := dto.GetSpecifiedToolConfigDTOResp{Total: len(configList), ToolConfig: configList, ID: GetSpecifiedToolConfigDTOReq.ToolID}
 	Meta := model.Meta{Msg: "查询配置成功", Status_code: 200}
 	response.Success(ctx, util.Struct2MapViaJson(ToolData), util.Struct2MapViaJson(Meta))
 }

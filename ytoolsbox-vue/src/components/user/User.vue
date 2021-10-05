@@ -28,7 +28,8 @@
           <el-button type="primary" @click="dialogVisible = true">添加用户</el-button>
         </el-col>
       </el-row>
-
+      <!-- 分割线 -->
+      <el-divider></el-divider>
       <!-- 用户列表展示区 -->
       <el-table :data="userList" stripe border style="width: 100%">
         <!-- 只要添加了type=index，就能序号列 -->

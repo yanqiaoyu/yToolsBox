@@ -46,5 +46,10 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.GET(URL_Prefix+"/tools", controller.GetAllTools)
 	// 查询某个工具的所有配置
 	r.GET(URL_Prefix+"/tools/config/:toolID", controller.GetSpecifiedToolConfig)
+
+	// 新建一个任务
+	r.POST(URL_Prefix+"/tasks", controller.PostNewTask)
+
 	return r
+
 }

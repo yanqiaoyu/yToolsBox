@@ -100,7 +100,7 @@ func InitUserTable(db *gorm.DB) {
 func InitRightsTable(db *gorm.DB) {
 	RightsList := []model.Rights{
 		{AuthName: "首页", Level: 0, Pid: 0, Path: "home"},
-		{AuthName: "能效总览", Level: 1, Pid: 0, Path: "dashboard"},
+		{AuthName: "任务", Level: 1, Pid: 0, Path: "dashboard"},
 		{AuthName: "工具盒", Level: 1, Pid: 0, Path: "toolbox"},
 		{AuthName: "全局配置", Level: 2, Pid: 0, Path: "config"},
 		{AuthName: "用户管理", Level: 2, Pid: 4, Path: "users"},

@@ -45,7 +45,8 @@ import {
   TabPane,
   Upload,
   Progress,
-  Cascader
+  Cascader,
+  Loading
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -94,5 +95,6 @@ Vue.use(TabPane)
 Vue.use(Upload)
 Vue.use(Progress)
 Vue.use(Cascader)
+Vue.use(Loading)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

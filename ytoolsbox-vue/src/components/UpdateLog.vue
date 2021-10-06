@@ -16,7 +16,18 @@
     </el-backtop>
 
     <el-timeline>
-      <el-timeline-item timestamp="2021/10/4" placement="top">
+      <el-timeline-item timestamp="2021/10/6" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 复用用户管理模块, 完成了任务模块相关的增删改查
+            <br />2. 参考gorm的官方文档，解决了一个时间显示的问题
+            <br />3. 使用v-loading规避了一个重复请求的Bug，提升用户体验
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/10/5" placement="top">
         <el-card>
           <h4>更新内容</h4>
           <p>

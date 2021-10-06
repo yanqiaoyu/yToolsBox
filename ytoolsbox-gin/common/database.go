@@ -55,6 +55,7 @@ func InitAllTables(db *gorm.DB) {
 	InitRightsTable(db)
 	InitToolsTable(db)
 	InitToolsConfigTable(db)
+	InitTaskTable(db)
 }
 
 // 初始化工具基础信息表
@@ -109,6 +110,11 @@ func InitRightsTable(db *gorm.DB) {
 
 	db.AutoMigrate(&model.Rights{})
 	db.Create(&RightsList)
+}
+
+// 初始化任务列表
+func InitTaskTable(db *gorm.DB) {
+	db.AutoMigrate(&model.Tasks{})
 }
 
 func GetDB() *gorm.DB {

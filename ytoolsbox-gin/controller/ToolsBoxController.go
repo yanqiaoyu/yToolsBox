@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"main/common"
 	"main/dao"
 	"main/dto"
@@ -90,4 +91,24 @@ func GetSpecifiedToolConfig(ctx *gin.Context) {
 	ToolData := dto.GetSpecifiedToolConfigDTOResp{Total: len(configList), ToolConfig: configList, ID: GetSpecifiedToolConfigDTOReq.ToolID}
 	Meta := model.Meta{Msg: "查询配置成功", Status_code: 200}
 	response.Success(ctx, util.Struct2MapViaJson(ToolData), util.Struct2MapViaJson(Meta))
+}
+
+// 上传脚本文件
+func PostScriptFile(ctx *gin.Context) {
+	//获取文件头
+	file, err := ctx.FormFile("upload")
+	if err != nil {
+		ctx.String(401, "请求失败")
+		return
+	}
+	//获取文件名
+	fileName := file.Filename
+	log.Println("文件名：", fileName)
+	//保存文件到服务器本地
+	//SaveUploadedFile(文件头，保存路径)
+	if err := ctx.SaveUploadedFile(file, fileName); err != nil {
+		ctx.String(401, "保存失败 Error:%s", err.Error())
+		return
+	}
+	ctx.String(200, "上传文件成功")
 }

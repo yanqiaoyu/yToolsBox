@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"main/dto"
+	"main/util"
 	"net"
 	"os"
 	"time"
@@ -113,9 +115,11 @@ func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
 	fmt.Println("文件下载完毕")
 }
 
-func CreateNewTaskService() {
+func CreateNewTaskService(config dto.BriefToolConfigDTO) {
 	cliConf := new(ClientConfig)
 	cliConf.createClient("103.44.241.227", 22, "yqy", "yqy0325dwj")
+
+	log.Print(util.Struct2MapViaJson(config))
 	// //本地文件上传到服务器
 	// cliConf.Upload(`D:\settings.txt`, `/tmp/haha.go`) // /root/haha.go
 	// //从服务器中下载文件

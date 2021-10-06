@@ -1,5 +1,20 @@
 <template>
   <div>
+    <!-- 回到顶部 -->
+    <el-backtop>
+      <div
+        style="{
+        height: 100%;
+        width: 100%;
+        background-color: #f2f5f6;
+        box-shadow: 0 0 6px rgba(0,0,0, .12);
+        text-align: center;
+        line-height: 40px;
+        color: #1989fa;
+      }"
+      >UP</div>
+    </el-backtop>
+
     <!-- 面包屑路径 -->
     <el-breadcrumb>
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
@@ -25,7 +40,7 @@
 
         <!-- 这个列里面放的是添加按钮 -->
         <el-col :span="6">
-          <el-button type="primary" @click="dialogVisible = true">新建任务</el-button>
+          <el-button type="primary" @click="openDialog">新建任务</el-button>
         </el-col>
       </el-row>
 
@@ -35,11 +50,22 @@
       <!-- 任务列表展示区 -->
       <el-table :data="tasksList" stripe border style="width: 100%">
         <!-- 只要添加了type=index，就能序号列 -->
-        <el-table-column type="index" label="序号" width="70"></el-table-column>
-        <el-table-column prop="toolName" label="工具名称"></el-table-column>
-        <el-table-column prop="toolConfigName" label="配置名称"></el-table-column>
-        <el-table-column prop="toolConfigDesc" label="配置描述"></el-table-column>
-        <el-table-column prop="toolTaskProgress" label="任务进度">
+        <el-table-column type="index" label="任务序号" align="center" width="90"></el-table-column>
+        <el-table-column prop="toolName" label="选择的工具"></el-table-column>
+        <el-table-column prop="toolConfigName" label="选择的配置"></el-table-column>
+        <el-table-column label="新建时间" align="center" width="200">
+          <!-- <template slot-scope="scope">{{ scope.row.addTime | formatDate }}</template> -->
+          <template slot-scope="scope">{{ FomatDate(scope.row.CreatedAt) }}</template>
+        </el-table-column>
+        <el-table-column label="完成时间" align="center" width="200">
+          <template slot-scope="scope">
+            <!-- 未完成 -->
+            <div v-if="scope.row.isDone == false">未完成</div>
+            <!-- 已完成 -->
+            <div v-else>{{ FomatDate(scope.row.addTime) }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="toolTaskProgress" label="任务进度" width="150">
           <el-progress :text-inside="true" :stroke-width="26" :percentage="0"></el-progress>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150">
@@ -80,10 +106,24 @@
         width="30%"
         :close-on-click-modal="false"
         @close="closeDialog"
+        v-loading="loading"
+        element-loading-text="创建任务中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
       >
+        <!-- 任务配置的级联选择器 -->
         <div>
-          <span class="demonstration" style="margin-right: 10px">选择配置</span>
-          <el-cascader :options="options" :props="props" collapse-tags clearable size="medium"></el-cascader>
+          <span style="margin-right: 20px">选择配置</span>
+          <el-cascader
+            v-model="finalList"
+            :options="options"
+            :props="props"
+            collapse-tags
+            clearable
+            size="medium"
+            filterable
+            placeholder="搜索工具名称或配置名称"
+          ></el-cascader>
         </div>
 
         <span slot="footer" class="dialog-footer">
@@ -91,6 +131,17 @@
           <el-button type="primary" @click="PostAddTask">确 定</el-button>
         </span>
       </el-dialog>
+
+      <!-- 分页功能 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[10, 50, 100]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -99,33 +150,103 @@
 export default {
   data() {
     return {
-      options: [
-        {
-          value: 1,
-          label: '东南',
-          children: [
-            { value: 1, label: '普陀' },
-            { value: 1, label: '黄埔' },
-            { value: 1, label: '徐汇' },
-          ],
-        },
-      ],
+      finalList: [],
+      options: [],
       props: { multiple: true },
       queryInfo: {
         query: '',
-        params: '',
+        // 这行属性其实就是当前在第几页
+        pagenum: 1,
+        // 这行属性其实就是当前每页展示多少条数据，这里最好与page-sizes里面的第一个元素值保持一致，否则在刷新的时候会出Bug
+        pagesize: 10,
       },
-      tasksList: [{ toolName: '1' }],
+      tasksList: [],
+      total: 0,
       dialogVisible: false,
+      loading: false,
     }
   },
+  created() {
+    // 要获取任务的列表
+    this.GetTasksList()
+  },
   methods: {
-    GetTasksList() {
-      console.log('Get Task')
+    // 获取任务列表的请求
+    async GetTasksList() {
+      // console.log('Get Task')
+      const { data: res } = await this.$http.get('tasks', {
+        params: this.queryInfo,
+      })
+      if (res.meta.status_code !== 200)
+        return this.$message.error('获取任务列表失败')
+
+      this.tasksList = res.data.TaskItemList
+      this.total = res.data.Total
     },
-    PostAddTask() {},
+    // 获取级联选择器中的信息的请求
+    async GetCascaderList() {
+      // console.log('Get Cascader Info')
+      const { data: res } = await this.$http.get('tasks/cascader')
+      // console.log(res)
+      if (res.meta.status_code !== 200)
+        return this.$message.error('获取配置信息失败')
+
+      this.options = res.data.CascaderList
+    },
+    // 确认新增一个任务
+    async PostAddTask() {
+      this.loading = true
+      console.log(this.finalList)
+      if (this.finalList.length == 0) {
+        this.loading = false
+        return this.$message.error('未选择配置信息,无法创建任务')
+      }
+      const { data: res } = await this.$http.post('tasks', {
+        ConfigList: JSON.stringify(this.finalList),
+      })
+      if (res.meta.status_code !== 200) {
+        this.loading = false
+        return this.$message.error('获取配置信息失败')
+      }
+      this.loading = false
+      this.$message.success('新建任务成功')
+      // 成功了关闭对话框
+      this.dialogVisible = false
+      // 清空Cascader的选中条目
+      this.finalList = []
+    },
+    // 取消任务
     CancelTask() {},
-    closeDialog() {},
+    // 打开新增任务的对话框
+    openDialog() {
+      // 清空Cascader的选中条目
+      this.finalList = []
+      this.dialogVisible = true
+      // 打开的时候，请求工具以及对应的工具配置
+      this.GetCascaderList()
+    },
+    // 关闭新增任务的对话框
+    closeDialog() {
+      // 关闭的时候，请求一次任务列表
+      this.GetTasksList()
+      this.dialogVisible = false
+    },
+    // 转换时间戳
+    FomatDate(unixtime) {
+      return this.$moment.unix(unixtime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    // 翻页
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`)
+      this.queryInfo.pagenum = val
+      this.GetTasksList()
+    },
+    // 改变每页大小
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`)
+      this.queryInfo.pagesize = val
+      this.GetTasksList()
+    },
   },
 }
 </script>

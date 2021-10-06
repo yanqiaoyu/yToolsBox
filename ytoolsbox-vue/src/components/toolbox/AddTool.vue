@@ -139,7 +139,7 @@
                 style="width:450px"
                 class="upload-demo"
                 ref="upload"
-                action="https://1"
+                action="http://localhost/api/auth/upload/"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :file-list="fileList"
@@ -523,7 +523,7 @@ export default {
             qs.stringify({ ...this.toolForm, toolRunCMD: this.finalCMD })
           )
 
-          console.log(res.data)
+          // console.log(res.data)
           if (res.meta.status_code == 200) {
             this.$message({
               type: 'success',
@@ -563,14 +563,14 @@ export default {
       try {
         var fileArr = file.name.split('.')
         suffix = fileArr[fileArr.length - 1]
-        console.log(suffix)
+        // console.log(suffix)
         if (suffix != 'py' && suffix != 'sh') {
           this.$message.error('上传文件类型错误')
           this.$refs.upload.clearFiles()
           return
         }
       } catch (err) {
-        console.log(err)
+        // console.log(err)
         this.$message.error('文件异常')
         this.$refs.upload.clearFiles()
         return

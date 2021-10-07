@@ -14,6 +14,7 @@ import (
 	"main/dto"
 	"main/response"
 	"math/rand"
+	"os"
 	"reflect"
 	"time"
 
@@ -80,4 +81,16 @@ func ResolveURI(ctx *gin.Context, obj interface{}) error {
 		return err
 	}
 	return nil
+}
+
+// 创建文件夹
+func CreateDir(folderPath string) (dirPath string) {
+	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
+		// 必须分成两步
+		// 先创建文件夹
+		os.MkdirAll(folderPath, 0777)
+		// 再修改权限
+		os.Chmod(folderPath, 0777)
+	}
+	return folderPath
 }

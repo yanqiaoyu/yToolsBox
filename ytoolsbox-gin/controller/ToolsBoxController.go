@@ -1,12 +1,12 @@
 package controller
 
 import (
-	"log"
 	"main/common"
 	"main/dao"
 	"main/dto"
 	"main/model"
 	"main/response"
+	"main/service"
 	"main/util"
 
 	"github.com/gin-gonic/gin"
@@ -95,20 +95,12 @@ func GetSpecifiedToolConfig(ctx *gin.Context) {
 
 // 上传脚本文件
 func PostScriptFile(ctx *gin.Context) {
-	//获取文件头
-	file, err := ctx.FormFile("upload")
+	_, err := service.SaveScriptFile(ctx)
 	if err != nil {
-		ctx.String(401, "请求失败")
-		return
+		msg := dto.FailResponseMeta{StatusCode: 400, Message: "上传文件失败"}
+		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
 	}
-	//获取文件名
-	fileName := file.Filename
-	log.Println("文件名：", fileName)
-	//保存文件到服务器本地
-	//SaveUploadedFile(文件头，保存路径)
-	if err := ctx.SaveUploadedFile(file, fileName); err != nil {
-		ctx.String(401, "保存失败 Error:%s", err.Error())
-		return
-	}
-	ctx.String(200, "上传文件成功")
+
+	Meta := model.Meta{Msg: "上传文件成功", Status_code: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }

@@ -164,6 +164,7 @@ export default {
       total: 0,
       dialogVisible: false,
       loading: false,
+      configIDList: [],
     }
   },
   created() {
@@ -196,13 +197,17 @@ export default {
     // 确认新增一个任务
     async PostAddTask() {
       this.loading = true
-      console.log(this.finalList)
+      // 拿到所有配置ID，存放到一个List中
+      for (var i in this.finalList) {
+        this.configIDList.push(this.finalList[i]['1'])
+      }
+
       if (this.finalList.length == 0) {
         this.loading = false
         return this.$message.error('未选择配置信息,无法创建任务')
       }
       const { data: res } = await this.$http.post('tasks', {
-        ConfigList: JSON.stringify(this.finalList),
+        ConfigList: JSON.stringify(this.configIDList),
       })
       if (res.meta.status_code !== 200) {
         this.loading = false

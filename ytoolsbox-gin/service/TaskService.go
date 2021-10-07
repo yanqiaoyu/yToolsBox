@@ -8,9 +8,12 @@ import (
 	"main/util"
 	"net"
 	"os"
+	"path/filepath"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/pkg/sftp"
+	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -117,11 +120,48 @@ func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
 
 func CreateNewTaskService(config dto.BriefToolConfigDTO) {
 	cliConf := new(ClientConfig)
-	cliConf.createClient("103.44.241.227", 22, "yqy", "yqy0325dwj")
+	cliConf.createClient("103.44.241.227", 22, "yqy", "")
 
-	log.Print(util.Struct2MapViaJson(config))
+	// 1.在哪里执行?
+	if config.ToolExecuteLocation == "local" {
+		log.Println("直接本地执行")
+	} else if config.ToolExecuteLocation == "remote" {
+		log.Println("进入远程执行")
+	}
+
+	// log.Print(util.Struct2MapViaJson(config))
 	// //本地文件上传到服务器
 	// cliConf.Upload(`D:\settings.txt`, `/tmp/haha.go`) // /root/haha.go
 	// //从服务器中下载文件
 	// cliConf.Download(`/root/1.py`, `D:\go\1.py`) //文件下载完毕
+}
+
+func SaveScriptFile(ctx *gin.Context) (string, error) {
+	// 获取文件名
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		return "", err
+	}
+	fileName := file.Filename
+	//获取工具名
+	toolName := ctx.PostForm("toolName")
+	// log.Println("工具名：", toolName)
+	// log.Println("文件名：", fileName)
+
+	// 创建Base路径
+	AbsPath, _ := os.Getwd()
+	BasePath := viper.GetString("tool.scriptBasePath")
+	FinalFilePath := filepath.Join(AbsPath, BasePath, toolName)
+	// log.Println("文件存放路径: ", FinalFilePath)
+
+	util.CreateDir(FinalFilePath)
+
+	FileDST := filepath.Join(FinalFilePath, fileName)
+
+	//保存文件到服务器本地
+	//SaveUploadedFile(文件头，保存路径)
+	if err := ctx.SaveUploadedFile(file, FileDST); err != nil {
+		return "", err
+	}
+	return FileDST, nil
 }

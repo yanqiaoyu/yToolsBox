@@ -23,14 +23,11 @@ func PostNewTask(ctx *gin.Context) {
 	// 这里获取到的PostNewTaskParam是一个字符串形式的数组，所以还需要处理
 	PostNewTaskParam.ConfigList = strings.TrimPrefix(PostNewTaskParam.ConfigList, "[")
 	PostNewTaskParam.ConfigList = strings.TrimSuffix(PostNewTaskParam.ConfigList, "]")
-	// 每遇到一个],就取前一个的数字
-	configIDList := []string{}
-	for i := 0; i < len(PostNewTaskParam.ConfigList); i++ {
-		if string(PostNewTaskParam.ConfigList[i]) == "]" {
-			configIDList = append(configIDList, string(PostNewTaskParam.ConfigList[i-1]))
-		}
-	}
+	// log.Println(PostNewTaskParam.ConfigList)
 
+	configIDList := strings.Split(PostNewTaskParam.ConfigList, ",")
+
+	// log.Println(configIDList)
 	// 获取每一个配置ID，新增一个任务，新增一个任务进度条目
 	for i := 0; i < len(configIDList); i++ {
 		// 从库里面把这个配置ID的全部信息查出来传给service
@@ -69,6 +66,8 @@ func GetTaskItem(ctx *gin.Context) {
 	// log.Println(GetAllTaskItemParam)
 
 	TaskItemList, DefaultLength := dao.SelectAllTaskItem(db, GetAllTaskItemParam)
+
+	// log.Println(TaskItemList)
 
 	// 构造返回的结构体
 	TaskItemData := dto.GetAllTaskItemDTOResp{Total: int64(DefaultLength), TaskItemList: TaskItemList}

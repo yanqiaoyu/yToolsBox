@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"log"
 	"main/dto"
 	"main/model"
 	"main/util"
@@ -22,6 +21,6 @@ func SelectAllRights(db *gorm.DB) []map[string]interface{} {
 		map_RightsList = append(map_RightsList, map_item)
 	}
 
-	log.Println(map_RightsList)
+	// log.Println(map_RightsList)
 	return map_RightsList
 }

@@ -16,6 +16,17 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/7" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 修复了解析配置ID异常的Bug
+            <br />2. 修复了上传脚本但是执行语句是容器的Bug
+            <br />3. 完成了文件上传的功能
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/6" placement="top">
         <el-card>
           <h4>更新内容</h4>

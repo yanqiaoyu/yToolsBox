@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -74,7 +75,7 @@ func (cliConf *ClientConfig) RunShell(shell string) string {
 	}
 	//执行shell
 	if output, err := session.CombinedOutput(shell); err != nil {
-		fmt.Println(shell)
+		log.Println(shell)
 		log.Fatalln("error occurred:", err)
 	} else {
 		cliConf.LastResult = string(output)
@@ -119,14 +120,40 @@ func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
 }
 
 func CreateNewTaskService(config dto.BriefToolConfigDTO) {
-	cliConf := new(ClientConfig)
-	cliConf.createClient("103.44.241.227", 22, "yqy", "")
-
+	log.Println(config)
 	// 1.在哪里执行?
 	if config.ToolExecuteLocation == "local" {
-		log.Println("直接本地执行")
+		log.Println("1.直接本地执行")
 	} else if config.ToolExecuteLocation == "remote" {
-		log.Println("进入远程执行")
+		log.Println("1.进入远程执行")
+		// 准备好远程连接的素材
+		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
+		cliConf := new(ClientConfig)
+		cliConf.createClient(
+			config.ToolRemoteIP,
+			int64(port),
+			config.ToolRemoteSSH_Account,
+			config.ToolRemoteSSH_Password)
+
+		// 2.执行的是容器还是脚本?
+		if config.ToolType == "container" {
+			log.Println("2.执行的是容器工具")
+			// 3.开始执行
+			log.Println("3.开始执行：", config.ToolRunCMD)
+			ExecuteResult := cliConf.RunShell(config.ToolRunCMD)
+			// 4.获取执行结果，后续这里要改进，另起一个goroutine，持续获取执行情况
+			log.Println("4.执行结果", ExecuteResult)
+
+		} else if config.ToolType == "script" {
+			log.Println("2.执行的是脚本工具")
+			// 脚本工具，需要先上传脚本到指定位置
+			cliConf.Upload(config.ToolScriptLocalPath, config.ToolScriptPath+config.ToolScriptName)
+			// 3.开始执行
+			log.Println("3.开始执行：", config.ToolRunCMD)
+			ExecuteResult := cliConf.RunShell(config.ToolRunCMD)
+			// 4.获取执行结果，后续这里要改进，另起一个goroutine，持续获取执行情况
+			log.Println("4.执行结果", ExecuteResult)
+		}
 	}
 
 	// log.Print(util.Struct2MapViaJson(config))
@@ -136,11 +163,11 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO) {
 	// cliConf.Download(`/root/1.py`, `D:\go\1.py`) //文件下载完毕
 }
 
-func SaveScriptFile(ctx *gin.Context) (string, error) {
+func SaveScriptFile(ctx *gin.Context) (string, string, error) {
 	// 获取文件名
 	file, err := ctx.FormFile("file")
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	fileName := file.Filename
 	//获取工具名
@@ -161,7 +188,7 @@ func SaveScriptFile(ctx *gin.Context) (string, error) {
 	//保存文件到服务器本地
 	//SaveUploadedFile(文件头，保存路径)
 	if err := ctx.SaveUploadedFile(file, FileDST); err != nil {
-		return "", err
+		return "", "", err
 	}
-	return FileDST, nil
+	return toolName, FileDST, nil
 }

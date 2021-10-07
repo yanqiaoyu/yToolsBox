@@ -3,7 +3,6 @@ package dao
 import (
 	"main/dto"
 	"main/model"
-	"main/service"
 	"main/util"
 
 	"gorm.io/gorm"
@@ -77,7 +76,7 @@ func SelectAllTaskItem(db *gorm.DB, obj dto.GetAllTaskItemDTOReq) ([]map[string]
 	}
 
 	// 计算一下需要如何切割数组
-	ArrayStart, ArrayEnd := service.CalculateReturnMapLength(pagenum, pagesize, map_taskItemList)
+	ArrayStart, ArrayEnd := util.CalculateReturnMapLength(pagenum, pagesize, map_taskItemList)
 	// 返回切片后的结果
 	return map_taskItemList[ArrayStart:ArrayEnd], DefaultLength
 }

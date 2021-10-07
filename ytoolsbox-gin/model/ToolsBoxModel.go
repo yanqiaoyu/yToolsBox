@@ -37,6 +37,8 @@ type ToolConfig struct {
 	ToolScriptName string `form:"toolScriptName" json:"toolScriptName" gorm:"column:toolScriptName"`
 	// 脚本的存放路径
 	ToolScriptPath string `form:"toolScriptPath" json:"toolScriptPath" gorm:"column:toolScriptPath"`
+	// 脚本在本地的存放路径
+	ToolScriptLocalPath string `form:"toolScriptLocalPath" json:"toolScriptLocalPath" gorm:"column:toolScriptLocalPath"`
 	// 工具运行需要的参数
 	ToolOptions string `form:"toolOptions" json:"toolOptions" gorm:"column:toolOptions"`
 	// 工具最终执行指令

@@ -4,11 +4,7 @@
       <div>
         <!-- <img src="../assets/cat.png" alt="" class="catImage" /> -->
         <!-- 需要require引入资源 -->
-        <el-avatar
-          :size="55"
-          fit="fit"
-          :src="require('../assets/cat.png')"
-        ></el-avatar>
+        <el-avatar :size="55" fit="fit" :src="require('../assets/cat.png')"></el-avatar>
         <span>我的工具盒</span>
       </div>
       <el-button type="warning" @click="logout">退出</el-button>
@@ -30,21 +26,13 @@
         >
           <!-- 把index从id改成path，配合组件的router属性，可以直接实现跳转 -->
           <template v-for="item in menuList">
-            <el-submenu
-              v-if="item.child.length"
-              :index="'/' + item.path"
-              :key="item.id"
-            >
+            <el-submenu v-if="item.child.length" :index="'/' + item.path" :key="item.id">
               <template slot="title">
                 <i :class="iconList[item.id]"></i>
                 <span>{{ item.authName }}</span>
               </template>
               <!-- 把index从id改成path，配合组件的router属性，可以直接实现跳转 -->
-              <el-menu-item
-                :index="'/' + child.path"
-                v-for="child in item.child"
-                :key="child.id"
-              >
+              <el-menu-item :index="'/' + child.path" v-for="child in item.child" :key="child.id">
                 <template slot="title">
                   <i :class="childIconList[child.id]"></i>
                   <span>{{ child.authName }}</span>
@@ -76,17 +64,17 @@ export default {
       menuList: [],
       // 动态获取icon，当然这里写死了，如果后续新增了，这里也要改
       iconList: {
-        '1': 'el-icon-s-home',
-        '2': 'el-icon-view',
-        '3': 'el-icon-s-goods',
-        '4': 'el-icon-setting',
-        '5': 'el-icon-info'
+        1: 'el-icon-s-home',
+        2: 'el-icon-view',
+        3: 'el-icon-s-goods',
+        4: 'el-icon-setting',
+        5: 'el-icon-info',
       },
       childIconList: {
-        '401': 'el-icon-s-custom',
-        '402': 'el-icon-cpu'
+        401: 'el-icon-s-custom',
+        402: 'el-icon-cpu',
       },
-      isCollapse: false
+      isCollapse: false,
       // imgPath: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
       // imgPath: "../assets/cat.png"
     }
@@ -100,7 +88,7 @@ export default {
       this.$router.push('/login')
       this.$message({
         message: '成功退出',
-        type: 'success'
+        type: 'success',
       })
     },
     async getMenuList() {
@@ -112,8 +100,8 @@ export default {
     toggleCollapse() {
       // console.log('展开与收起状态:', this.isCollapse)
       this.isCollapse = !this.isCollapse
-    }
-  }
+    },
+  },
 }
 </script>
 

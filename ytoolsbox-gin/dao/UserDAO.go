@@ -3,7 +3,6 @@ package dao
 import (
 	"main/dto"
 	"main/model"
-	"main/service"
 
 	"main/util"
 
@@ -36,7 +35,7 @@ func SelectAllUser(db *gorm.DB, obj dto.GetAllUserDTOReq) ([]map[string]interfac
 	}
 
 	// 计算一下需要如何切割数组
-	ArrayStart, ArrayEnd := service.CalculateReturnMapLength(pagenum, pagesize, map_userList)
+	ArrayStart, ArrayEnd := util.CalculateReturnMapLength(pagenum, pagesize, map_userList)
 	// 返回切片后的结果
 	return map_userList[ArrayStart:ArrayEnd], DefaultLength
 }

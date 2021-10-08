@@ -109,6 +109,8 @@ type BriefToolConfigDTO struct {
 	ToolDockerImageName string `form:"toolDockerImageName" json:"toolDockerImageName" gorm:"column:toolDockerImageName"`
 	// 脚本工具的名称
 	ToolScriptName string `form:"toolScriptName" json:"toolScriptName" gorm:"column:toolScriptName"`
+	// 脚本在本地的存放路径
+	ToolScriptLocalPath string `form:"toolScriptLocalPath" json:"toolScriptLocalPath" gorm:"column:toolScriptLocalPath"`
 	// 脚本的存放路径
 	ToolScriptPath string `form:"toolScriptPath" json:"toolScriptPath" gorm:"column:toolScriptPath"`
 	// 工具运行需要的参数

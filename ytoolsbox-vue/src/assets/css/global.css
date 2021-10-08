@@ -28,3 +28,13 @@ body,
 .el-steps {
   margin: 15px 0;
 }
+
+/* 级联选择器的展开高度 */
+.el-cascader-menu {
+  height: 300px;
+}
+
+/* 级联选择器输入框的长度 */
+.el-cascader .el-input {
+  width: 400px;
+}

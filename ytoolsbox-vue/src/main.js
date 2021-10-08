@@ -9,11 +9,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import Moment from 'moment'
 import './plugins/element.js'
 // 导入全局样式
 import './assets/css/global.css'
 // 导入axios发送ajax请求
 import axios from 'axios'
+
 
 // 测试，生产环境，不同的请求的路径
 if (process.env.NODE_ENV == 'production') {
@@ -29,8 +31,10 @@ axios.interceptors.request.use(config => {
   return config
 })
 
-// 在Vue的原型上挂载axios，让所有示例都能发送http请求
+// 在Vue的原型上挂载axios，让所有实例都能发送http请求
 Vue.prototype.$http = axios
+// 在Vue的原型上挂载Moment，让所有实例都能调用时间戳转换
+Vue.prototype.$moment = Moment;
 
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
@@ -40,6 +44,7 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
+
 new Vue({
   router,
   render: h => h(App)

@@ -20,7 +20,6 @@
 
     <!-- 底部信息填充区域 -->
     <!-- 表单数据 -->
-
     <el-card style="width:70%;margin:0 auto">
       <!-- 引导信息 -->
       <el-alert :title="stepList[activeIndex]" type="success" center :closable="false"></el-alert>
@@ -139,7 +138,7 @@
                 style="width:450px"
                 class="upload-demo"
                 ref="upload"
-                action="https://1"
+                :action="uploadPath"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :file-list="fileList"
@@ -147,14 +146,18 @@
                 :limit="1"
                 :on-change="handleBeforeUpload"
                 accept=".py, .sh"
+                :data="uploadDataObj"
+                :headers="uploadHeaderObj"
+                :on-success="handleUploadSuc"
+                :on-error="handleUploadErr"
               >
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button
+                <!-- <el-button
                   style="margin-left: 10px;"
                   size="small"
                   type="success"
                   @click="submitUpload"
-                >上传到服务器</el-button>
+                >上传到服务器</el-button>-->
                 <div slot="tip" class="el-upload__tip">只能上传一个py或者sh文件，且不超过10MB</div>
               </el-upload>
             </el-form-item>
@@ -427,6 +430,13 @@ export default {
       fileList: [],
       isPythonScript: false,
       isShellScript: false,
+      uploadPath: 'http://localhost/api/auth/upload',
+      uploadDataObj: {
+        toolName: '',
+      },
+      uploadHeaderObj: {
+        Authorization: '',
+      },
     }
   },
   computed: {
@@ -518,12 +528,17 @@ export default {
         type: 'warning',
       })
         .then(async () => {
+          // 新建工具的请求
+          this.toolForm.toolType == 'script'
+            ? (this.toolForm.toolRunCMD = this.finalScriptCMD)
+            : (this.toolForm.toolRunCMD = this.finalCMD)
           const { data: res } = await this.$http.post(
             'tools',
-            qs.stringify({ ...this.toolForm, toolRunCMD: this.finalCMD })
+            qs.stringify({ ...this.toolForm })
           )
-
-          console.log(res.data)
+          // 上传文件的请求
+          this.submitUpload()
+          // console.log(res, uploadResult)
           if (res.meta.status_code == 200) {
             this.$message({
               type: 'success',
@@ -544,7 +559,12 @@ export default {
     back2ToolBoxPage() {
       this.$router.push('/toolbox')
     },
-    submitUpload() {
+    async submitUpload() {
+      // 上传前为请求头添加授权
+      this.uploadHeaderObj.Authorization =
+        window.sessionStorage.getItem('token')
+      // 把工具名也传过去，方便建立唯一的文件夹存储脚本
+      this.uploadDataObj.toolName = this.toolForm.toolName
       this.$refs.upload.submit()
     },
     handleRemove(file, fileList) {
@@ -563,14 +583,14 @@ export default {
       try {
         var fileArr = file.name.split('.')
         suffix = fileArr[fileArr.length - 1]
-        console.log(suffix)
+        // console.log(suffix)
         if (suffix != 'py' && suffix != 'sh') {
           this.$message.error('上传文件类型错误')
           this.$refs.upload.clearFiles()
           return
         }
       } catch (err) {
-        console.log(err)
+        // console.log(err)
         this.$message.error('文件异常')
         this.$refs.upload.clearFiles()
         return
@@ -594,6 +614,22 @@ export default {
       }
 
       this.toolForm.toolScriptName = file.name
+    },
+    // 上传失败的钩子函数
+    handleUploadErr(err) {
+      console.log(err)
+      this.$message.error({
+        message: '上传文件失败!',
+      })
+    },
+    // 上传成功的钩子函数
+    handleUploadSuc(res) {
+      if (res.meta.status_code == 200) {
+        this.$message({
+          type: 'success',
+          message: '上传文件成成功!',
+        })
+      }
     },
   },
 }

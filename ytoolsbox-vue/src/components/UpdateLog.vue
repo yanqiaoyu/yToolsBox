@@ -16,6 +16,41 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/7" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 修复了解析配置ID异常的Bug
+            <br />2. 修复了上传脚本但是执行语句是容器的Bug
+            <br />3. 完成了文件上传的功能
+            <br />4. 完成了工具执行的功能，至此关键功能基本OK，后续开始进行完善和改进
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/10/6" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 复用用户管理模块, 完成了任务模块相关的增删改查
+            <br />2. 参考gorm的官方文档，解决了一个时间显示的问题
+            <br />3. 使用v-loading规避了一个重复请求的Bug，提升用户体验
+          </p>
+        </el-card>
+      </el-timeline-item>
+
+      <el-timeline-item timestamp="2021/10/5" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 尝试用goroutine并发新增任务
+            <br />2. copy网上关于go-ssh的代码并融合使用
+            <br />3. 完成了前端任务界面的样式展示
+            <br />4. 选用级联选择器作为发起任务的前端样式，并解决了高度不一致的问题
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/4" placement="top">
         <el-card>
           <h4>更新内容</h4>

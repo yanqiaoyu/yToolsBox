@@ -6,6 +6,7 @@ import (
 	"main/dto"
 	"main/model"
 	"main/response"
+	"main/service"
 	"main/util"
 
 	"github.com/gin-gonic/gin"
@@ -90,4 +91,19 @@ func GetSpecifiedToolConfig(ctx *gin.Context) {
 	ToolData := dto.GetSpecifiedToolConfigDTOResp{Total: len(configList), ToolConfig: configList, ID: GetSpecifiedToolConfigDTOReq.ToolID}
 	Meta := model.Meta{Msg: "查询配置成功", Status_code: 200}
 	response.Success(ctx, util.Struct2MapViaJson(ToolData), util.Struct2MapViaJson(Meta))
+}
+
+// 上传脚本文件
+func PostScriptFile(ctx *gin.Context) {
+	db := common.GetDB()
+	toolName, FileDST, err := service.SaveScriptFile(ctx)
+	if err != nil {
+		msg := dto.FailResponseMeta{StatusCode: 400, Message: "上传文件失败"}
+		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
+	}
+
+	dao.UpdateToolConfigScriptLocalPath(db, toolName, FileDST)
+
+	Meta := model.Meta{Msg: "上传文件成功", Status_code: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }

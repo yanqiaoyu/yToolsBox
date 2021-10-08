@@ -37,7 +37,6 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="工具评价"></el-tab-pane>
-      <el-tab-pane label="执行"></el-tab-pane>
     </el-tabs>
 
     <el-dialog

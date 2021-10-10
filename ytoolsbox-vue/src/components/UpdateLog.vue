@@ -16,6 +16,17 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/10" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 修复了一个容器执行失败引起的后端崩溃的Bug
+            <br />2. 利用goroutine+channel实现了同步完成任务执行与进度更新
+            <br />3. 完成了任务详情的展示
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/7" placement="top">
         <el-card>
           <h4>更新内容</h4>

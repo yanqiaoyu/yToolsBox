@@ -1,10 +1,12 @@
 package service
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
 	"main/dto"
+	"main/model"
 	"main/util"
 	"net"
 	"os"
@@ -52,13 +54,13 @@ func (cliConf *ClientConfig) createClient(host string, port int64, username, pas
 	addr := fmt.Sprintf("%s:%d", cliConf.Host, cliConf.Port)
 
 	if sshClient, err = ssh.Dial("tcp", addr, &config); err != nil {
-		log.Fatalln("error occurred:", err)
+		log.Println("error occurred:", err)
 	}
 	cliConf.sshClient = sshClient
 
 	//此时获取了sshClient，下面使用sshClient构建sftpClient
 	if sftpClient, err = sftp.NewClient(sshClient); err != nil {
-		log.Fatalln("error occurred:", err)
+		log.Println("error occurred:", err)
 	}
 	cliConf.sftpClient = sftpClient
 }
@@ -71,12 +73,14 @@ func (cliConf *ClientConfig) RunShell(shell string) string {
 
 	//获取session，这个session是用来远程执行操作的
 	if session, err = cliConf.sshClient.NewSession(); err != nil {
-		log.Fatalln("error occurred:", err)
+		log.Println("error occurred:", err)
+		return err.Error()
 	}
 	//执行shell
 	if output, err := session.CombinedOutput(shell); err != nil {
 		log.Println(shell)
-		log.Fatalln("error occurred:", err)
+		log.Println("error occurred:", err, string(output))
+		return err.Error() + string(output)
 	} else {
 		cliConf.LastResult = string(output)
 	}
@@ -95,7 +99,7 @@ func (cliConf *ClientConfig) Upload(srcPath, dstPath string) {
 		n, err := srcFile.Read(buf)
 		if err != nil {
 			if err != io.EOF {
-				log.Fatalln("error occurred:", err)
+				log.Println("error occurred:", err)
 			} else {
 				break
 			}
@@ -114,18 +118,26 @@ func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
 	}()
 
 	if _, err := srcFile.WriteTo(dstFile); err != nil {
-		log.Fatalln("error occurred", err)
+		log.Println("error occurred", err)
 	}
 	fmt.Println("文件下载完毕")
 }
 
-func CreateNewTaskService(config dto.BriefToolConfigDTO) {
+func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.Tasks) {
 	log.Println(config)
+
+	// 结果的缓存
+	buf := bytes.Buffer{}
 	// 1.在哪里执行?
 	if config.ToolExecuteLocation == "local" {
 		log.Println("1.直接本地执行")
+		buf.WriteString("1.直接本地执行\r\n")
+		resultChannel <- model.Tasks{Progress: 25, ReturnContent: buf.String()}
+
 	} else if config.ToolExecuteLocation == "remote" {
 		log.Println("1.进入远程执行")
+		buf.WriteString("1.进入远程执行\r\n")
+		resultChannel <- model.Tasks{Progress: 25, ReturnContent: buf.String()}
 		// 准备好远程连接的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
 		cliConf := new(ClientConfig)
@@ -138,11 +150,23 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO) {
 		// 2.执行的是容器还是脚本?
 		if config.ToolType == "container" {
 			log.Println("2.执行的是容器工具")
+			buf.WriteString("2.执行的是容器工具\r\n")
+			resultChannel <- model.Tasks{Progress: 50, ReturnContent: buf.String()}
+
 			// 3.开始执行
 			log.Println("3.开始执行：", config.ToolRunCMD)
+			buf.WriteString("3.开始执行：")
+			buf.WriteString(config.ToolRunCMD)
+			buf.WriteString("\r\n")
 			ExecuteResult := cliConf.RunShell(config.ToolRunCMD)
+			resultChannel <- model.Tasks{Progress: 75, ReturnContent: buf.String()}
+
 			// 4.获取执行结果，后续这里要改进，另起一个goroutine，持续获取执行情况
 			log.Println("4.执行结果", ExecuteResult)
+			buf.WriteString("4.执行结果:")
+			buf.WriteString(ExecuteResult)
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
 
 		} else if config.ToolType == "script" {
 			log.Println("2.执行的是脚本工具")
@@ -150,11 +174,23 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO) {
 			cliConf.Upload(config.ToolScriptLocalPath, config.ToolScriptPath+config.ToolScriptName)
 			// 3.开始执行
 			log.Println("3.开始执行：", config.ToolRunCMD)
+			buf.WriteString("3.开始执行：")
+			buf.WriteString(config.ToolRunCMD)
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 75, ReturnContent: buf.String()}
+
 			ExecuteResult := cliConf.RunShell(config.ToolRunCMD)
 			// 4.获取执行结果，后续这里要改进，另起一个goroutine，持续获取执行情况
 			log.Println("4.执行结果", ExecuteResult)
+			buf.WriteString("4.执行结果:")
+			buf.WriteString(ExecuteResult)
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
 		}
 	}
+
+	// 关闭resultChannel
+	close(resultChannel)
 
 	// log.Print(util.Struct2MapViaJson(config))
 	// //本地文件上传到服务器

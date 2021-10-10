@@ -62,11 +62,13 @@
             <!-- 未完成 -->
             <div v-if="scope.row.isDone == false">未完成</div>
             <!-- 已完成 -->
-            <div v-else>{{ FomatDate(scope.row.addTime) }}</div>
+            <div v-else>{{ FomatDate(scope.row.UpdatedAt) }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="toolTaskProgress" label="任务进度" width="150">
-          <el-progress :text-inside="true" :stroke-width="26" :percentage="0"></el-progress>
+          <template slot-scope="scope">
+            <el-progress :text-inside="true" :stroke-width="26" :percentage="scope.row.progress"></el-progress>
+          </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150">
           <template slot-scope="scope">
@@ -83,6 +85,7 @@
                 icon="el-icon-close"
                 circle
                 @click="cancelTask(scope.row.id)"
+                :disabled="scope.row.isDone"
               ></el-button>
             </el-tooltip>
             <!-- 任务详情 -->
@@ -93,7 +96,12 @@
               placement="top"
               :enterable="false"
             >
-              <el-button type="warning" icon="el-icon-question" circle></el-button>
+              <el-button
+                type="warning"
+                icon="el-icon-question"
+                @click="opentaskDetailDialog(scope.row)"
+                circle
+              ></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -132,6 +140,20 @@
         </span>
       </el-dialog>
 
+      <!-- 任务详情的提示框 -->
+      <el-dialog
+        title="任务详情"
+        :visible.sync="taskDetailDialogVisible"
+        width="30%"
+        :close-on-click-modal="false"
+        @close="taskDetailDialogVisible=false"
+      >
+        <div style="white-space: pre-line;">{{ taskDetail }}</div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="taskDetailDialogVisible = false">关闭</el-button>
+        </span>
+      </el-dialog>
+
       <!-- 分页功能 -->
       <el-pagination
         @size-change="handleSizeChange"
@@ -163,8 +185,10 @@ export default {
       tasksList: [],
       total: 0,
       dialogVisible: false,
+      taskDetailDialogVisible: false,
       loading: false,
       configIDList: [],
+      taskDetail: '',
     }
   },
   created() {
@@ -251,6 +275,11 @@ export default {
       // console.log(`每页 ${val} 条`)
       this.queryInfo.pagesize = val
       this.GetTasksList()
+    },
+    // 任务详情
+    opentaskDetailDialog(row) {
+      this.taskDetailDialogVisible = true
+      this.taskDetail = row.returnContent
     },
   },
 }

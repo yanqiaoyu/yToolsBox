@@ -4,6 +4,7 @@ import (
 	"main/common"
 	"main/dao"
 	"main/dto"
+	"main/model"
 	"main/response"
 	"main/service"
 	"main/util"
@@ -32,9 +33,15 @@ func PostNewTask(ctx *gin.Context) {
 	for i := 0; i < len(configIDList); i++ {
 		// 从库里面把这个配置ID的全部信息查出来传给service
 		configList := dao.SelectConfigByToolID(db, string(configIDList[i]))
-		// 新增一个条目
-		dao.InsertTaskItem(db, configList)
-		go service.CreateNewTaskService(configList)
+		// 新增一个任务条目
+		TaskID := dao.InsertTaskItem(db, configList)
+
+		// 线程间通信需要用到的chan
+		resultChannel := make(chan model.Tasks, 10)
+		// 用于接收业务执行结果并更新至数据库
+		go dao.UpdateTaskProgress(db, resultChannel, TaskID)
+		// 用于关键业务的执行
+		go service.CreateNewTaskService(configList, resultChannel)
 	}
 
 	// 返回

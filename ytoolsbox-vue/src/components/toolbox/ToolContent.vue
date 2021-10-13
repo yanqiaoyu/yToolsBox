@@ -319,6 +319,7 @@
       :visible.sync="addToolConfigVisible"
       width="30%"
       :close-on-click-modal="false"
+      @close="closeAddConfigDialog"
     >
       <!-- 新增配置的表单 -->
       <el-form
@@ -514,6 +515,12 @@
 <script>
 export default {
   data() {
+    var checkConfigName = (rule, value, callback) => {
+      if (value != '默认配置') {
+        return callback()
+      }
+      callback(new Error('新增的配置名称不允许叫"默认配置"'))
+    }
     return {
       toolID: 0,
       toolName: '',
@@ -553,6 +560,54 @@ export default {
             min: 1,
             max: 20,
             message: '长度在 2 到 20 个字符',
+            trigger: 'blur'
+          },
+          { validator: checkConfigName, trigger: 'blur' }
+        ],
+        toolConfigDesc: [
+          { required: true, message: '请输入配置描述', trigger: 'blur' },
+          {
+            min: 1,
+            max: 50,
+            message: '长度在 1 到 50 个字符',
+            trigger: 'blur'
+          }
+        ],
+        toolRemoteIP: [
+          { required: true, message: '请填写远程环境的IP', trigger: 'blur' }
+        ],
+        toolRemoteSSH_Port: [
+          {
+            required: true,
+            message: '请填写远程环境的SSH端口',
+            trigger: 'blur'
+          }
+        ],
+        toolRemoteSSH_Account: [
+          {
+            required: true,
+            message: '请填写远程环境的SSH账号',
+            trigger: 'blur'
+          }
+        ],
+        toolRemoteSSH_Password: [
+          {
+            required: true,
+            message: '请填写远程环境的SSH密码',
+            trigger: 'blur'
+          }
+        ],
+        toolPythonVersion: [
+          {
+            required: true,
+            message: '请选择Python解释器版本',
+            trigger: 'blur'
+          }
+        ],
+        toolShellVersion: [
+          {
+            required: true,
+            message: '请选择Shell解释器版本',
             trigger: 'blur'
           }
         ]
@@ -732,14 +787,28 @@ export default {
     },
     // 关闭新增配置的对话框
     closeAddConfigDialog() {
+      this.$refs.addConfigForm.resetFields()
       this.addToolConfigVisible = false
     },
 
     // 确认新增配置
     confirmAddConfig() {
-      this.addToolConfigVisible = false
-      // TBD
-      // 后续要发送请求确认修改
+      this.$refs.addConfigForm.validate(async valid => {
+        console.log(valid)
+        if (valid) {
+          // TBD
+          // 后续要发送请求确认修改
+          // const { data: res } = await this.$http.post('users')
+          // console.log(res)
+
+          this.$message.success('添加成功')
+          this.dialogVisible = false
+          this.GetToolConfig()
+          this.addToolConfigVisible = false
+        } else {
+          this.$message.error('添加信息验证失败')
+        }
+      })
     }
   }
 }

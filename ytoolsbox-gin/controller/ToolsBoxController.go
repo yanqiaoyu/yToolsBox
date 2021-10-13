@@ -107,3 +107,8 @@ func PostScriptFile(ctx *gin.Context) {
 	Meta := model.Meta{Msg: "上传文件成功", Status_code: 200}
 	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }
+
+// 新增配置
+func PostNewConfig(ctx *gin.Context) {
+	
+}

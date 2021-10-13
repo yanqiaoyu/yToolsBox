@@ -794,17 +794,18 @@ export default {
     // 确认新增配置
     confirmAddConfig() {
       this.$refs.addConfigForm.validate(async valid => {
-        console.log(valid)
+        // console.log(valid)
         if (valid) {
           // TBD
           // 后续要发送请求确认修改
           // const { data: res } = await this.$http.post('users')
           // console.log(res)
+          console.log(this.addConfigForm)
 
           this.$message.success('添加成功')
           this.dialogVisible = false
           this.GetToolConfig()
-          this.addToolConfigVisible = false
+          // this.addToolConfigVisible = false
         } else {
           this.$message.error('添加信息验证失败')
         }

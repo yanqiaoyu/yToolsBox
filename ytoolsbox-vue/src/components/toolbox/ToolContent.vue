@@ -235,6 +235,70 @@
             ></el-input>
           </el-form-item>
         </div>
+
+        <!-- 选择执行位置的开关 -->
+        <el-form-item>
+          <el-switch
+            disabled
+            v-model="editConfigForm.toolExecuteLocation"
+            active-text="远程执行"
+            active-value="remote"
+            inactive-text="本地执行"
+            inactive-value="local"
+          ></el-switch>
+          <!-- 针对执行位置的说明提示 -->
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="选择远程执行,如果是脚本,会把脚本上传到远程环境再执行;如果是容器,那么会先ssh进入远程环境后再拉取镜像"
+            placement="top-start"
+          >
+            <i class="header-icon el-icon-info" style="margin-left:10px"></i>
+          </el-tooltip>
+        </el-form-item>
+
+        <!-- 只有选择了远程执行，才会需要填写远程信息 -->
+        <div
+          v-if="editConfigForm.toolExecuteLocation == 'remote'"
+          :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
+        >
+          <el-form-item label="SSH IP地址" prop="toolRemoteIP">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteIP"
+              placeholder="远程环境的IP"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="SSH端口" prop="toolRemoteSSH_Port">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteSSH_Port"
+              placeholder="远程环境的端口"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="SSH账号" prop="toolRemoteSSH_Account">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteSSH_Account"
+              placeholder="远程SSH账号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="SSH密码" prop="toolRemoteSSH_Password">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteSSH_Password"
+              placeholder="远程SSH密码"
+            ></el-input>
+          </el-form-item>
+        </div>
       </el-form>
 
       <!-- 底部的按钮 -->
@@ -253,30 +317,24 @@
     >
       <!-- 新增配置的表单 -->
       <el-form
-        :model="editConfigForm"
-        :rules="editConfigFormRule"
-        ref="editConfigForm"
+        :model="addConfigForm"
+        :rules="addConfigFormRule"
+        ref="addConfigForm"
         label-width="120px"
       >
-        <!-- 编辑工具配置的弹窗界面中的表单 -->
+        <!-- 新增工具配置的弹窗界面中的表单 -->
         <el-form-item label="配置名称" prop="toolConfigName">
-          <el-input
-            v-model="editConfigForm.toolConfigName"
-            :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
-          ></el-input>
+          <el-input v-model="addConfigForm.toolConfigName"></el-input>
         </el-form-item>
         <el-form-item label="配置描述" prop="toolConfigDesc">
-          <el-input
-            v-model="editConfigForm.toolConfigDesc"
-            :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
-          ></el-input>
+          <el-input v-model="addConfigForm.toolConfigDesc"></el-input>
         </el-form-item>
         <el-form-item label="工具类型" prop="toolType">
           <!-- 选择工具类型下拉框 -->
           <el-select
-            :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
-            v-model="editConfigForm.toolType"
+            v-model="addConfigForm.toolType"
             placeholder="请选择工具类型"
+            disabled
           >
             <el-option label="容器化工具" value="container"></el-option>
             <el-option label="脚本工具" value="script"></el-option>
@@ -284,27 +342,25 @@
         </el-form-item>
 
         <!-- 选择了脚本工具，出现这个 -->
-        <div v-if="editConfigForm.toolType == 'script'">
+        <div v-if="addConfigForm.toolType == 'script'">
           <el-form-item label="脚本名称" prop="toolScriptName">
             <el-input
               :disabled="true"
-              v-model="editConfigForm.toolScriptName"
+              v-model="addConfigForm.toolScriptName"
               placeholder="脚本名称"
             ></el-input>
           </el-form-item>
           <!-- python版本选择器 -->
           <el-form-item
             label="Python版本"
-            v-if="editConfigForm.toolPythonVersion"
+            v-if="addConfigForm.toolPythonVersion"
             prop="toolPythonVersion"
           >
             <!-- Python版本下拉框 -->
             <el-select
-              :disabled="
-                disableEditDefaultConfig(editConfigForm.toolConfigName)
-              "
+              :disabled="disableEditDefaultConfig(addConfigForm.toolConfigName)"
               placeholder="请选择Python版本"
-              v-model="editConfigForm.toolPythonVersion"
+              v-model="addConfigForm.toolPythonVersion"
             >
               <el-option label="python2" value="python2"></el-option>
               <el-option label="python2.7" value="python2.7"></el-option>
@@ -318,16 +374,14 @@
           <!-- shell版本选择器 -->
           <el-form-item
             label="Shell版本"
-            v-if="editConfigForm.toolShellVersion"
+            v-if="addConfigForm.toolShellVersion"
             prop="toolShellVersion"
           >
             <!-- Shell版本下拉框 -->
             <el-select
-              :disabled="
-                disableEditDefaultConfig(editConfigForm.toolConfigName)
-              "
+              :disabled="disableEditDefaultConfig(addConfigForm.toolConfigName)"
               placeholder="请选择Shell版本"
-              v-model="editConfigForm.toolShellVersion"
+              v-model="addConfigForm.toolShellVersion"
             >
               <el-option label="sh" value="sh"></el-option>
               <el-option label="bash" value="bash"></el-option>
@@ -335,26 +389,21 @@
           </el-form-item>
           <!-- 脚本位于远端服务器的位置 -->
           <el-form-item
-            v-if="editConfigForm.toolExecuteLocation == 'remote'"
+            v-if="addConfigForm.toolExecuteLocation == 'remote'"
             label="脚本绝对路径"
             prop="toolScriptPath"
           >
             <el-input
-              :disabled="
-                disableEditDefaultConfig(editConfigForm.toolConfigName)
-              "
-              v-model="editConfigForm.toolScriptPath"
+              disabled
+              v-model="addConfigForm.toolScriptPath"
               placeholder="脚本在远程环境的绝对路径,不含文件名 eg:/tmp/"
             ></el-input>
           </el-form-item>
           <!-- 运行参数 -->
           <el-form-item label="运行参数" prop="toolOptions">
             <el-input
-              :disabled="
-                disableEditDefaultConfig(editConfigForm.toolConfigName)
-              "
               type="textarea"
-              v-model="editConfigForm.toolOptions"
+              v-model="addConfigForm.toolOptions"
               :autosize="{ minRows: 8, maxRows: 10 }"
               placeholder="工具运行时需要传入的参数"
             ></el-input>
@@ -362,29 +411,27 @@
           <el-form-item label="最终执行语句" prop="toolRunCMD">
             <el-input
               type="textarea"
-              :value="finalScriptCMD"
-              :disabled="true"
+              :value="addFinalScriptCMD"
+              disabled
               :autosize="{ minRows: 8, maxRows: 10 }"
             ></el-input>
           </el-form-item>
         </div>
 
         <!-- 选择了容器化工具，出现这个 -->
-        <div v-else-if="editConfigForm.toolType == 'container'">
+        <div v-else-if="addConfigForm.toolType == 'container'">
           <el-form-item label="Docker镜像名称" prop="toolDockerImageName">
             <el-input
               :disabled="true"
-              v-model="editConfigForm.toolDockerImageName"
+              v-model="addConfigForm.toolDockerImageName"
               placeholder="Docker镜像名称, eg:hello-world"
             ></el-input>
           </el-form-item>
           <el-form-item label="运行参数" prop="toolOptions">
             <el-input
-              :disabled="
-                disableEditDefaultConfig(editConfigForm.toolConfigName)
-              "
+              :disabled="disableEditDefaultConfig(addConfigForm.toolConfigName)"
               type="textarea"
-              v-model="editConfigForm.toolOptions"
+              v-model="addConfigForm.toolOptions"
               :autosize="{ minRows: 8, maxRows: 10 }"
               placeholder="工具运行时需要传入的参数"
             ></el-input>
@@ -393,9 +440,58 @@
           <el-form-item label="最终执行语句" prop="toolRunCMD">
             <el-input
               type="textarea"
-              :value="finalCMD"
+              :value="addFinalCMD"
               :disabled="true"
               :autosize="{ minRows: 8, maxRows: 10 }"
+            ></el-input>
+          </el-form-item>
+        </div>
+
+        <!-- 选择执行位置的开关 -->
+        <el-form-item>
+          <el-switch
+            disabled
+            v-model="addConfigForm.toolExecuteLocation"
+            active-text="远程执行"
+            active-value="remote"
+            inactive-text="本地执行"
+            inactive-value="local"
+          ></el-switch>
+          <!-- 针对执行位置的说明提示 -->
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="选择远程执行,如果是脚本,会把脚本上传到远程环境再执行;如果是容器,那么会先ssh进入远程环境后再拉取镜像"
+            placement="top-start"
+          >
+            <i class="header-icon el-icon-info" style="margin-left:10px"></i>
+          </el-tooltip>
+        </el-form-item>
+
+        <!-- 只有选择了远程执行，才会需要填写远程信息 -->
+        <div v-if="addConfigForm.toolExecuteLocation == 'remote'">
+          <el-form-item label="SSH IP地址" prop="toolRemoteIP">
+            <el-input
+              v-model="addConfigForm.toolRemoteIP"
+              placeholder="远程环境的IP"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="SSH端口" prop="toolRemoteSSH_Port">
+            <el-input
+              v-model="addConfigForm.toolRemoteSSH_Port"
+              placeholder="远程环境的端口"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="SSH账号" prop="toolRemoteSSH_Account">
+            <el-input
+              v-model="addConfigForm.toolRemoteSSH_Account"
+              placeholder="远程SSH账号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="SSH密码" prop="toolRemoteSSH_Password">
+            <el-input
+              v-model="addConfigForm.toolRemoteSSH_Password"
+              placeholder="远程SSH密码"
             ></el-input>
           </el-form-item>
         </div>
@@ -415,13 +511,31 @@ export default {
       // 编辑配置需要的表单
       editConfigForm: {},
       // 编辑配置需要的表单验证规则
-      editConfigFormRule: [],
+      editConfigFormRule: {},
       // 编辑配置的对话框可见度操控
       editToolConfigVisible: false,
       // 添加配置的对话框可见度操控
       addToolConfigVisible: false,
       // 新增配置的表单
-      addConfigForm: [],
+      addConfigForm: {
+        toolConfigName: '',
+        toolConfigDesc: '',
+        toolType: '',
+        toolScriptName: '',
+        toolDockerImageName: '',
+        toolScriptPath: '',
+        toolOptions: '',
+        toolRunCMD: '',
+        toolExecuteLocation: '',
+        toolRemoteIP: '',
+        toolRemoteSSH_Port: '',
+        toolRemoteSSH_Account: '',
+        toolRemoteSSH_Password: '',
+        toolPythonVersion: '',
+        toolShellVersion: ''
+      },
+      // 新增配置的表单验证规则
+      addConfigFormRule: {},
       // 查询配置信息的请求body
       queryInfo: { query: '' }
     }
@@ -456,7 +570,57 @@ export default {
         toolPythonVersion,
         toolShellVersion
       } = this.editConfigForm
-      console.log(toolPythonVersion, toolShellVersion)
+      // console.log(toolPythonVersion, toolShellVersion)
+      if (toolPythonVersion) {
+        toolRunCMD =
+          toolPythonVersion +
+          ' ' +
+          toolScriptPath +
+          toolScriptName +
+          ' ' +
+          toolOptions
+      } else {
+        toolRunCMD =
+          toolShellVersion +
+          ' ' +
+          toolScriptPath +
+          toolScriptName +
+          ' ' +
+          toolOptions
+      }
+
+      return toolRunCMD
+    },
+    addFinalCMD() {
+      let { toolRunCMD, toolDockerImageName, toolOptions } = this.addConfigForm
+
+      // 处理一下特殊字符
+      let runName = toolDockerImageName.replace('/', '')
+      runName = runName.replace(':', '')
+      runName = runName.replace('.', '')
+
+      toolRunCMD =
+        'docker run' +
+        ' ' +
+        'yToolsBox-' +
+        runName +
+        ' ' +
+        toolOptions +
+        ' ' +
+        toolDockerImageName
+
+      return toolRunCMD
+    },
+    addFinalScriptCMD() {
+      let {
+        toolRunCMD,
+        toolScriptName,
+        toolScriptPath,
+        toolOptions,
+        toolPythonVersion,
+        toolShellVersion
+      } = this.addConfigForm
+      // console.log(toolPythonVersion, toolShellVersion)
       if (toolPythonVersion) {
         toolRunCMD =
           toolPythonVersion +
@@ -490,6 +654,7 @@ export default {
     async GetToolConfig() {
       const { data: res } = await this.$http.get('tools/config/' + this.toolID)
       this.allConfigForm = res.data.toolsConfig
+      // console.log(this.allConfigForm)
 
       if (res.meta.status_code != 200) {
         this.$message.error('获取工具配置信息失败')
@@ -523,6 +688,25 @@ export default {
     // 展示添加配置的对话框
     showAddConfigDialog() {
       this.addToolConfigVisible = true
+
+      // 工具类型不允许修改
+      this.addConfigForm.toolType = this.allConfigForm[0].toolType
+      // 脚本名称不允许修改
+      this.addConfigForm.toolScriptName = this.allConfigForm[0].toolScriptName
+      // 镜像名称不允许修改
+      this.addConfigForm.toolDockerImageName = this.allConfigForm[0].toolDockerImageName
+      // 脚本执行位置不允许修改
+      this.addConfigForm.toolExecuteLocation = this.allConfigForm[0].toolExecuteLocation
+      // 脚本远程路径不允许修改
+      this.addConfigForm.toolScriptPath = this.allConfigForm[0].toolScriptPath
+      // 解释器类型允许修改，但是需要给个初始值
+      if (this.allConfigForm[0].toolPythonVersion) {
+        this.addConfigForm.toolPythonVersion = this.allConfigForm[0].toolPythonVersion
+      } else if (this.allConfigForm[0].toolShellVersion) {
+        this.addConfigForm.toolShellVersion = this.allConfigForm[0].toolShellVersion
+      }
+      // 最终执行语句赋值
+      this.addConfigForm.toolRunCMD = this.allConfigForm[0].toolRunCMD
     }
   }
 }

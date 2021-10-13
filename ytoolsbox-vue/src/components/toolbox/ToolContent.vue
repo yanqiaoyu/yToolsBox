@@ -304,7 +304,12 @@
       <!-- 底部的按钮 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeEditDialog">取 消</el-button>
-        <el-button type="primary" @click="confirmEdit">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="confirmEdit"
+          :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
+          >确认修改</el-button
+        >
       </span>
     </el-dialog>
 
@@ -496,6 +501,12 @@
           </el-form-item>
         </div>
       </el-form>
+
+      <!-- 底部的按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeEditDialog">取 消</el-button>
+        <el-button type="primary" @click="confirmEdit">新增配置</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -671,6 +682,7 @@ export default {
     closeEditDialog() {
       this.editToolConfigVisible = false
     },
+    // 确认修改配置
     confirmEdit() {
       this.editToolConfigVisible = false
       // TBD
@@ -707,6 +719,17 @@ export default {
       }
       // 最终执行语句赋值
       this.addConfigForm.toolRunCMD = this.allConfigForm[0].toolRunCMD
+    },
+    // 关闭新增配置的对话框
+    closeAddConfigDialog() {
+      this.addToolConfigVisible = false
+    },
+
+    // 确认新增配置
+    confirmAddConfig() {
+      this.addToolConfigVisible = false
+      // TBD
+      // 后续要发送请求确认修改
     }
   }
 }

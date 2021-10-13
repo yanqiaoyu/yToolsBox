@@ -504,8 +504,8 @@
 
       <!-- 底部的按钮 -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="closeEditDialog">取 消</el-button>
-        <el-button type="primary" @click="confirmEdit">新增配置</el-button>
+        <el-button @click="closeAddConfigDialog">取 消</el-button>
+        <el-button type="primary" @click="confirmAddConfig">新增配置</el-button>
       </span>
     </el-dialog>
   </div>
@@ -546,7 +546,17 @@ export default {
         toolShellVersion: ''
       },
       // 新增配置的表单验证规则
-      addConfigFormRule: {},
+      addConfigFormRule: {
+        toolConfigName: [
+          { required: true, message: '请输入配置名称', trigger: 'blur' },
+          {
+            min: 1,
+            max: 20,
+            message: '长度在 2 到 20 个字符',
+            trigger: 'blur'
+          }
+        ]
+      },
       // 查询配置信息的请求body
       queryInfo: { query: '' }
     }

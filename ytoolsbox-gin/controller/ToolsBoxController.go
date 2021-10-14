@@ -79,16 +79,21 @@ func GetAllTools(ctx *gin.Context) {
 // 查询某个工具的所有配置
 func GetSpecifiedToolConfig(ctx *gin.Context) {
 	db := common.GetDB()
-	GetSpecifiedToolConfigDTOReq := dto.GetSpecifiedToolConfigDTOReq{}
+	GetSpecifiedToolConfigDTOReqURI := dto.GetSpecifiedToolConfigDTOReqURI{}
+	GetSpecifiedToolConfigDTOReqQuery := dto.GetSpecifiedToolConfigDTOReqQuery{}
 
-	if util.ResolveURI(ctx, &GetSpecifiedToolConfigDTOReq) != nil {
+	if util.ResolveURI(ctx, &GetSpecifiedToolConfigDTOReqURI) != nil {
 		return
 	}
-	configList := dao.SelectSpecifiedToolConfig(db, int(GetSpecifiedToolConfigDTOReq.ToolID))
+	if util.ResolveQuery(ctx, &GetSpecifiedToolConfigDTOReqQuery) != nil {
+		return
+	}
+
+	configList, DefaultLength := dao.SelectSpecifiedToolConfig(db, int(GetSpecifiedToolConfigDTOReqURI.ToolID), GetSpecifiedToolConfigDTOReqQuery)
 	// log.Println(configList)
 
 	// 构造返回的结构体
-	ToolData := dto.GetSpecifiedToolConfigDTOResp{Total: len(configList), ToolConfig: configList, ID: GetSpecifiedToolConfigDTOReq.ToolID}
+	ToolData := dto.GetSpecifiedToolConfigDTOResp{Total: DefaultLength, ToolConfig: configList, ID: GetSpecifiedToolConfigDTOReqURI.ToolID}
 	Meta := model.Meta{Msg: "查询配置成功", Status_code: 200}
 	response.Success(ctx, util.Struct2MapViaJson(ToolData), util.Struct2MapViaJson(Meta))
 }
@@ -110,5 +115,66 @@ func PostScriptFile(ctx *gin.Context) {
 
 // 新增配置
 func PostNewConfig(ctx *gin.Context) {
-	
+	db := common.GetDB()
+	PostNewConfig := dto.PostNewToolConfigInfoDTOReq{}
+	if util.ResolveParam(ctx, &PostNewConfig) != nil {
+		return
+	}
+	// log.Println(util.Struct2MapViaJson(PostNewConfig))
+
+	dao.InsertExistToolConfigInfo(db, &PostNewConfig)
+
+	Meta := model.Meta{Msg: "新增配置成功", Status_code: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+}
+
+// 删除特定的配置文件
+func DeleteSpecifiedConfig(ctx *gin.Context) {
+	db := common.GetDB()
+	DeleteSpecifiedConfigDTOReq := dto.DeleteSpecifiedConfigDTOReq{}
+
+	if util.ResolveURI(ctx, &DeleteSpecifiedConfigDTOReq) != nil {
+		return
+	}
+
+	dao.DeleteSpecifiedConfig(db, DeleteSpecifiedConfigDTOReq.ID)
+
+	Meta := model.Meta{Msg: "删除配置成功", Status_code: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+}
+
+// 查询某个工具的某个配置
+func GetSpecifiedToolConfigByConfigID(ctx *gin.Context) {
+	db := common.GetDB()
+	GetSpecifiedToolConfigByConfigID := dto.GetSpecifiedToolConfigByConfigIDDTOReq{}
+
+	if util.ResolveURI(ctx, &GetSpecifiedToolConfigByConfigID) != nil {
+		return
+	}
+
+	toolConfig := dao.SelectSpecifiedToolConfigByConfigID(db, GetSpecifiedToolConfigByConfigID.ID)
+
+	// 构造返回的结构体
+	ToolData := dto.GetSpecifiedToolConfigByConfigIDDTOResp{ToolConfig: toolConfig}
+	Meta := model.Meta{Msg: "查询配置成功", Status_code: 200}
+	response.Success(ctx, util.Struct2MapViaJson(ToolData), util.Struct2MapViaJson(Meta))
+}
+
+// 更新某个工具的某个配置
+func PutSpecifiedToolConfigByConfigID(ctx *gin.Context) {
+	db := common.GetDB()
+	PutSpecifiedToolConfigByConfigIDDTOReqURI := dto.PutSpecifiedToolConfigByConfigIDDTOReqURI{}
+	PutSpecifiedToolConfigByConfigIDDTOReqQuery := dto.PutSpecifiedToolConfigByConfigIDDTOReqQuery{}
+
+	if util.ResolveURI(ctx, &PutSpecifiedToolConfigByConfigIDDTOReqURI) != nil {
+		return
+	}
+	if util.ResolveParam(ctx, &PutSpecifiedToolConfigByConfigIDDTOReqQuery) != nil {
+		return
+	}
+
+	dao.UpdateSpecifiedToolConfigByConfigID(db, PutSpecifiedToolConfigByConfigIDDTOReqURI.ID, PutSpecifiedToolConfigByConfigIDDTOReqQuery)
+
+	Meta := model.Meta{Msg: "更新配置成功", Status_code: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }

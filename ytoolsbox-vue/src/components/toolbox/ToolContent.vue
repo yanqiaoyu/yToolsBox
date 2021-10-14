@@ -62,7 +62,7 @@
                 type="primary"
                 icon="el-icon-edit"
                 circle
-                @click="showEditToolConfig(scope.row)"
+                @click="showEditToolConfig(scope.row.id)"
               ></el-button>
               <!-- 删除 -->
               <el-button
@@ -70,11 +70,22 @@
                 type="danger"
                 icon="el-icon-delete"
                 circle
-                @click="deleteToolConfig(scope.row)"
+                @click="deleteToolConfig(scope.row.id)"
               ></el-button>
             </template>
           </el-table-column>
         </el-table>
+
+        <!-- 分页功能 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="queryInfo.pagenum"
+          :page-sizes="[10, 50]"
+          :page-size="queryInfo.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        ></el-pagination>
       </el-tab-pane>
       <el-tab-pane label="工具评价"> 工具评价 </el-tab-pane>
     </el-tabs>
@@ -110,7 +121,7 @@
         <el-form-item label="工具类型" prop="toolType">
           <!-- 选择工具类型下拉框 -->
           <el-select
-            :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
+            disabled
             v-model="editConfigForm.toolType"
             placeholder="请选择工具类型"
           >
@@ -513,6 +524,8 @@
 </template>
 
 <script>
+import qs from 'qs'
+
 export default {
   data() {
     var checkConfigName = (rule, value, callback) => {
@@ -524,12 +537,72 @@ export default {
     return {
       toolID: 0,
       toolName: '',
+      configID: 0,
+      total: 0,
       // created阶段拿到的这个工具的所有的配置信息
       allConfigForm: [],
       // 编辑配置需要的表单
       editConfigForm: {},
       // 编辑配置需要的表单验证规则
-      editConfigFormRule: {},
+      editConfigFormRule: {
+        toolConfigName: [
+          { required: true, message: '请输入配置名称', trigger: 'blur' },
+          {
+            min: 1,
+            max: 20,
+            message: '长度在 2 到 20 个字符',
+            trigger: 'blur'
+          },
+          { validator: checkConfigName, trigger: 'blur' }
+        ],
+        toolConfigDesc: [
+          { required: true, message: '请输入配置描述', trigger: 'blur' },
+          {
+            min: 1,
+            max: 50,
+            message: '长度在 1 到 50 个字符',
+            trigger: 'blur'
+          }
+        ],
+        toolRemoteIP: [
+          { required: true, message: '请填写远程环境的IP', trigger: 'blur' }
+        ],
+        toolRemoteSSH_Port: [
+          {
+            required: true,
+            message: '请填写远程环境的SSH端口',
+            trigger: 'blur'
+          }
+        ],
+        toolRemoteSSH_Account: [
+          {
+            required: true,
+            message: '请填写远程环境的SSH账号',
+            trigger: 'blur'
+          }
+        ],
+        toolRemoteSSH_Password: [
+          {
+            required: true,
+            message: '请填写远程环境的SSH密码',
+            trigger: 'blur'
+          }
+        ],
+        toolPythonVersion: [
+          {
+            required: true,
+            message: '请选择Python解释器版本',
+            trigger: 'blur'
+          }
+        ],
+        toolShellVersion: [
+          {
+            required: true,
+            message: '请选择Shell解释器版本',
+            trigger: 'blur'
+          }
+        ]
+      },
       // 编辑配置的对话框可见度操控
       editToolConfigVisible: false,
       // 添加配置的对话框可见度操控
@@ -542,6 +615,7 @@ export default {
         toolScriptName: '',
         toolDockerImageName: '',
         toolScriptPath: '',
+        toolScriptLocalPath: '',
         toolOptions: '',
         toolRunCMD: '',
         toolExecuteLocation: '',
@@ -613,7 +687,7 @@ export default {
         ]
       },
       // 查询配置信息的请求body
-      queryInfo: { query: '' }
+      queryInfo: { query: '', pagenum: 1, pagesize: 10 }
     }
   },
   computed: {
@@ -728,8 +802,14 @@ export default {
   methods: {
     // 发起请求拿到配置信息
     async GetToolConfig() {
-      const { data: res } = await this.$http.get('tools/config/' + this.toolID)
+      const { data: res } = await this.$http.get(
+        'tools/config/' + this.toolID,
+        {
+          params: this.queryInfo
+        }
+      )
       this.allConfigForm = res.data.toolsConfig
+      this.total = res.data.total
       // console.log(this.allConfigForm)
 
       if (res.meta.status_code != 200) {
@@ -737,20 +817,45 @@ export default {
       }
     },
     // 查看配置详情的对话框
-    showEditToolConfig(toolInfo) {
-      console.log(toolInfo)
+    async showEditToolConfig(configID) {
+      // console.log(toolInfo)
       this.editToolConfigVisible = true
-      // TBD 这里后续需要请求后端，返回这条配置的数据，而不是直接拿取前端的数据
-      this.editConfigForm = toolInfo
+      // console.log(configID)
+      const { data: res } = await this.$http.get(
+        'tools/config/' + this.toolID + '/' + configID
+      )
+      // console.log(res)
+
+      this.editConfigForm = res.data.toolConfig
+      // console.log(this.editConfigForm)
     },
     // 关闭配置详情的对话框
     closeEditDialog() {
+      this.$refs.editConfigForm.resetFields()
       this.editToolConfigVisible = false
     },
     // 确认修改配置
     confirmEdit() {
-      this.editToolConfigVisible = false
-      // TBD
+      this.$refs.editConfigForm.validate(async valid => {
+        // console.log(valid)
+        if (valid) {
+          // // 发送请求确认修改
+          const { data: res } = await this.$http.put(
+            'tools/config/' + this.toolID + '/' + this.editConfigForm.id,
+            qs.stringify(this.editConfigForm)
+          )
+          console.log(res)
+          // 获取用户失败
+          if (res.meta.status_code !== 200)
+            return this.$message.error('修改信息失败')
+          this.$message.success('添加成功')
+          this.GetToolConfig()
+          this.editToolConfigVisible = false
+        } else {
+          this.$message.error('修改信息验证失败')
+        }
+      })
+
       // 后续要发送请求确认修改
     },
     // 封装了一下针对默认配置禁止修改的条件
@@ -759,8 +864,29 @@ export default {
         return true
       } else return false
     },
-    deleteToolConfig(id) {
-      console.log(id)
+    // 删除配置
+    async deleteToolConfig(id) {
+      this.$confirm('此操作将永久删除该配置, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // console.log(id)
+          const { data: res } = await this.$http.delete(
+            'tools/config/' + this.toolID + '/' + id
+          )
+          if (res.meta.status_code !== 200)
+            return this.$message.error('删除配置失败')
+          this.$message.success('删除配置成功')
+          this.GetToolConfig()
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 展示添加配置的对话框
     showAddConfigDialog() {
@@ -784,32 +910,51 @@ export default {
       }
       // 最终执行语句赋值
       this.addConfigForm.toolRunCMD = this.allConfigForm[0].toolRunCMD
+      // 本地位置不允许修改
+      this.addConfigForm.toolScriptLocalPath = this.allConfigForm[0].toolScriptLocalPath
     },
     // 关闭新增配置的对话框
     closeAddConfigDialog() {
       this.$refs.addConfigForm.resetFields()
       this.addToolConfigVisible = false
     },
-
     // 确认新增配置
     confirmAddConfig() {
       this.$refs.addConfigForm.validate(async valid => {
         // console.log(valid)
         if (valid) {
-          // TBD
-          // 后续要发送请求确认修改
-          // const { data: res } = await this.$http.post('users')
-          // console.log(res)
-          console.log(this.addConfigForm)
+          this.addConfigForm.toolID = this.toolID
+          // console.log(this.addConfigForm)
 
+          // 发送请求确认修改
+          const { data: res } = await this.$http.post(
+            'tools/config/' + this.toolID,
+            qs.stringify(this.addConfigForm)
+          )
+          console.log(res)
+
+          // 获取用户失败
+          if (res.meta.status_code !== 200)
+            return this.$message.error('获取用户信息失败')
           this.$message.success('添加成功')
-          this.dialogVisible = false
           this.GetToolConfig()
-          // this.addToolConfigVisible = false
+          this.addToolConfigVisible = false
         } else {
           this.$message.error('添加信息验证失败')
         }
       })
+    },
+    // 翻页
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`)
+      this.queryInfo.pagenum = val
+      this.GetToolConfig()
+    },
+    // 改变每页大小
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`)
+      this.queryInfo.pagesize = val
+      this.GetToolConfig()
     }
   }
 }

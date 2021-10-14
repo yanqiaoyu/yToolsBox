@@ -1,8 +1,10 @@
 package dao
 
 import (
+	"log"
 	"main/dto"
 	"main/model"
+	"main/util"
 
 	"gorm.io/gorm"
 )
@@ -16,6 +18,12 @@ func InsertNewToolBasicInfo(db *gorm.DB, PostNewToolBasicInfoDTOReq *dto.PostNew
 // 插入工具的配置信息
 func InsertNewToolConfigInfo(db *gorm.DB, PostNewToolConfigInfoDTOReq *dto.PostNewToolConfigInfoDTOReq) *gorm.DB {
 	result := db.Model(&model.ToolConfig{}).Create(PostNewToolConfigInfoDTOReq)
+	return result
+}
+
+// 插入已有工具的配置信息
+func InsertExistToolConfigInfo(db *gorm.DB, PostToolConfig *dto.PostNewToolConfigInfoDTOReq) *gorm.DB {
+	result := db.Model(&model.ToolConfig{}).Create(PostToolConfig)
 	return result
 }
 
@@ -40,16 +48,47 @@ func SelectAllTools(db *gorm.DB, obj dto.GetAllToolsDTOReq) []dto.BriefToolsInfo
 	return briefToolsInfoList
 }
 
-// 查询特定工具的配置
-func SelectSpecifiedToolConfig(db *gorm.DB, toolID int) []dto.BriefToolConfigDTO {
+// 查询特定工具的所有配置
+func SelectSpecifiedToolConfig(db *gorm.DB, toolID int, QueryInfo dto.GetSpecifiedToolConfigDTOReqQuery) ([]map[string]interface{}, int) {
 	// 配置列表
 	configList := []dto.BriefToolConfigDTO{}
 
-	// 1.拿取配置
-	// db.Model(&model.Tool{}).Select("tools.id, tools.\"toolName\", tool_configs.\"toolConfigName\", tool_configs.\"toolConfigDesc\"").Joins("join tool_configs on tools.id = tool_configs.\"toolID\"").Where("tool_configs.\"toolID\" = ?", toolID).Find(&configList)
-	// log.Println(configList)
-	db.Model(&model.ToolConfig{}).Where("tool_configs.\"toolID\" = ?", toolID).Find(&configList)
-	return configList
+	query := QueryInfo.Query
+	pagenum := QueryInfo.Pagenum
+	pagesize := QueryInfo.Pagesize
+	map_configList := []map[string]interface{}{}
+
+	// 不带Query，返回全部
+	// 否则返回like搜索后的结果
+	if query == "" {
+		// 按照时间降序
+		db.Order("created_at asc").Model(&model.ToolConfig{}).Where("tool_configs.\"toolID\" = ?", toolID).Find(&configList)
+	} else {
+		// 按照时间降序
+		db.Order("created_at asc").Model(&model.ToolConfig{}).Where("tool_configs.\"toolID\" = ?", toolID).Where("\"toolConfigName\" LIKE ?", "%"+query+"%").Find(&configList)
+	}
+
+	DefaultLength := len(configList)
+
+	// 把一个自定义结构体的array 转换成map的array
+	// 这里用了json的方法 虽然效率低 但是解决了返回给前端大小写的问题
+	for i := 0; i < DefaultLength; i++ {
+		map_item := util.Struct2MapViaJson(configList[i])
+		map_configList = append(map_configList, map_item)
+	}
+
+	// 计算一下需要如何切割数组
+	ArrayStart, ArrayEnd := util.CalculateReturnMapLength(pagenum, pagesize, map_configList)
+	// 返回切片后的结果
+	return map_configList[ArrayStart:ArrayEnd], DefaultLength
+
+}
+
+// 根据配置ID查询配置
+func SelectSpecifiedToolConfigByConfigID(db *gorm.DB, configID uint) dto.BriefToolConfigDTO {
+	config := dto.BriefToolConfigDTO{}
+	db.Model(&model.ToolConfig{}).Where("id = ?", configID).Find(&config)
+	return config
 }
 
 // 更新一下脚本存放在本地的位置 ！！！注意，只有Default条目会存放位置，不管这个工具包含多少个配置，都使用的是第一次上传的脚本文件
@@ -57,4 +96,30 @@ func UpdateToolConfigScriptLocalPath(db *gorm.DB, toolName string, FileDST strin
 	tool := model.Tool{}
 	db.Debug().Model(&model.Tool{}).Select("id").Where("\"toolName\" = ?", toolName).Find(&tool)
 	db.Debug().Model(&model.ToolConfig{}).Where("\"toolID\" = ?", tool.ID).Where("\"toolConfigName\" = ?", "默认配置").Update("toolScriptLocalPath", FileDST)
+}
+
+// 删除特定的工具底下的配置条目
+func DeleteSpecifiedConfig(db *gorm.DB, configID uint) {
+	db.Debug().Delete(&model.ToolConfig{}, configID)
+}
+
+// 更新配置信息
+func UpdateSpecifiedToolConfigByConfigID(db *gorm.DB, configID uint, obj dto.PutSpecifiedToolConfigByConfigIDDTOReqQuery) {
+	log.Println(util.Struct2MapViaJson(obj))
+	db.Debug().Model(&model.ToolConfig{}).Where("id = ?", configID).Updates(
+		model.ToolConfig{
+			ToolConfigName:         obj.ToolConfig.ToolConfigName,
+			ToolConfigDesc:         obj.ToolConfig.ToolConfigDesc,
+			ToolPythonVersion:      obj.ToolConfig.ToolPythonVersion,
+			ToolShellVersion:       obj.ToolConfig.ToolShellVersion,
+			ToolDockerImageName:    obj.ToolConfig.ToolDockerImageName,
+			ToolOptions:            obj.ToolConfig.ToolOptions,
+			ToolRunCMD:             obj.ToolConfig.ToolRunCMD,
+			ToolScriptPath:         obj.ToolConfig.ToolScriptPath,
+			ToolRemoteIP:           obj.ToolConfig.ToolRemoteIP,
+			ToolRemoteSSH_Port:     obj.ToolConfig.ToolRemoteSSH_Port,
+			ToolRemoteSSH_Account:  obj.ToolConfig.ToolRemoteSSH_Account,
+			ToolRemoteSSH_Password: obj.ToolConfig.ToolRemoteSSH_Password,
+		},
+	)
 }

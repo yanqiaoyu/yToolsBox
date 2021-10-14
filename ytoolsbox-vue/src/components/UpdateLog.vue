@@ -18,6 +18,15 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/14" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成配置界面的修改，删除，过滤搜索
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/11" placement="top">
         <el-card>
           <h4>更新内容</h4>

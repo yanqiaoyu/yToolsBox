@@ -12,3 +12,6 @@
 
 # Mac file
 *.DS_Store
+
+# Exec file
+*.exe

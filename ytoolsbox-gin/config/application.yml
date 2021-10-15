@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8081
 datasource:
   host: 103.44.241.227
   port: 5432

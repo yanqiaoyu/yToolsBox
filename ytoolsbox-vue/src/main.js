@@ -18,7 +18,8 @@ import axios from 'axios'
 
 // 测试，生产环境，不同的请求的路径
 if (process.env.NODE_ENV == 'production') {
-  axios.defaults.baseURL = 'http://103.44.241.227/api/auth/'
+  let host = window.location.host; //主机
+  axios.defaults.baseURL = 'http://'+ host +'/api/auth/';
 } else {
   axios.defaults.baseURL = 'http://localhost:8081/api/auth/'
 }

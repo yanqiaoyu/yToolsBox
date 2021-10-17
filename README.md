@@ -37,7 +37,7 @@ docker run -itd -p 80:80 --network yToolsBox-network --name yToolsBox-dashboard 
 
 #### 3. 验证结果
 
-访问 http://`yourIP` 验证是否安装成功
+访问 http://yourIP 验证是否安装成功
 
 ### 用docker compose部署
 
@@ -114,9 +114,13 @@ docker run -itd -p 80:80 --network yToolsBox-network --name yToolsBox-dashboard 
 
 ```
 
-#### 2.验证安装结果
+#### 2.安装
 
-同上
+执行
+```shell
+docker-compose up -d
+```
+
 
 
 ## 使用教程

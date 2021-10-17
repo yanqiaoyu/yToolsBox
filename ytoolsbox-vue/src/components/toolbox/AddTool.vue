@@ -430,7 +430,7 @@ export default {
       fileList: [],
       isPythonScript: false,
       isShellScript: false,
-      uploadPath: 'http://localhost/api/auth/upload',
+      uploadPath: 'http://' + window.location.host + '/api/auth/',
       uploadDataObj: {
         toolName: '',
       },

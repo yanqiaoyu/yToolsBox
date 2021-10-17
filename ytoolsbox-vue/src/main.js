@@ -16,12 +16,12 @@ import './assets/css/global.css'
 // 导入axios发送ajax请求
 import axios from 'axios'
 
-
 // 测试，生产环境，不同的请求的路径
 if (process.env.NODE_ENV == 'production') {
-  axios.defaults.baseURL = 'http://103.44.241.227/api/auth/'
+  let host = window.location.host; //主机
+  axios.defaults.baseURL = 'http://'+ host +'/api/auth/';
 } else {
-  axios.defaults.baseURL = 'http://localhost/api/auth/'
+  axios.defaults.baseURL = 'http://localhost:8081/api/auth/'
 }
 
 axios.interceptors.request.use(config => {
@@ -34,7 +34,7 @@ axios.interceptors.request.use(config => {
 // 在Vue的原型上挂载axios，让所有实例都能发送http请求
 Vue.prototype.$http = axios
 // 在Vue的原型上挂载Moment，让所有实例都能调用时间戳转换
-Vue.prototype.$moment = Moment;
+Vue.prototype.$moment = Moment
 
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {

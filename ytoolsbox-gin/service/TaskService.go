@@ -87,8 +87,9 @@ func (cliConf *ClientConfig) RunShell(shell string) string {
 	return cliConf.LastResult
 }
 
-func (cliConf *ClientConfig) Upload(srcPath, dstPath string) {
-	srcFile, _ := os.Open(srcPath)                   //本地
+func (cliConf *ClientConfig) Upload(srcPath, dstPath string) string {
+	srcFile, err := os.Open(srcPath) //本地
+	log.Println(srcFile, err)
 	dstFile, _ := cliConf.sftpClient.Create(dstPath) //远程
 	defer func() {
 		_ = srcFile.Close()
@@ -100,6 +101,7 @@ func (cliConf *ClientConfig) Upload(srcPath, dstPath string) {
 		if err != nil {
 			if err != io.EOF {
 				log.Println("error occurred:", err)
+				return err.Error()
 			} else {
 				break
 			}
@@ -107,6 +109,7 @@ func (cliConf *ClientConfig) Upload(srcPath, dstPath string) {
 		_, _ = dstFile.Write(buf[:n])
 	}
 	fmt.Println(cliConf.RunShell(fmt.Sprintf("ls %s", dstPath)))
+	return "上传成功至" + dstPath + "目标路径存在如下文件:\r\n" + cliConf.RunShell(fmt.Sprintf("ls %s", dstPath))
 }
 
 func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
@@ -169,20 +172,36 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
 
 		} else if config.ToolType == "script" {
+			// 执行脚本工具
 			log.Println("2.执行的是脚本工具")
+			buf.WriteString("2.执行的是脚本工具\r\n")
+			resultChannel <- model.Tasks{Progress: 40, ReturnContent: buf.String()}
+
 			// 脚本工具，需要先上传脚本到指定位置
-			cliConf.Upload(config.ToolScriptLocalPath, config.ToolScriptPath+config.ToolScriptName)
-			// 3.开始执行
-			log.Println("3.开始执行：", config.ToolRunCMD)
-			buf.WriteString("3.开始执行：")
+			log.Println("3.上传脚本至指定位置", config.ToolScriptPath+config.ToolScriptName)
+			buf.WriteString("3.上传脚本: " + config.ToolScriptLocalPath)
+			buf.WriteString(" 至指定位置: ")
+			buf.WriteString(config.ToolScriptPath + config.ToolScriptName)
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 60, ReturnContent: buf.String()}
+			uploadResult := cliConf.Upload(config.ToolScriptLocalPath, config.ToolScriptPath+config.ToolScriptName)
+			log.Println("上传结果：", uploadResult)
+			buf.WriteString("上传结果:")
+			buf.WriteString(uploadResult)
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 70, ReturnContent: buf.String()}
+
+			// 4.开始执行
+			log.Println("4.开始执行：", config.ToolRunCMD)
+			buf.WriteString("4.开始执行：")
 			buf.WriteString(config.ToolRunCMD)
 			buf.WriteString("\r\n")
-			resultChannel <- model.Tasks{Progress: 75, ReturnContent: buf.String()}
+			resultChannel <- model.Tasks{Progress: 85, ReturnContent: buf.String()}
 
 			ExecuteResult := cliConf.RunShell(config.ToolRunCMD)
-			// 4.获取执行结果，后续这里要改进，另起一个goroutine，持续获取执行情况
-			log.Println("4.执行结果", ExecuteResult)
-			buf.WriteString("4.执行结果:")
+			// 5.获取执行结果，后续这里要改进，另起一个goroutine，持续获取执行情况
+			log.Println("5.执行结果", ExecuteResult)
+			buf.WriteString("5.执行结果:")
 			buf.WriteString(ExecuteResult)
 			buf.WriteString("\r\n")
 			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}

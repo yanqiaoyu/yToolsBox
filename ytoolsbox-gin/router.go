@@ -30,7 +30,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.GET(URL_Prefix+"/users/:userID", controller.GetSpecifiedUser)
 	// 更新特定用户的状态
 	r.PUT(URL_Prefix+"/users/state", controller.PutUserState)
-	// 更新特定用户的状态
+	// 更新特定用户的信息
 	r.PUT(URL_Prefix+"/users/:userID", controller.PutUserInfo)
 	// 新增用户
 	r.POST(URL_Prefix+"/users", controller.PostNewUser)
@@ -46,6 +46,14 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.GET(URL_Prefix+"/tools", controller.GetAllTools)
 	// 查询某个工具的所有配置
 	r.GET(URL_Prefix+"/tools/config/:toolID", controller.GetSpecifiedToolConfig)
+	// 查询某个工具的某个配置
+	r.GET(URL_Prefix+"/tools/config/:toolID/:configID", controller.GetSpecifiedToolConfigByConfigID)
+	// 更新某个工具的某个配置
+	r.PUT(URL_Prefix+"/tools/config/:toolID/:configID", controller.PutSpecifiedToolConfigByConfigID)
+	// 为某个工具新增配置
+	r.POST(URL_Prefix+"/tools/config/:toolID", controller.PostNewConfig)
+	// 删除某个工具下的某个配置
+	r.DELETE(URL_Prefix+"/tools/config/:toolID/:configID", controller.DeleteSpecifiedConfig)
 	// 上传脚本文件
 	r.POST(URL_Prefix+"/upload", controller.PostScriptFile)
 

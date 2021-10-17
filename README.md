@@ -15,7 +15,93 @@ yToolsBox是一个小型的工具收纳与调度平台。目前支持收纳调�
 
 ## 部署
 
-(应该做成docker化部署的方式，TBD)
+### 手动部署
+
+#### 1. 依次执行如下指令
+
+```shell
+docker network create --driver bridge yToolsBox-network
+
+docker volume create yToolsBox-db-data
+
+docker run -itd --name yToolsBox-db --network yToolsBox-network -e POSTGRES_PASSWORD=test123456 -v yToolsBox-db-data:/var/lib/postgresql/data postgres
+
+docker run -itd --name yToolsBox-api --network yToolsBox-network -v /home/yToolsBox/api/Script:/root/Script yanqiaoyu/ytoolsbox-api:v0.1
+
+docker run -itd -p 80:80 --network yToolsBox-network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.1
+```
+
+#### 2. 部署结果
+
+![manu_deploy](/doc/pic/manu_deploy1.png)
+
+#### 3. 验证结果
+
+访问 http://yourIP 验证是否安装成功
+
+### 用docker compose部署
+
+#### 1. docker-compose.yml
+
+```yaml
+  version: '3'
+  services:
+    yToolsBox-db:
+      container_name: 'yToolsBox-db'
+      image: postgres
+      restart: always
+      expose:
+        - "5432"
+      volumes:
+        - db-data:/var/lib/postgresql/data
+      networks:
+        - network
+      environment:
+        POSTGRES_PASSWORD: test123456
+
+    yToolsBox-api:
+      container_name: 'yToolsBox-api'
+      image: yanqiaoyu/ytoolsbox-api:v0.1
+      depends_on:
+        - yToolsBox-db
+      networks:
+        - network
+      volumes:
+        - /home/yToolsBox/api/Script:/root/Script
+      expose:
+        - "8081"
+
+    yToolsBox-dashboard:
+      container_name: 'yToolsBox-dashboard'
+      image: yanqiaoyu/ytoolsbox-dashboard:v0.1
+      networks:
+        - network
+      ports:
+        - 80:80
+      depends_on:
+        - yToolsBox-db
+        - yToolsBox-api
+
+  volumes:
+    db-data:
+  networks:
+    network:
+      driver: bridge
+
+```
+
+#### 2.安装
+
+执行
+```shell
+docker-compose up -d
+```
+
+
+#### 3.验证安装结果
+
+同上
+
 
 ## 使用教程
 

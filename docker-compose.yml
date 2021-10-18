@@ -7,11 +7,11 @@
       image: postgres
       # docker重启的时候会自动重启容器
       restart: always
-      # 内部端口映射到宿主机
-      # ports:
-      #   - 5432:5432
-      expose:
-        - "5432"
+      # 调试时端口映射出来
+      ports:
+        - 5432:5432
+      # expose:
+      #   - "5432"
       # 挂载
       volumes:
         - db-data:/var/lib/postgresql/data
@@ -36,11 +36,11 @@
       # 挂载
       volumes:
         - /home/yToolsBox/api/Script:/root/Script
-      # 允许docker网络中其他容器访问，但是不允许外部访问
-      # ports:
-      #   - 8081:8081
-      expose:
-        - "8081"
+      # 调试时端口映射出来
+      ports:
+        - 8081:8081
+      # expose:
+      #   - "8081"
 
 
     yToolsBox-dashboard:

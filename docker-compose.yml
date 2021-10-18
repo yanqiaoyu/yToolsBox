@@ -1,67 +1,43 @@
   version: '3'
   services:
     yToolsBox-db:
-      #容器名称
       container_name: 'yToolsBox-db'
-      # 镜像名称
       image: postgres
-      # docker重启的时候会自动重启容器
       restart: always
-      # 调试时端口映射出来
       ports:
         - 5432:5432
-      # expose:
-      #   - "5432"
-      # 挂载
       volumes:
         - db-data:/var/lib/postgresql/data
-      # 加入网络
       networks:
         - network
-      # 设置环境变量
       environment:
         POSTGRES_PASSWORD: test123456
 
     yToolsBox-api:
-      #容器名称
       container_name: 'yToolsBox-api'
-      # 镜像名称
       image: yanqiaoyu/ytoolsbox-api:v0.1
-      # 控制启动顺序
       depends_on:
         - yToolsBox-db
-      # 加入网络
       networks:
         - network
-      # 挂载
       volumes:
         - /home/yToolsBox/api/Script:/root/Script
-      # 调试时端口映射出来
       ports:
         - 8081:8081
-      # expose:
-      #   - "8081"
-
 
     yToolsBox-dashboard:
-      #容器名称
       container_name: 'yToolsBox-dashboard'
-      # 镜像名称
       image: yanqiaoyu/ytoolsbox-dashboard:v0.1
-      # 加入网络
       networks:
         - network
       ports:
         - 80:80
-      # 控制启动顺序
       depends_on:
         - yToolsBox-db
         - yToolsBox-api
 
-  # 创建卷
   volumes:
     db-data:
-  # 创建网络
   networks:
     network:
       driver: bridge

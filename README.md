@@ -50,8 +50,8 @@ docker run -itd -p 80:80 --network yToolsBox-network --name yToolsBox-dashboard 
       container_name: 'yToolsBox-db'
       image: postgres
       restart: always
-      expose:
-        - "5432"
+      ports:
+        - 5432:5432
       volumes:
         - db-data:/var/lib/postgresql/data
       networks:
@@ -68,8 +68,8 @@ docker run -itd -p 80:80 --network yToolsBox-network --name yToolsBox-dashboard 
         - network
       volumes:
         - /home/yToolsBox/api/Script:/root/Script
-      expose:
-        - "8081"
+      ports:
+        - 8081:8081
 
     yToolsBox-dashboard:
       container_name: 'yToolsBox-dashboard'
@@ -87,7 +87,6 @@ docker run -itd -p 80:80 --network yToolsBox-network --name yToolsBox-dashboard 
   networks:
     network:
       driver: bridge
-
 ```
 
 #### 2.安装

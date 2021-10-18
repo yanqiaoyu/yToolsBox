@@ -2,6 +2,7 @@ server:
   port: 8081
 datasource:
   host: 103.44.241.227
+  # host: yToolsBox-api
   port: 5432
   database: postgres
   username: postgres

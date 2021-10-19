@@ -10,6 +10,7 @@
 package common
 
 import (
+	"flag"
 	"fmt"
 	"main/model"
 
@@ -22,8 +23,21 @@ import (
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
+	var compileMode, host string
+
+	flag.StringVar(&compileMode, "m", "test", "运行模式")
+	flag.Parse()
+	fmt.Println(compileMode)
+
+	// 区分生产环境和测试环境
+	if compileMode == "production" {
+		host = viper.GetString("datasource.productionhost")
+	} else {
+		host = viper.GetString("datasource.testhost")
+	}
+
 	// 一系列的读取配置操作
-	host := viper.GetString("datasource.host")
+
 	port := viper.GetString("datasource.port")
 	database := viper.GetString("datasource.database")
 	username := viper.GetString("datasource.username")

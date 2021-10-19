@@ -1,3 +1,6 @@
+docker stop yToolsBox-api yToolsBox-dashboard yToolsBox-db
+docker rm yToolsBox-api yToolsBox-dashboard yToolsBox-db
+
 docker images | grep none | awk '{print $3}' | xargs docker rmi
 cd ./ytoolsbox-vue
 npm run build

@@ -1,3 +1,4 @@
+docker images | grep none | awk '{print $3}' | xargs docker rmi
 cd ./ytoolsbox-vue
 npm run build
 docker rmi yanqiaoyu/ytoolsbox-dashboard:v0.1 yanqiaoyu/ytoolsbox-api:v0.1 -f

@@ -18,7 +18,8 @@ WORKDIR /root/
 COPY --from=development /go/src/yToolsBox-gin/main .
 COPY --from=development /go/src/yToolsBox-gin/config ./config
 COPY --from=development /go/src/yToolsBox-gin/Script ./Script
+COPY --from=development /go/src/yToolsBox-gin/wait-for-it.sh ./
 # 挂载容器目录
 VOLUME ["/root/config", "/root/Script"]
 # 执行
-ENTRYPOINT  ["./main", "-m", "production"]
+# ENTRYPOINT  ["./main", "-m", "production"]

@@ -62,6 +62,9 @@ services:
 
   yToolsBox-api:
     container_name: 'yToolsBox-api'
+    build:
+      context: ./ytoolsbox-gin
+      dockerfile: Dockerfile
     image: yanqiaoyu/ytoolsbox-api:v0.1
     depends_on:
       - yToolsBox-db
@@ -74,6 +77,9 @@ services:
 
   yToolsBox-dashboard:
     container_name: 'yToolsBox-dashboard'
+    build:
+      context: ./ytoolsbox-vue
+      dockerfile: Dockerfile
     image: yanqiaoyu/ytoolsbox-dashboard:v0.1
     networks:
       - network

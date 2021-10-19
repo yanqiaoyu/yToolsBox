@@ -18,6 +18,21 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/19" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成了前端，后端代码的打包，编译，docker化
+            <br />
+            2. 解决了一个nginx配置错误导致请求跨域的问题
+            <br />
+            3. 解决了el-upload上传不经过axios从而导致跨域的问题
+            <br />
+            4. 完善了中文readme文档，发布0.1版本<br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/14" placement="top">
         <el-card>
           <h4>更新内容</h4>

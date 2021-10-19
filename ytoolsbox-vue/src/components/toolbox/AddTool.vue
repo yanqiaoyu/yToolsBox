@@ -469,8 +469,6 @@ export default {
       fileList: [],
       isPythonScript: false,
       isShellScript: false,
-      uploadPath:
-        'http://' + window.location.hostname + ':8081/api/auth/upload',
       uploadDataObj: {
         toolName: ''
       },
@@ -671,6 +669,19 @@ export default {
           type: 'success',
           message: '上传文件成成功!'
         })
+      }
+    },
+    // 返回上传地址
+    uploadPath() {
+      // 测试，生产环境，不同的请求的路径
+      if (process.env.NODE_ENV == 'production') {
+        let uploadPath =
+          'http://' + window.location.hostname + '/api/auth/upload'
+        return uploadPath
+      } else {
+        let uploadPath =
+          'http://' + window.location.hostname + ':8081/api/auth/upload'
+        return uploadPath
       }
     }
   }

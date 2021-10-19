@@ -2,7 +2,7 @@
 
 [README](README_en.md) | [中文文档](README.md)
 
-yToolsBox 是一个 All-in-One 的 工具收纳与调度平台。目前支持收纳调度脚本(_.py _.sh)与容器。
+yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收纳调度脚本(_.py _.sh)与容器。
 
 ## 为什么开发 yToolsBox ？
 
@@ -40,7 +40,7 @@ docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard 
 
 访问 http://yourIP 验证是否安装成功
 
-### 用 docker compose 部署
+### 用 docker-compose 部署
 
 #### 1. docker-compose.yml
 
@@ -62,6 +62,9 @@ services:
 
   yToolsBox-api:
     container_name: 'yToolsBox-api'
+    build:
+      context: ./ytoolsbox-gin
+      dockerfile: Dockerfile
     image: yanqiaoyu/ytoolsbox-api:v0.1
     depends_on:
       - yToolsBox-db
@@ -74,6 +77,9 @@ services:
 
   yToolsBox-dashboard:
     container_name: 'yToolsBox-dashboard'
+    build:
+      context: ./ytoolsbox-vue
+      dockerfile: Dockerfile
     image: yanqiaoyu/ytoolsbox-dashboard:v0.1
     networks:
       - network

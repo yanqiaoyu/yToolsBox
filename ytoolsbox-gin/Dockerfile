@@ -21,4 +21,4 @@ COPY --from=development /go/src/yToolsBox-gin/Script ./Script
 # 挂载容器目录
 VOLUME ["/root/config", "/root/Script"]
 # 执行
-ENTRYPOINT  ["./main -m production"]
+ENTRYPOINT  ["./main", "-m", "production"]

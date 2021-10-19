@@ -34,7 +34,7 @@ func InitDB() *gorm.DB {
 	} else {
 		host = viper.GetString("datasource.testhost")
 	}
-	fmt.Println("host is", host)
+	// fmt.Println("host is", host)
 	// 一系列的读取配置操作
 
 	port := viper.GetString("datasource.port")

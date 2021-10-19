@@ -27,6 +27,9 @@
 
     yToolsBox-dashboard:
       container_name: 'yToolsBox-dashboard'
+      build:
+        context: ./ytoolsbox-vue
+        dockerfile: Dockerfile
       image: yanqiaoyu/ytoolsbox-dashboard:v0.1
       networks:
         - network

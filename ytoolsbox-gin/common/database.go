@@ -27,7 +27,6 @@ func InitDB() *gorm.DB {
 
 	flag.StringVar(&compileMode, "m", "test", "运行模式")
 	flag.Parse()
-	fmt.Println(compileMode)
 
 	// 区分生产环境和测试环境
 	if compileMode == "production" {
@@ -35,7 +34,7 @@ func InitDB() *gorm.DB {
 	} else {
 		host = viper.GetString("datasource.testhost")
 	}
-
+	fmt.Println("host is", host)
 	// 一系列的读取配置操作
 
 	port := viper.GetString("datasource.port")

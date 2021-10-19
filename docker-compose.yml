@@ -27,7 +27,7 @@
         - /home/yToolsBox/api/Script:/root/Script
       ports:
         - 8081:8081
-      command: ["sh", "wait-for", "yToolsBox-db", "--", "./main", "-m", "production"]
+      command: ["sh", "wait-for", "yToolsBox-db:5432", "--", "./main", "-m", "production"]
 
     yToolsBox-dashboard:
       container_name: 'yToolsBox-dashboard'

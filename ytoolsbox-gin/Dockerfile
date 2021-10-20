@@ -12,7 +12,7 @@ RUN go build -o main .
 
 # 然后把可执行程序放进最小环境里面
 FROM alpine:latest AS production
-RUN sed -i 's@http://dl-cdn.alpinelinux.org/@https://mirrors.aliyun.com/@g' /etc/apk/repositories
+RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN apk add --no-cache --virtual .persistent-deps netcat-openbsd
 # 设置工作目录
 WORKDIR /root/

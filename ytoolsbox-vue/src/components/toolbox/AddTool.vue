@@ -322,6 +322,40 @@
               ></el-input>
             </el-form-item>
           </div>
+          <div v-else-if="toolForm.toolExecuteLocation == 'local'">
+            <el-form-item label="本机IP地址" prop="toolRemoteIP">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteIP"
+                placeholder="本机的IP地址"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="本机SSH端口" prop="toolRemoteSSH_Port">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteSSH_Port"
+                placeholder="本机的端口"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="本机SSH账号" prop="toolRemoteSSH_Account">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteSSH_Account"
+                placeholder="本机的SSH账号"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="本机SSH密码" prop="toolRemoteSSH_Password">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteSSH_Password"
+                placeholder="本机的SSH密码"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+          </div>
         </div>
       </el-form>
 
@@ -487,7 +521,7 @@ export default {
       runName = runName.replace('.', '')
 
       toolRunCMD =
-        'docker run' +
+        'docker run --name' +
         ' ' +
         'yToolsBox-' +
         runName +

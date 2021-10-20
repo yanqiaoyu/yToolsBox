@@ -137,7 +137,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 		buf.WriteString("1.直接本地执行\r\n")
 		resultChannel <- model.Tasks{Progress: 25, ReturnContent: buf.String()}
 
-		// 准备好远程连接的素材
+		// 准备好连接本地的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
 		cliConf := new(ClientConfig)
 		cliConf.createClient(
@@ -173,34 +173,23 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 			buf.WriteString("2.执行的是脚本工具\r\n")
 			resultChannel <- model.Tasks{Progress: 40, ReturnContent: buf.String()}
 
-			// // 脚本工具，需要先上传脚本到指定位置
-			// log.Println("3.上传脚本至指定位置", config.ToolScriptPath+config.ToolScriptName)
-			// buf.WriteString("3.上传脚本: " + config.ToolScriptLocalPath)
-			// buf.WriteString(" 至指定位置: ")
-			// buf.WriteString(config.ToolScriptPath + config.ToolScriptName)
-			// buf.WriteString("\r\n")
-			// resultChannel <- model.Tasks{Progress: 60, ReturnContent: buf.String()}
-			// uploadResult := cliConf.Upload(config.ToolScriptLocalPath, config.ToolScriptPath+config.ToolScriptName)
-			// log.Println("上传结果：", uploadResult)
-			// buf.WriteString("上传结果:")
-			// buf.WriteString(uploadResult)
-			// buf.WriteString("\r\n")
-			// resultChannel <- model.Tasks{Progress: 70, ReturnContent: buf.String()}
+			// 3.开始执行
+			log.Println("3.开始执行：", config.ToolRunCMD)
+			buf.WriteString("3.开始执行：")
+			buf.WriteString(config.ToolRunCMD)
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 85, ReturnContent: buf.String()}
 
-			// // 4.开始执行
-			// log.Println("4.开始执行：", config.ToolRunCMD)
-			// buf.WriteString("4.开始执行：")
-			// buf.WriteString(config.ToolRunCMD)
-			// buf.WriteString("\r\n")
-			// resultChannel <- model.Tasks{Progress: 85, ReturnContent: buf.String()}
+			// 这是文件在宿主机存放的路径
+			HOST_SCRIPT_PATH := os.Getenv("HOST_SCRIPT_PATH")
 
-			// ExecuteResult := cliConf.RunShell(config.ToolRunCMD)
-			// // 5.获取执行结果，后续这里要改进，另起一个goroutine，持续获取执行情况
-			// log.Println("5.执行结果", ExecuteResult)
-			// buf.WriteString("5.执行结果:")
-			// buf.WriteString(ExecuteResult)
-			// buf.WriteString("\r\n")
-			// resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
+			ExecuteResult := cliConf.RunShell("cd " + HOST_SCRIPT_PATH + " & " + config.ToolRunCMD)
+			// 4.获取执行结果
+			log.Println("4.执行结果", ExecuteResult)
+			buf.WriteString("4.执行结果:")
+			buf.WriteString(ExecuteResult)
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
 		}
 
 	} else if config.ToolExecuteLocation == "remote" {

@@ -287,7 +287,7 @@
             </el-tooltip>
           </el-form-item>
 
-          <!-- 只有选择了远程执行，才会需要填写远程信息 -->
+          <!-- 远程执行，需要填写远程信息 -->
           <div v-if="toolForm.toolExecuteLocation == 'remote'">
             <el-form-item label="SSH IP地址" prop="toolRemoteIP">
               <el-input
@@ -322,6 +322,7 @@
               ></el-input>
             </el-form-item>
           </div>
+          <!-- 本地执行，需要填写本机信息 -->
           <div v-else-if="toolForm.toolExecuteLocation == 'local'">
             <el-form-item label="本机IP地址" prop="toolRemoteIP">
               <el-input

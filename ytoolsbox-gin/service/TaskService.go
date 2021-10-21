@@ -194,7 +194,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 				tmpStr = strings.Split(config.ToolScriptLocalPath, "\\")
 			}
 
-			finalShell := "cd " + HOST_SCRIPT_PATH + " & " + "cd " + tmpStr[len(tmpStr)-2] + " & " + config.ToolRunCMD
+			finalShell := "cd " + HOST_SCRIPT_PATH + " && " + "cd " + tmpStr[len(tmpStr)-2] + " && " + config.ToolRunCMD
 
 			ExecuteResult := cliConf.RunShell(finalShell)
 			// 4.获取执行结果

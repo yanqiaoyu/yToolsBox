@@ -108,6 +108,7 @@ func UpdateSpecifiedToolConfigByConfigID(db *gorm.DB, configID uint, obj dto.Put
 	log.Println(util.Struct2MapViaJson(obj))
 	db.Debug().Model(&model.ToolConfig{}).Where("id = ?", configID).Updates(
 		model.ToolConfig{
+			ToolExecuteLocation:    obj.ToolConfig.ToolExecuteLocation,
 			ToolConfigName:         obj.ToolConfig.ToolConfigName,
 			ToolConfigDesc:         obj.ToolConfig.ToolConfigDesc,
 			ToolPythonVersion:      obj.ToolConfig.ToolPythonVersion,

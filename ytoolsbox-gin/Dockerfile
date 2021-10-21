@@ -12,13 +12,16 @@ RUN go build -o main .
 
 # 然后把可执行程序放进最小环境里面
 FROM alpine:latest AS production
+RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+RUN apk add --no-cache --virtual .persistent-deps netcat-openbsd
 # 设置工作目录
 WORKDIR /root/
 # 拷贝必须的文件
 COPY --from=development /go/src/yToolsBox-gin/main .
 COPY --from=development /go/src/yToolsBox-gin/config ./config
 COPY --from=development /go/src/yToolsBox-gin/Script ./Script
+COPY --from=development /go/src/yToolsBox-gin/wait-for ./
 # 挂载容器目录
 VOLUME ["/root/config", "/root/Script"]
 # 执行
-ENTRYPOINT  ["./main"]
+# ENTRYPOINT  ["./main", "-m", "production"]

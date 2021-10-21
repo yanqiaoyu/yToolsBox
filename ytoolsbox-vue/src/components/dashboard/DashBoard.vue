@@ -12,7 +12,9 @@
         line-height: 40px;
         color: #1989fa;
       }"
-      >UP</div>
+      >
+        UP
+      </div>
     </el-backtop>
 
     <!-- 面包屑路径 -->
@@ -50,12 +52,22 @@
       <!-- 任务列表展示区 -->
       <el-table :data="tasksList" stripe border style="width: 100%">
         <!-- 只要添加了type=index，就能序号列 -->
-        <el-table-column type="index" label="任务序号" align="center" width="90"></el-table-column>
+        <el-table-column
+          type="index"
+          label="任务序号"
+          align="center"
+          width="90"
+        ></el-table-column>
         <el-table-column prop="toolName" label="选择的工具"></el-table-column>
-        <el-table-column prop="toolConfigName" label="选择的配置"></el-table-column>
+        <el-table-column
+          prop="toolConfigName"
+          label="选择的配置"
+        ></el-table-column>
         <el-table-column label="新建时间" align="center" width="200">
           <!-- <template slot-scope="scope">{{ scope.row.addTime | formatDate }}</template> -->
-          <template slot-scope="scope">{{ FomatDate(scope.row.CreatedAt) }}</template>
+          <template slot-scope="scope">{{
+            FomatDate(scope.row.CreatedAt)
+          }}</template>
         </el-table-column>
         <el-table-column label="完成时间" align="center" width="200">
           <template slot-scope="scope">
@@ -67,7 +79,11 @@
         </el-table-column>
         <el-table-column prop="toolTaskProgress" label="任务进度" width="150">
           <template slot-scope="scope">
-            <el-progress :text-inside="true" :stroke-width="26" :percentage="scope.row.progress"></el-progress>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="26"
+              :percentage="scope.row.progress"
+            ></el-progress>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150">
@@ -144,9 +160,9 @@
       <el-dialog
         title="任务详情"
         :visible.sync="taskDetailDialogVisible"
-        width="30%"
+        width="50%"
         :close-on-click-modal="false"
-        @close="taskDetailDialogVisible=false"
+        @close="taskDetailDialogVisible = false"
       >
         <div style="white-space: pre-line;">{{ taskDetail }}</div>
         <span slot="footer" class="dialog-footer">
@@ -180,7 +196,7 @@ export default {
         // 这行属性其实就是当前在第几页
         pagenum: 1,
         // 这行属性其实就是当前每页展示多少条数据，这里最好与page-sizes里面的第一个元素值保持一致，否则在刷新的时候会出Bug
-        pagesize: 10,
+        pagesize: 10
       },
       tasksList: [],
       total: 0,
@@ -188,7 +204,7 @@ export default {
       taskDetailDialogVisible: false,
       loading: false,
       configIDList: [],
-      taskDetail: '',
+      taskDetail: ''
     }
   },
   created() {
@@ -200,7 +216,7 @@ export default {
     async GetTasksList() {
       // console.log('Get Task')
       const { data: res } = await this.$http.get('tasks', {
-        params: this.queryInfo,
+        params: this.queryInfo
       })
       if (res.meta.status_code !== 200)
         return this.$message.error('获取任务列表失败')
@@ -231,7 +247,7 @@ export default {
         return this.$message.error('未选择配置信息,无法创建任务')
       }
       const { data: res } = await this.$http.post('tasks', {
-        ConfigList: JSON.stringify(this.configIDList),
+        ConfigList: JSON.stringify(this.configIDList)
       })
       if (res.meta.status_code !== 200) {
         this.loading = false
@@ -280,10 +296,9 @@ export default {
     opentaskDetailDialog(row) {
       this.taskDetailDialogVisible = true
       this.taskDetail = row.returnContent
-    },
-  },
+    }
+  }
 }
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

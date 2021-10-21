@@ -49,7 +49,7 @@
           <el-form-item label="工具名称" prop="toolName">
             <el-input
               :disabled="activeIndex == stepList.length - 1"
-              v-model="toolForm.toolName"
+              v-model.trim="toolForm.toolName"
               placeholder="给工具起个名字,名字唯一"
               style="width:450px"
             ></el-input>
@@ -156,7 +156,7 @@
                 style="width:450px"
                 class="upload-demo"
                 ref="upload"
-                :action="uploadPath"
+                :action="computeUploadPath"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :file-list="fileList"
@@ -287,7 +287,7 @@
             </el-tooltip>
           </el-form-item>
 
-          <!-- 只有选择了远程执行，才会需要填写远程信息 -->
+          <!-- 远程执行，需要填写远程信息 -->
           <div v-if="toolForm.toolExecuteLocation == 'remote'">
             <el-form-item label="SSH IP地址" prop="toolRemoteIP">
               <el-input
@@ -318,6 +318,41 @@
                 :disabled="activeIndex == stepList.length - 1"
                 v-model="toolForm.toolRemoteSSH_Password"
                 placeholder="远程SSH密码"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+          </div>
+          <!-- 本地执行，需要填写本机信息 -->
+          <div v-else-if="toolForm.toolExecuteLocation == 'local'">
+            <el-form-item label="本机IP地址" prop="toolRemoteIP">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteIP"
+                placeholder="本机的IP地址"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="本机SSH端口" prop="toolRemoteSSH_Port">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteSSH_Port"
+                placeholder="本机的端口"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="本机SSH账号" prop="toolRemoteSSH_Account">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteSSH_Account"
+                placeholder="本机的SSH账号"
+                style="width:450px"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="本机SSH密码" prop="toolRemoteSSH_Password">
+              <el-input
+                :disabled="activeIndex == stepList.length - 1"
+                v-model="toolForm.toolRemoteSSH_Password"
+                placeholder="本机的SSH密码"
                 style="width:450px"
               ></el-input>
             </el-form-item>
@@ -487,7 +522,7 @@ export default {
       runName = runName.replace('.', '')
 
       toolRunCMD =
-        'docker run' +
+        'docker run --name' +
         ' ' +
         'yToolsBox-' +
         runName +
@@ -527,6 +562,18 @@ export default {
       }
 
       return toolRunCMD
+    },
+    computeUploadPath() {
+      // 测试，生产环境，不同的请求的路径
+      if (process.env.NODE_ENV == 'production') {
+        let uploadPath =
+          'http://' + window.location.hostname + '/api/auth/upload'
+        return uploadPath
+      } else {
+        let uploadPath =
+          'http://' + window.location.hostname + ':8081/api/auth/upload'
+        return uploadPath
+      }
     }
   },
   methods: {
@@ -669,19 +716,6 @@ export default {
           type: 'success',
           message: '上传文件成成功!'
         })
-      }
-    },
-    // 返回上传地址
-    uploadPath() {
-      // 测试，生产环境，不同的请求的路径
-      if (process.env.NODE_ENV == 'production') {
-        let uploadPath =
-          'http://' + window.location.hostname + '/api/auth/upload'
-        return uploadPath
-      } else {
-        let uploadPath =
-          'http://' + window.location.hostname + ':8081/api/auth/upload'
-        return uploadPath
       }
     }
   }

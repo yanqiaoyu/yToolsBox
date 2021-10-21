@@ -250,7 +250,7 @@
         <!-- 选择执行位置的开关 -->
         <el-form-item>
           <el-switch
-            disabled
+            :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
             v-model="editConfigForm.toolExecuteLocation"
             active-text="远程执行"
             active-value="remote"
@@ -268,7 +268,7 @@
           </el-tooltip>
         </el-form-item>
 
-        <!-- 只有选择了远程执行，才会需要填写远程信息 -->
+        <!-- 远程执行，需要填写远程信息 -->
         <div
           v-if="editConfigForm.toolExecuteLocation == 'remote'"
           :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
@@ -307,6 +307,48 @@
               "
               v-model="editConfigForm.toolRemoteSSH_Password"
               placeholder="远程SSH密码"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <!-- 本地执行，需要填写本机信息 -->
+        <div
+          v-else-if="editConfigForm.toolExecuteLocation == 'local'"
+          :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
+        >
+          <el-form-item label="本机IP地址" prop="toolRemoteIP">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteIP"
+              placeholder="本机的IP地址"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="本机SSH端口" prop="toolRemoteSSH_Port">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteSSH_Port"
+              placeholder="本机的端口"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="本机SSH账号" prop="toolRemoteSSH_Account">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteSSH_Account"
+              placeholder="本机的SSH账号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="本机SSH密码" prop="toolRemoteSSH_Password">
+            <el-input
+              :disabled="
+                disableEditDefaultConfig(editConfigForm.toolConfigName)
+              "
+              v-model="editConfigForm.toolRemoteSSH_Password"
+              placeholder="本机的SSH密码"
             ></el-input>
           </el-form-item>
         </div>
@@ -467,7 +509,6 @@
         <!-- 选择执行位置的开关 -->
         <el-form-item>
           <el-switch
-            disabled
             v-model="addConfigForm.toolExecuteLocation"
             active-text="远程执行"
             active-value="remote"
@@ -485,7 +526,7 @@
           </el-tooltip>
         </el-form-item>
 
-        <!-- 只有选择了远程执行，才会需要填写远程信息 -->
+        <!-- 远程执行，需要填写远程信息 -->
         <div v-if="addConfigForm.toolExecuteLocation == 'remote'">
           <el-form-item label="SSH IP地址" prop="toolRemoteIP">
             <el-input
@@ -509,6 +550,33 @@
             <el-input
               v-model="addConfigForm.toolRemoteSSH_Password"
               placeholder="远程SSH密码"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <!-- 本地执行，需要填写本机信息 -->
+        <div v-else-if="addConfigForm.toolExecuteLocation == 'local'">
+          <el-form-item label="本机IP地址" prop="toolRemoteIP">
+            <el-input
+              v-model="addConfigForm.toolRemoteIP"
+              placeholder="本机的IP地址"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="本机SSH端口" prop="toolRemoteSSH_Port">
+            <el-input
+              v-model="addConfigForm.toolRemoteSSH_Port"
+              placeholder="本机的端口"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="本机SSH账号" prop="toolRemoteSSH_Account">
+            <el-input
+              v-model="addConfigForm.toolRemoteSSH_Account"
+              placeholder="本机的SSH账号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="本机SSH密码" prop="toolRemoteSSH_Password">
+            <el-input
+              v-model="addConfigForm.toolRemoteSSH_Password"
+              placeholder="本机的SSH密码"
             ></el-input>
           </el-form-item>
         </div>

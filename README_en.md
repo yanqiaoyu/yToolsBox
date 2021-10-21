@@ -25,11 +25,11 @@ docker network create --driver bridge ytoolsbox_network
 
 docker volume create ytoolsbox_db-data
 
-docker run -itd --name yToolsBox-db --network ytoolsbox_network -e POSTGRES_PASSWORD=test123456 -v ytoolsbox_db-data:/var/lib/postgresql/data postgres
+docker run -itd -p 5432:5432 --name yToolsBox-db --network ytoolsbox_network -e POSTGRES_PASSWORD=test123456 -v ytoolsbox_db-data:/var/lib/postgresql/data postgres
 
-docker run -itd --name yToolsBox-api --network ytoolsbox_network -v /home/yToolsBox/api/Script:/root/Script yanqiaoyu/ytoolsbox-api:v0.1
+docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e HOST_SCRIPT_PATH=/home/yToolsBox/api/Script -v /home/yToolsBox/api/Script:/root/Script yanqiaoyu/ytoolsbox-api:v0.1.1  ./main -m production
 
-docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.1
+docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.1.1
 ```
 
 #### 2. The cmds result
@@ -45,55 +45,59 @@ Visit http://yourIP to verify whether the platform has been deployed
 #### 1. docker-compose.yml
 
 ```yaml
-version: '3'
-services:
-  yToolsBox-db:
-    container_name: 'yToolsBox-db'
-    image: postgres
-    restart: always
-    ports:
-      - 5432:5432
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - network
-    environment:
-      POSTGRES_PASSWORD: test123456
+  version: '3'
+  services:
+    yToolsBox-db:
+      container_name: 'yToolsBox-db'
+      image: postgres
+      restart: always
+      ports:
+        - 5432:5432
+      volumes:
+        - db-data:/var/lib/postgresql/data
+      networks:
+        - network
+      environment:
+        POSTGRES_PASSWORD: test123456
 
-  yToolsBox-api:
-    container_name: 'yToolsBox-api'
-    build:
-      context: ./ytoolsbox-gin
-      dockerfile: Dockerfile
-    image: yanqiaoyu/ytoolsbox-api:v0.1
-    depends_on:
-      - yToolsBox-db
-    networks:
-      - network
-    volumes:
-      - /home/yToolsBox/api/Script:/root/Script
-    ports:
-      - 8081:8081
+    yToolsBox-api:
+      container_name: 'yToolsBox-api'
+      build:
+        context: ./ytoolsbox-gin
+        dockerfile: Dockerfile
+      image: yanqiaoyu/ytoolsbox-api:v0.1.1
+      depends_on:
+        - yToolsBox-db
+      networks:
+        - network
+      volumes:
+        - /home/yToolsBox/api/Script:/root/Script
+      # should be same as above path
+      environment:
+        HOST_SCRIPT_PATH: /home/yToolsBox/api/Script
+      ports:
+        - 8081:8081
+      command: ["sh", "wait-for", "yToolsBox-db:5432", "--", "./main", "-m", "production"]
 
-  yToolsBox-dashboard:
-    container_name: 'yToolsBox-dashboard'
-    build:
-      context: ./ytoolsbox-vue
-      dockerfile: Dockerfile
-    image: yanqiaoyu/ytoolsbox-dashboard:v0.1
-    networks:
-      - network
-    ports:
-      - 80:80
-    depends_on:
-      - yToolsBox-db
-      - yToolsBox-api
+    yToolsBox-dashboard:
+      container_name: 'yToolsBox-dashboard'
+      build:
+        context: ./ytoolsbox-vue
+        dockerfile: Dockerfile
+      image: yanqiaoyu/ytoolsbox-dashboard:v0.1.1
+      networks:
+        - network
+      ports:
+        - 80:80
+      depends_on:
+        - yToolsBox-db
+        - yToolsBox-api
 
-volumes:
-  db-data:
-networks:
-  network:
-    driver: bridge
+  volumes:
+    db-data:
+  networks:
+    network:
+      driver: bridge
 ```
 
 #### 2.Deploy

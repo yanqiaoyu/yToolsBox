@@ -18,6 +18,16 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/21" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 现在脚本也支持本地执行了
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/20" placement="top">
         <el-card>
           <h4>更新内容</h4>

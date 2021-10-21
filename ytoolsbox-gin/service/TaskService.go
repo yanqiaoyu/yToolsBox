@@ -11,7 +11,9 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -182,6 +184,16 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 
 			// 这是文件在宿主机存放的路径
 			HOST_SCRIPT_PATH := os.Getenv("HOST_SCRIPT_PATH")
+			//
+			sysType := runtime.GOOS
+			if sysType == "linux" {
+				tmpStr := strings.Split(config.ToolScriptLocalPath, "/")
+				fmt.Println(tmpStr)
+
+			} else if sysType == "windows" {
+				tmpStr := strings.Split(config.ToolScriptLocalPath, "\\")
+				fmt.Println(tmpStr)
+			}
 
 			ExecuteResult := cliConf.RunShell("cd " + HOST_SCRIPT_PATH + " & " + config.ToolRunCMD)
 			// 4.获取执行结果

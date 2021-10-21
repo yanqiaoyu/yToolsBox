@@ -111,7 +111,7 @@ func (cliConf *ClientConfig) Upload(srcPath, dstPath string) string {
 		_, _ = dstFile.Write(buf[:n])
 	}
 	fmt.Println(cliConf.RunShell(fmt.Sprintf("ls %s", dstPath)))
-	return "上传成功至" + dstPath + "目标路径存在如下文件:\r\n" + cliConf.RunShell(fmt.Sprintf("ls %s", dstPath))
+	return ">>> 上传成功至" + dstPath + "\r\n目标路径存在如下文件:\r\n" + cliConf.RunShell(fmt.Sprintf("ls %s", dstPath))
 }
 
 func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
@@ -250,7 +250,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 			// 脚本工具，需要先上传脚本到指定位置
 			log.Println(">>> 上传脚本至指定位置", config.ToolScriptPath+config.ToolScriptName)
 			buf.WriteString(">>> 上传脚本 \r\n" + config.ToolScriptLocalPath)
-			buf.WriteString(">>> 至指定位置 \r\n")
+			buf.WriteString("\r\n>>> 至指定位置 \r\n")
 			buf.WriteString(config.ToolScriptPath + config.ToolScriptName)
 			buf.WriteString("\r\n")
 			resultChannel <- model.Tasks{Progress: 60, ReturnContent: buf.String()}

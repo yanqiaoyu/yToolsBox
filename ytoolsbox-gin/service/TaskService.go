@@ -186,16 +186,17 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 			HOST_SCRIPT_PATH := os.Getenv("HOST_SCRIPT_PATH")
 			//
 			sysType := runtime.GOOS
+			var tmpStr []string
 			if sysType == "linux" {
-				tmpStr := strings.Split(config.ToolScriptLocalPath, "/")
-				fmt.Println(tmpStr)
+				tmpStr = strings.Split(config.ToolScriptLocalPath, "/")
 
 			} else if sysType == "windows" {
-				tmpStr := strings.Split(config.ToolScriptLocalPath, "\\")
-				fmt.Println(tmpStr)
+				tmpStr = strings.Split(config.ToolScriptLocalPath, "\\")
 			}
 
-			ExecuteResult := cliConf.RunShell("cd " + HOST_SCRIPT_PATH + " & " + config.ToolRunCMD)
+			finalShell := "cd " + HOST_SCRIPT_PATH + " & " + "cd " + tmpStr[len(tmpStr)-2] + " & " + config.ToolRunCMD
+
+			ExecuteResult := cliConf.RunShell(finalShell)
 			// 4.获取执行结果
 			log.Println("4.执行结果", ExecuteResult)
 			buf.WriteString("4.执行结果:")

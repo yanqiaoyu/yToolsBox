@@ -49,7 +49,7 @@
           <el-form-item label="工具名称" prop="toolName">
             <el-input
               :disabled="activeIndex == stepList.length - 1"
-              v-model="toolForm.toolName"
+              v-model.trim="toolForm.toolName"
               placeholder="给工具起个名字,名字唯一"
               style="width:450px"
             ></el-input>

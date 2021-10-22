@@ -47,7 +47,7 @@ func (cliConf *ClientConfig) createClient(host string, port int64, username, pas
 
 	config := ssh.ClientConfig{
 		Config: ssh.Config{
-			Ciphers: []string{"aes128-ctr", "aes192-ctr", "aes256-ctr", "aes128-gcm@openssh.com", "arcfour256", "arcfour128", "aes128-cbc", "3des-cbc", "aes192-cbc", "aes256-cbc"},
+			Ciphers: []string{"aes256-cbc", "aes128-ctr", "aes192-ctr", "aes256-ctr", "aes128-gcm@openssh.com", "arcfour256", "arcfour128", "aes128-cbc", "3des-cbc", "aes192-cbc"},
 		},
 		User: cliConf.Username,
 		Auth: []ssh.AuthMethod{ssh.Password(password)},

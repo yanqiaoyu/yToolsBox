@@ -45,14 +45,12 @@ func (cliConf *ClientConfig) createClient(host string, port int64, username, pas
 	cliConf.Password = password
 	cliConf.Port = port
 
-	var sshconfig ssh.Config
-	cipherOrder := sshconfig.Ciphers
-	sshconfig.Ciphers = append(cipherOrder, "aes256-cbc")
-
 	config := ssh.ClientConfig{
-		Config: sshconfig,
-		User:   cliConf.Username,
-		Auth:   []ssh.AuthMethod{ssh.Password(password)},
+		Config: ssh.Config{
+			Ciphers: []string{"aes128-ctr", "aes192-ctr", "aes256-ctr", "aes128-gcm@openssh.com", "arcfour256", "arcfour128", "aes128-cbc", "3des-cbc", "aes192-cbc", "aes256-cbc"},
+		},
+		User: cliConf.Username,
+		Auth: []ssh.AuthMethod{ssh.Password(password)},
 		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
 			return nil
 		},

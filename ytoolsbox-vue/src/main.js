@@ -16,6 +16,9 @@ import './assets/css/global.css'
 // 导入axios发送ajax请求
 import axios from 'axios'
 
+import nProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 // 测试，生产环境，不同的请求的路径
 if (process.env.NODE_ENV == 'production') {
   let host = window.location.host; //主机
@@ -24,10 +27,18 @@ if (process.env.NODE_ENV == 'production') {
   axios.defaults.baseURL = 'http://localhost:8081/api/auth/'
 }
 
+// 请求拦截器
 axios.interceptors.request.use(config => {
   // console.log(config)
+  nProgress.start()
   config.headers.Authorization = window.sessionStorage.getItem('token')
   // 最后必须return这个config
+  return config
+})
+
+// 响应拦截器
+axios.interceptors.response.use(config => {
+  nProgress.done()
   return config
 })
 

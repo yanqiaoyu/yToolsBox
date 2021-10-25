@@ -18,7 +18,7 @@
       build:
         context: ./ytoolsbox-gin
         dockerfile: Dockerfile
-      image: yanqiaoyu/ytoolsbox-api:v0.2
+      image: "yanqiaoyu/ytoolsbox-api:${TAG}"
       depends_on:
         - yToolsBox-db
       networks:
@@ -30,14 +30,14 @@
         HOST_SCRIPT_PATH: /home/yToolsBox/api/Script
       ports:
         - 8081:8081
-      command: ["sh", "wait-for", "yToolsBox-db:5432", "--", "./main", "-m", "production"]
+      command: ["sh", "wait-for", "yToolsBox-db:5432", "--", "supervisord", "-c", "/etc/supervisord.conf"]
 
     yToolsBox-dashboard:
       container_name: 'yToolsBox-dashboard'
       build:
         context: ./ytoolsbox-vue
         dockerfile: Dockerfile
-      image: yanqiaoyu/ytoolsbox-dashboard:v0.2
+      image: "yanqiaoyu/ytoolsbox-dashboard:${TAG}"
       networks:
         - network
       ports:

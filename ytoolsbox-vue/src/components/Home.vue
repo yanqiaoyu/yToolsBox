@@ -20,7 +20,7 @@
         <!-- unique-opened：一次只能有一个子模块 -->
         <el-menu
           class="el-menu-vertical-demo"
-          background-color="#4d505b"
+          background-color="#3b3e47"
           text-color="#fff"
           active-text-color="#409eff"
           :unique-opened="true"
@@ -44,6 +44,7 @@
                 :index="'/' + child.path"
                 v-for="child in item.child"
                 :key="child.id"
+                :disabled="child.path == 'rights'"
               >
                 <template slot="title">
                   <i :class="childIconList[child.id]"></i>
@@ -149,15 +150,9 @@ export default {
 }
 
 .el-aside {
-  background: #4d505b;
-  background: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(#4d505b),
-    to(#3b3e47)
-  );
-  background: linear-gradient(180deg, #4d505b 0, #3b3e47);
+  background: #3b3e47;
+  background: -webkit-gradient(linear, left top, left bottom, #3b3e47);
+  background: linear-gradient(180deg, #3b3e47);
   // 这个是为了解决子模块展开时对齐的问题
   .el-menu {
     border-right: none;
@@ -187,7 +182,7 @@ export default {
 }
 
 .toggle-button {
-  background-color: #4a5064;
+  background-color: #3b3e47;
   font-size: 10px;
   line-height: 24px;
   color: #fff;

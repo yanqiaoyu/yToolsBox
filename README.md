@@ -135,13 +135,17 @@ docker-compose up -d
 
 #### 1.2 新增一个工具
 
-进入工具盒界面
+进入新增工具盒的界面
 
 
 
 ![usage_script_2](/doc/pic/usage_script_2.png)
 
 #### 1.3 填写工具基础信息
+
+工具基础信息涵盖
+
+
 
 ![usage_script_3](/doc/pic/usage_script_3.png)
 

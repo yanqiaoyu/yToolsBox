@@ -269,6 +269,38 @@ docker-compose up -d
 
 ![usage_script_24](/doc/pic/usage_script_24.png)
 
+### 3. 为已有的工具，添加新的配置
+
+我们希望针对不同的环境或者对象复用我们的工具，这种情况就可以为已有的工具添加一个新的配置，达到工具快速复用的目的
+
+#### 3.1 进入某个工具界面
+
+![usage_script_31](/doc/pic/usage_script_31.png)
+
+#### 3.2 新增配置
+
+![usage_script_32](/doc/pic/usage_script_32.png)
+
+这里配置名称与配置简介是必填的
+
+可以看到，运行参数填写的是/ ，这样我们利用用一个工具，去检查根目录下的文件
+
+![usage_script_33](/doc/pic/usage_script_33.png)
+
+填写好之后，确认新增
+
+![usage_script_34](/doc/pic/usage_script_34.png)
+
+#### 3.3 新增任务
+
+添加好配置之后，我们进入新增任务界面，可以看到已经添加的配置
+
+![usage_script_35](/doc/pic/usage_script_35.png)
+
+选中这个配置，发起一次任务，观察执行结果
+
+
+
 ## 开发进度
 
 截止至 2021 年 10 月 8 日 15:06:52

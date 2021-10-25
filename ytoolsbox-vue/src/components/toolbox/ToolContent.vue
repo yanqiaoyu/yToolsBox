@@ -856,7 +856,7 @@ export default {
           ' ' +
           toolOptions
       }
-
+      console.log(toolRunCMD)
       return toolRunCMD
     }
   },
@@ -977,7 +977,7 @@ export default {
         this.addConfigForm.toolShellVersion = this.allConfigForm[0].toolShellVersion
       }
       // 最终执行语句赋值
-      this.addConfigForm.toolRunCMD = this.allConfigForm[0].toolRunCMD
+      // this.addConfigForm.toolRunCMD = this.allConfigForm[0].toolRunCMD
       // 本地位置不允许修改
       this.addConfigForm.toolScriptLocalPath = this.allConfigForm[0].toolScriptLocalPath
     },
@@ -992,14 +992,23 @@ export default {
         // console.log(valid)
         if (valid) {
           this.addConfigForm.toolID = this.toolID
-          // console.log(this.addConfigForm)
+          const tmpVar = { ...this.addConfigForm }
+
+          if (tmpVar.toolType == 'script') {
+            tmpVar.toolRunCMD = this.addFinalScriptCMD
+          } else {
+            tmpVar.toolRunCMD = this.addFinalCMD
+          }
+
+          // console.log('tmpVar', tmpVar)
+          // console.log('addConfigForm', this.addConfigForm)
 
           // 发送请求确认修改
           const { data: res } = await this.$http.post(
             'tools/config/' + this.toolID,
-            qs.stringify(this.addConfigForm)
+            qs.stringify(tmpVar)
           )
-          console.log(res)
+          // console.log(res)
 
           // 获取用户失败
           if (res.meta.status_code !== 200)

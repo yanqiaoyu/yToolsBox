@@ -267,7 +267,7 @@ docker-compose up -d
 
 #### 2.6 查看任务执行结果
 
-
+![usage_script_24](/doc/pic/usage_script_24.png)
 
 ## 开发进度
 

@@ -299,7 +299,7 @@ docker-compose up -d
 
 选中这个配置，发起一次任务，观察执行结果
 
-
+![usage_script_36](/doc/pic/usage_script_36.png)
 
 ## 开发进度
 

@@ -174,7 +174,7 @@ docker-compose up -d
 因为我们在下面选择了远程执行，所以这里需要填写脚本存放在远程服务器的路径
 
 ```shell
-对于需要远程执行的脚本工具，平台会先将脚本上传到我们所指定的脚本绝对路径下，然后再ssh进远程环境执行
+注：对于需要远程执行的脚本工具，平台会先将脚本上传到我们所指定的脚本绝对路径下，然后再ssh进远程环境执行
 ```
 
 * 运行参数
@@ -192,6 +192,7 @@ docker-compose up -d
 这里我们选择远程执行
 
 ```shell
+注：
 如果选择的是本地执行，那么脚本会在平台所安装的宿主机被执行
 与远程执行类似，平台会ssh进宿主机，进入存放脚本的位置执行脚本
 宿主机存放在宿主机的 /home/yToolsBox/api/Script/`工具名称`/ 位置下
@@ -211,9 +212,13 @@ docker-compose up -d
 
 #### 1.5 确认添加
 
+确认一切信息正常后，提交即可
+
 ![usage_script_6](/doc/pic/usage_script_6.png)
 
 #### 1.6 发起执行任务
+
+新增好工具之后，进入任务界面，新增任务
 
 ![usage_script_7](/doc/pic/usage_script_7.png)
 
@@ -221,13 +226,14 @@ docker-compose up -d
 
 ![usage_script_9](/doc/pic/usage_script_9.png)
 
-![usage_script_10](/doc/pic/usage_script_10.png)
 
 #### 1.7 查看任务执行结果
 
-![usage_script_11](/doc/pic/usage_script_11.png)
+等待任务执行完成后，我们可以获取任务的执行结果
 
-![usage_script_12](/doc/pic/usage_script_12.png)
+![usage_script_11](/doc/pic/usage_script_10.png)
+
+![usage_script_12](/doc/pic/usage_script_11.png)
 
 ### 2. 执行容器类工具
 

@@ -231,9 +231,9 @@ docker-compose up -d
 
 等待任务执行完成后，我们可以获取任务的执行结果
 
-![usage_script_11](/doc/pic/usage_script_10.png)
+![usage_script_10](/doc/pic/usage_script_10.png)
 
-![usage_script_12](/doc/pic/usage_script_11.png)
+![usage_script_11](/doc/pic/usage_script_11.png)
 
 ### 2. 执行容器类工具
 

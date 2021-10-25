@@ -131,7 +131,7 @@ docker-compose up -d
 
 ![usage_script_1](/doc/pic/usage_script_1.png)
 
-#### 1.2 新增一个工具
+#### 1.2 新增一个脚本工具
 
 进入新增工具盒的界面
 
@@ -237,6 +237,9 @@ docker-compose up -d
 
 ### 2. 执行容器类工具
 
+容器工具的调度执行更为简单，因为大部分的工作docker都帮我们做完了，下面以执行一次docker官方的hello-world容器为例，不多做言语赘述
+
+### 2.1 新增一个容器工具
 
 
 ## 开发进度

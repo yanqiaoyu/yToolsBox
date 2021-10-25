@@ -129,9 +129,15 @@ docker-compose up -d
 
 假设我们现在有一个脚本 pwd.sh，具体内容如下
 
+
+
 ![usage_script_1](/doc/pic/usage_script_1.png)
 
 #### 1.2 新增一个工具
+
+进入工具盒界面
+
+
 
 ![usage_script_2](/doc/pic/usage_script_2.png)
 

@@ -1,10 +1,6 @@
-docker stop yToolsBox-api yToolsBox-dashboard yToolsBox-db
-docker rm yToolsBox-api yToolsBox-dashboard yToolsBox-db
-
-docker images | grep none | awk '{print $3}' | xargs docker rmi
+docker-compose down --rmi all -v
 cd ./ytoolsbox-vue
 npm run build
-docker rmi yanqiaoyu/ytoolsbox-dashboard:v0.2 yanqiaoyu/ytoolsbox-api:v0.2 -f
 cd ../
 docker-compose up -d
 

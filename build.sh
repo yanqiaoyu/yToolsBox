@@ -1,6 +1,6 @@
 export TAG=v0.2.1
 
-docker-compose down all -v
+docker-compose down -v
 cd ./ytoolsbox-vue
 npm run build
 cd ../

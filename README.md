@@ -128,6 +128,7 @@ docker-compose up -d
 #### 1.1 准备好一个脚本文件
 
 假设我们现在有一个脚本 pwd.sh，具体内容如下
+
 ![usage_script_1](/doc/pic/usage_script_1.png)
 
 #### 1.2 新增一个工具

@@ -907,10 +907,18 @@ export default {
       this.$refs.editConfigForm.validate(async valid => {
         // console.log(valid)
         if (valid) {
+          const tmpVar = { ...this.editConfigForm }
+
+          if (tmpVar.toolType == 'script') {
+            tmpVar.toolRunCMD = this.finalScriptCMD
+          } else {
+            tmpVar.toolRunCMD = this.finalCMD
+          }
+
           // // 发送请求确认修改
           const { data: res } = await this.$http.put(
             'tools/config/' + this.toolID + '/' + this.editConfigForm.id,
-            qs.stringify(this.editConfigForm)
+            qs.stringify(tmpVar)
           )
           console.log(res)
           // 获取用户失败

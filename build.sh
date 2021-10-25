@@ -1,4 +1,4 @@
-export TAG=0.2.1
+export TAG=v0.2.1
 
 docker-compose down all -v
 cd ./ytoolsbox-vue

@@ -239,7 +239,33 @@ docker-compose up -d
 
 容器工具的调度执行更为简单，因为大部分的工作docker都帮我们做完了，下面以执行一次docker官方的hello-world容器为例，不多做言语赘述
 
-### 2.1 新增一个容器工具
+#### 2.1 新增一个容器工具
+
+同上
+
+#### 2.2 填写容器工具的信息
+
+![usage_script_21](/doc/pic/usage_script_21.png)
+
+#### 2.3 填写工具配置信息
+
+```
+注：你需要保证执行docker工具的虚拟机docker相关的功能是正常的
+```
+
+![usage_script_22](/doc/pic/usage_script_22.png)
+
+![usage_script_23](/doc/pic/usage_script_23.png)
+
+#### 2.4 确认添加
+
+同上
+
+#### 2.5 发起执行任务
+
+同上
+
+#### 2.6 查看任务执行结果
 
 
 

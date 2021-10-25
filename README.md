@@ -233,13 +233,14 @@ docker-compose up -d
 
 ![usage_script_10](/doc/pic/usage_script_10.png)
 
-![usage_script_11](/doc/pic/usage_script_11.png)
+![usage_script_12](/doc/pic/usage_script_12.png)
 
 ### 2. 执行容器类工具
 
 容器工具的调度执行更为简单，因为大部分的工作docker都帮我们做完了，下面以执行一次docker官方的hello-world容器为例，不多做言语赘述
 
 ### 2.1 新增一个容器工具
+
 
 
 ## 开发进度

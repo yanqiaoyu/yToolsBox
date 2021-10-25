@@ -44,6 +44,7 @@
                 :index="'/' + child.path"
                 v-for="child in item.child"
                 :key="child.id"
+                :disabled="child.path == 'rights'"
               >
                 <template slot="title">
                   <i :class="childIconList[child.id]"></i>

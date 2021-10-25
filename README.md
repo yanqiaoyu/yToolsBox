@@ -340,5 +340,5 @@ docker-compose up -d
 
 ## 开发进度
 
-截止至 2021 年 10 月 8 日 15:06:52
+截止至 2021年10月25日23:30:37
 ![developProgress](/doc/pic/developProgress.png)

@@ -18,7 +18,7 @@
       build:
         context: ./ytoolsbox-gin
         dockerfile: Dockerfile
-      image: yanqiaoyu/ytoolsbox-api:v0.2
+      image: "yanqiaoyu/ytoolsbox-api:$(TAG)"
       depends_on:
         - yToolsBox-db
       networks:
@@ -37,7 +37,7 @@
       build:
         context: ./ytoolsbox-vue
         dockerfile: Dockerfile
-      image: yanqiaoyu/ytoolsbox-dashboard:v0.2
+      image: "yanqiaoyu/ytoolsbox-dashboard:$(TAG)"
       networks:
         - network
       ports:

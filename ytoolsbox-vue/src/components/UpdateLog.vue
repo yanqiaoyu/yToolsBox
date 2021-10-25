@@ -18,6 +18,20 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/25" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 统一侧边栏的色调
+            <br />
+            2. 隐藏未实现的权限管理模块
+            <br />
+            3. 让熊少帮忙解决了一个计算属性引起的Bug
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/21" placement="top">
         <el-card>
           <h4>更新内容</h4>

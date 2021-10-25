@@ -123,7 +123,50 @@ docker-compose up -d
 
 ## 使用教程
 
-(针对脚本与 docker 镜像 2 种类型都进行演示，TBD)
+### 1. 执行脚本类工具
+
+#### 1.1 准备好一个脚本文件
+
+假设我们现在有一个脚本 pwd.sh，具体内容如下
+![usage_script_1](/doc/pic/usage_script_1.png)
+
+#### 1.2 新增一个工具
+
+![usage_script_2](/doc/pic/usage_script_2.png)
+
+#### 1.3 填写工具基础信息
+
+![usage_script_3](/doc/pic/usage_script_3.png)
+
+#### 1.4 填写工具配置信息
+
+![usage_script_4](/doc/pic/usage_script_4.png)
+
+![usage_script_5](/doc/pic/usage_script_5.png)
+
+#### 1.5 确认添加
+
+![usage_script_6](/doc/pic/usage_script_6.png)
+
+#### 1.6 发起执行任务
+
+![usage_script_7](/doc/pic/usage_script_7.png)
+
+![usage_script_8](/doc/pic/usage_script_8.png)
+
+![usage_script_9](/doc/pic/usage_script_9.png)
+
+![usage_script_10](/doc/pic/usage_script_10.png)
+
+#### 1.7 查看任务执行结果
+
+![usage_script_11](/doc/pic/usage_script_11.png)
+
+![usage_script_12](/doc/pic/usage_script_12.png)
+
+### 2. 执行容器类工具
+
+
 
 ## 开发进度
 

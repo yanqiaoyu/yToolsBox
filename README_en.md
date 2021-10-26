@@ -47,7 +47,7 @@ Visit http://yourIP to verify whether the frontend has been deployed
 #### 1. Install
 
 ```shell
-Notice：It's not recommended to use docker-compose if your envirement lack of dependencies which will be used for compiling docker images 
+Notice：It's not recommended to use docker-compose if your envirement lack of dependencies which are used for compiling docker images 
 ```
 
 ```shell

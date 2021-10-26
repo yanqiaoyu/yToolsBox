@@ -33,7 +33,7 @@ type ClientConfig struct {
 	LastResult string       //最近一次运行的结果
 }
 
-func (cliConf *ClientConfig) createClient(host string, port int64, username, password string) {
+func (cliConf *ClientConfig) createClient(host string, port int64, username, password string) error {
 	var (
 		sshClient  *ssh.Client
 		sftpClient *sftp.Client
@@ -44,6 +44,14 @@ func (cliConf *ClientConfig) createClient(host string, port int64, username, pas
 	cliConf.Username = username
 	cliConf.Password = password
 	cliConf.Port = port
+
+	// 捕捉panic异常
+	defer func() {
+		if errPanic := recover(); errPanic != nil {
+			log.Println("Panic:", errPanic)
+			// return "Something Wrong During Create SSH Connection"
+		}
+	}()
 
 	config := ssh.ClientConfig{
 		Config: ssh.Config{
@@ -59,15 +67,19 @@ func (cliConf *ClientConfig) createClient(host string, port int64, username, pas
 	addr := fmt.Sprintf("%s:%d", cliConf.Host, cliConf.Port)
 
 	if sshClient, err = ssh.Dial("tcp", addr, &config); err != nil {
-		log.Println("error occurred:", err)
+		log.Println("Dial error occurred:", err)
+		return err
 	}
 	cliConf.sshClient = sshClient
 
 	//此时获取了sshClient，下面使用sshClient构建sftpClient
 	if sftpClient, err = sftp.NewClient(sshClient); err != nil {
-		log.Println("error occurred:", err)
+		log.Println("NewClient error occurred:", err)
+		return err
 	}
 	cliConf.sftpClient = sftpClient
+
+	return nil
 }
 
 func (cliConf *ClientConfig) RunShell(shell string) string {
@@ -131,7 +143,7 @@ func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
 	fmt.Println("文件下载完毕")
 }
 
-func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.Tasks) {
+func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.Tasks) error {
 	log.Println(config)
 
 	// 结果的缓存
@@ -145,11 +157,21 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 		// 准备好连接本地的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
 		cliConf := new(ClientConfig)
-		cliConf.createClient(
+		errCreateClient := cliConf.createClient(
 			config.ToolRemoteIP,
 			int64(port),
 			config.ToolRemoteSSH_Account,
 			config.ToolRemoteSSH_Password)
+
+		if errCreateClient != nil {
+			log.Println(">>> 连接异常")
+			buf.WriteString(">>> 连接异常\r\n")
+			buf.WriteString(errCreateClient.Error())
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String()}
+			close(resultChannel)
+			return nil
+		}
 
 		// 2.执行的是容器还是脚本?
 		if config.ToolType == "container" {
@@ -217,11 +239,21 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 		// 准备好远程连接的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
 		cliConf := new(ClientConfig)
-		cliConf.createClient(
+		errCreateClient := cliConf.createClient(
 			config.ToolRemoteIP,
 			int64(port),
 			config.ToolRemoteSSH_Account,
 			config.ToolRemoteSSH_Password)
+
+		if errCreateClient != nil {
+			log.Println(">>> 连接异常")
+			buf.WriteString(">>> 连接异常\r\n")
+			buf.WriteString(errCreateClient.Error())
+			buf.WriteString("\r\n")
+			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String()}
+			close(resultChannel)
+			return nil
+		}
 
 		// 2.执行的是容器还是脚本?
 		if config.ToolType == "container" {
@@ -283,6 +315,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 
 	// 关闭resultChannel
 	close(resultChannel)
+	return nil
 
 	// log.Print(util.Struct2MapViaJson(config))
 	// //本地文件上传到服务器

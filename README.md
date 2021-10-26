@@ -83,6 +83,10 @@ docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard 
 
 #### 1. docker-compose.yml
 
+```shell
+注：使用docker-compose的安装方式会现场编译一次镜像，若环境中缺少相关的依赖，不建议采用这种方式安装
+```
+
 ```yaml
 version: '3'
 services:
@@ -186,6 +190,8 @@ docker-compose up -d
 
 工具配置信息中，我们先看上半部分
 
+![usage_script_4](/doc/pic/usage_script_4.png)
+
 * 工具类型
 
 这里我们选择脚本工具
@@ -237,15 +243,13 @@ docker-compose up -d
 宿主机存放在宿主机的 /home/yToolsBox/api/Script/`工具名称`/ 位置下
 ```
 
-![usage_script_4](/doc/pic/usage_script_4.png)
-
 再看到下半部分
+
+![usage_script_5](/doc/pic/usage_script_5.png)
 
 * SSH信息
 
 按照实际情况，填写SSH的IP，端口，账号，密码即可
-
-![usage_script_5](/doc/pic/usage_script_5.png)
 
 填写完成后，点击下一步即可
 

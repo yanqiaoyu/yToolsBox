@@ -768,7 +768,7 @@ export default {
       runName = runName.replace('.', '')
 
       toolRunCMD =
-        'docker run' +
+        'docker run --name' +
         ' ' +
         'yToolsBox-' +
         runName +
@@ -818,7 +818,7 @@ export default {
       runName = runName.replace('.', '')
 
       toolRunCMD =
-        'docker run' +
+        'docker run --name' +
         ' ' +
         'yToolsBox-' +
         runName +

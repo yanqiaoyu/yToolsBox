@@ -93,3 +93,10 @@ func UpdateTaskProgress(db *gorm.DB, resultChannel chan model.Tasks, TaskID uint
 	}
 	log.Println("管道被关闭，结束这个更新任务信息的协程")
 }
+
+// 删除所有任务
+func DeleteAllTask(db *gorm.DB) {
+	// 根据gorm的官方文档，如果在没有任何条件的情况下执行批量删除，GORM 不会执行该操作
+	// 必须加一些条件
+	db.Unscoped().Where("\"isDone\" = true").Delete(&model.Tasks{})
+}

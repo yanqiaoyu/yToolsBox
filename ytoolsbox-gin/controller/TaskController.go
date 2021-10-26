@@ -82,3 +82,14 @@ func GetTaskItem(ctx *gin.Context) {
 
 	response.Success(ctx, util.Struct2MapViaJson(TaskItemData), util.Struct2MapViaJson(Meta))
 }
+
+// 清空所有任务
+func DeleteAllTask(ctx *gin.Context) {
+	db := common.GetDB()
+
+	dao.DeleteAllTask(db)
+
+	// 返回
+	Meta := dto.SuccessResponseMeta{Message: "清空所有任务成功", StatusCode: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+}

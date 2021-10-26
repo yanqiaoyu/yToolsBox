@@ -2,7 +2,7 @@
 
 [README](README_en.md) | [中文文档](README.md)
 
-yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收纳调度脚本(_.py _.sh)与 docker 容器。
+yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收纳调度脚本(*.py *.sh)与 docker 容器。
 
 
 
@@ -10,13 +10,11 @@ yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收
    * [为什么开发 yToolsBox ？](#为什么开发-ytoolsbox-)
    * [部署](#部署)
       * [手动部署](#手动部署)
-         * [1. 依次执行如下指令](#1-依次执行如下指令)
-         * [2. 部署结果](#2-部署结果)
-         * [3. 验证结果](#3-验证结果)
+         * [1. 安装](#1-安装)
+         * [2. 验证安装结果](#2-验证安装结果)
       * [用 docker-compose 部署](#用-docker-compose-部署)
-         * [1. docker-compose.yml](#1-docker-composeyml)
-         * [2.安装](#2安装)
-         * [3.验证安装结果](#3验证安装结果)
+         * [1.安装](#1安装)
+         * [2.验证安装结果](#2验证安装结果)
    * [使用教程](#使用教程)
       * [1. 执行脚本类工具](#1-执行脚本类工具)
          * [1.1 准备好一个脚本文件](#11-准备好一个脚本文件)
@@ -47,15 +45,17 @@ yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收
 
 同样的，日常的工作中我们也会遇到很多与之类似的场景，比方说：我们会为了提升日常的工作效率，产出各种辅助工作的脚本或者 docker 镜像。但往往每个人产出的辅助工具都处于一种“各自为战”的割裂状态，大家互相都不了解对方的工具如何使用；亦或者有相关的使用说明文档，却鲜有人愿意阅读，最终还是以“还是你帮我弄一下吧”草草收场
 
-如果我们把“解决各自工作中遇到的问题”当做“回家”，把为了解决这些问题而“产出的形形色色的工具”当做“回家的手段”，那么不难发现，这其实也是另一种形式的“最后一公里”问题。
+如果我们把“解决各自工作中遇到的问题”当做“回家”，把为了解决这些问题而产出的“各式工具”当做“回家的手段”，那么不难发现，这其实也是另一种形式的“最后一公里”问题。
 
-因此，yToolsBox 的意义就在于，它是一个“交通工具”的收纳与调度平台，任何人都可以把自己产出的“交通工具”，按照指定的方式添加进这个平台，后续如果需要让其他人复用，那么直接进入工具盒选择配置并执行即可
+因此yToolsBox 的意义就在于，它是一个“交通工具”的收纳与调度平台，任何人都可以把自己产出的“交通工具”，按照指定的方式添加进这个平台，后续如果需要让其他人复用，那么直接进入工具盒选择配置并执行即可
 
 ## 部署
 
 ### 手动部署
 
-#### 1. 依次执行如下指令
+#### 1. 安装
+
+依次执行如下指令
 
 ```shell
 docker network create --driver bridge ytoolsbox_network
@@ -69,92 +69,29 @@ docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e
 docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.2.1
 ```
 
-#### 2. 部署结果
+#### 2. 验证安装结果
+
+执行docker ps出现以下结果，则证明镜像拉起成功
 
 ![manu_deploy](/doc/pic/manu_deploy1.png)
-
-#### 3. 验证结果
 
 访问 http://yourIP 验证是否安装成功
 
 ### 用 docker-compose 部署
 
-#### 1. docker-compose.yml
-
-```yaml
-version: '3'
-services:
-  yToolsBox-db:
-    container_name: 'yToolsBox-db'
-    image: postgres
-    restart: always
-    ports:
-      - 5432:5432
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - network
-    environment:
-      POSTGRES_PASSWORD: test123456
-
-  yToolsBox-api:
-    container_name: 'yToolsBox-api'
-    build:
-      context: ./ytoolsbox-gin
-      dockerfile: Dockerfile
-    image: yanqiaoyu/ytoolsbox-api:v0.1.1
-    depends_on:
-      - yToolsBox-db
-    networks:
-      - network
-    volumes:
-      - /home/yToolsBox/api/Script:/root/Script
-    # should be same as above path
-    environment:
-      HOST_SCRIPT_PATH: /home/yToolsBox/api/Script
-    ports:
-      - 8081:8081
-    command:
-      [
-        'sh',
-        'wait-for',
-        'yToolsBox-db:5432',
-        '--',
-        './main',
-        '-m',
-        'production'
-      ]
-
-  yToolsBox-dashboard:
-    container_name: 'yToolsBox-dashboard'
-    build:
-      context: ./ytoolsbox-vue
-      dockerfile: Dockerfile
-    image: yanqiaoyu/ytoolsbox-dashboard:v0.1.1
-    networks:
-      - network
-    ports:
-      - 80:80
-    depends_on:
-      - yToolsBox-db
-      - yToolsBox-api
-
-volumes:
-  db-data:
-networks:
-  network:
-    driver: bridge
-```
-
-#### 2.安装
-
-执行
+#### 1. 安装
 
 ```shell
+注：使用docker-compose的安装方式会现场编译一次镜像，若环境中缺少相关的依赖，不建议采用这种方式安装
+```
+
+```shell
+git clone https://github.com/yanqiaoyu/yToolsBox.git
+cd yToolsBox
 docker-compose up -d
 ```
 
-#### 3.验证安装结果
+#### 2.验证安装结果
 
 同上
 
@@ -183,6 +120,8 @@ docker-compose up -d
 #### 1.4 填写工具配置信息
 
 工具配置信息中，我们先看上半部分
+
+![usage_script_4](/doc/pic/usage_script_4.png)
 
 * 工具类型
 
@@ -235,15 +174,13 @@ docker-compose up -d
 宿主机存放在宿主机的 /home/yToolsBox/api/Script/`工具名称`/ 位置下
 ```
 
-![usage_script_4](/doc/pic/usage_script_4.png)
-
 再看到下半部分
+
+![usage_script_5](/doc/pic/usage_script_5.png)
 
 * SSH信息
 
 按照实际情况，填写SSH的IP，端口，账号，密码即可
-
-![usage_script_5](/doc/pic/usage_script_5.png)
 
 填写完成后，点击下一步即可
 
@@ -340,5 +277,5 @@ docker-compose up -d
 
 ## 开发进度
 
-截止至 2021 年 10 月 8 日 15:06:52
+截止至 2021年10月25日23:30:37
 ![developProgress](/doc/pic/developProgress.png)

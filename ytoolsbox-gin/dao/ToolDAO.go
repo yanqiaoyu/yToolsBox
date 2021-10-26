@@ -9,9 +9,16 @@ import (
 	"gorm.io/gorm"
 )
 
+// 删除所有工具
+func DeleteAllTools(db *gorm.DB) {
+	db.Debug().Unscoped().Where("1 = 1").Delete(&model.Tool{})
+	db.Debug().Unscoped().Where("1 = 1").Delete(&model.ToolConfig{})
+	db.Debug().Unscoped().Where("\"isDone\" = true").Delete(&model.Tasks{})
+}
+
 // 插入工具的基本信息
 func InsertNewToolBasicInfo(db *gorm.DB, PostNewToolBasicInfoDTOReq *dto.PostNewToolBasicInfoDTOReq) *gorm.DB {
-	result := db.Model(&model.Tool{}).Create(PostNewToolBasicInfoDTOReq)
+	result := db.Debug().Model(&model.Tool{}).Create(PostNewToolBasicInfoDTOReq)
 	return result
 }
 

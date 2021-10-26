@@ -76,6 +76,22 @@ func GetAllTools(ctx *gin.Context) {
 	response.Success(ctx, util.Struct2MapViaJson(ToolData), util.Struct2MapViaJson(Meta))
 }
 
+// 删除所有工具
+func DeleteAllTools(ctx *gin.Context) {
+	db := common.GetDB()
+	// 清空表
+	dao.DeleteAllTools(db)
+
+	// 清空存放工具的路径
+	err := service.RemoveAllScripts()
+	if err != nil {
+		msg := dto.FailResponseMeta{StatusCode: 400, Message: "清除所有工具失败"}
+		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
+	}
+	Meta := model.Meta{Msg: "清除所有工具成功", Status_code: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+}
+
 // 查询某个工具的所有配置
 func GetSpecifiedToolConfig(ctx *gin.Context) {
 	db := common.GetDB()

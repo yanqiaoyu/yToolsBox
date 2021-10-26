@@ -168,7 +168,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 			buf.WriteString(">>> 连接异常\r\n")
 			buf.WriteString(errCreateClient.Error())
 			buf.WriteString("\r\n")
-			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String()}
+			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
 			close(resultChannel)
 			return nil
 		}
@@ -250,7 +250,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 			buf.WriteString(">>> 连接异常\r\n")
 			buf.WriteString(errCreateClient.Error())
 			buf.WriteString("\r\n")
-			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String()}
+			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
 			close(resultChannel)
 			return nil
 		}

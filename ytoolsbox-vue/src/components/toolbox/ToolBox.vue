@@ -18,7 +18,9 @@
         line-height: 40px;
         color: #1989fa;
       }"
-      >UP</div>
+      >
+        UP
+      </div>
     </el-backtop>
 
     <!-- 底部背景卡片 -->
@@ -41,6 +43,9 @@
         <!-- 这个列里面放的是添加按钮 -->
         <el-col :span="6">
           <el-button type="primary" @click="addTool">添加工具</el-button>
+          <el-button type="danger" @click="clearAllTool"
+            >清除所有工具</el-button
+          >
         </el-col>
       </el-row>
 
@@ -57,21 +62,38 @@
         @click.native="toToolContent(tool)"
       >
         <div v-if="tool.toolType === 'container'" class="image_container">
-          <el-image :src="require('../../assets/container.png')" class="image" fit="scale-down"></el-image>
+          <el-image
+            :src="require('../../assets/container.png')"
+            class="image"
+            fit="scale-down"
+          ></el-image>
         </div>
         <div v-if="tool.toolType === 'script'" class="image_container">
-          <el-image :src="require('../../assets/script.png')" class="image" fit="scale-down"></el-image>
+          <el-image
+            :src="require('../../assets/script.png')"
+            class="image"
+            fit="scale-down"
+          ></el-image>
         </div>
 
         <div class="text_container">
           <div class="rate_title">
-            <span class="tool-title" :title="tool.toolName">{{ tool.toolName }}</span>
+            <span class="tool-title" :title="tool.toolName">{{
+              tool.toolName
+            }}</span>
             <!-- 只有被评分过的工具，才会显示评分 -->
             <div v-if="tool.toolRate != 0 || tool.toolRateCount != 0">
               <el-tooltip
                 class="item"
                 effect="dark"
-                :content="'平均分:'+tool.toolRate+'分 '+'评分人数:'+tool.toolRateCount+'人'"
+                :content="
+                  '平均分:' +
+                    tool.toolRate +
+                    '分 ' +
+                    '评分人数:' +
+                    tool.toolRateCount +
+                    '人'
+                "
                 placement="top"
               >
                 <el-rate
@@ -91,12 +113,19 @@
 
           <el-divider class="line"></el-divider>
           <div class="toolsDesc">
-            <el-tooltip class="item" effect="dark" :content="tool.toolDesc" placement="bottom">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="tool.toolDesc"
+              placement="bottom"
+            >
               <span>{{ tool.toolDesc }}</span>
             </el-tooltip>
           </div>
           <div class="toolTags">
-            <el-tag type="info">{{ tool.toolType === 'container' ? '容器' : '脚本' }}</el-tag>
+            <el-tag type="info">{{
+              tool.toolType === 'container' ? '容器' : '脚本'
+            }}</el-tag>
             <el-tag type="success">作者:{{ tool.toolAuthor }}</el-tag>
           </div>
         </div>
@@ -110,7 +139,11 @@
         @click.native="addTool"
       >
         <div class="image_container">
-          <el-image fit="scale-down" class="image" :src="require('../../assets/add.png')"></el-image>
+          <el-image
+            fit="scale-down"
+            class="image"
+            :src="require('../../assets/add.png')"
+          ></el-image>
         </div>
 
         <div style="padding: 14px;">
@@ -130,8 +163,8 @@ export default {
       toolsList: [],
       totalTools: 0,
       queryInfo: {
-        query: '',
-      },
+        query: ''
+      }
     }
   },
   created() {
@@ -143,7 +176,7 @@ export default {
     },
     async GetToolsList() {
       const { data: res } = await this.$http.get('tools', {
-        params: this.queryInfo,
+        params: this.queryInfo
       })
       // console.log(res)
       if (res.meta.status_code !== 200)
@@ -158,10 +191,38 @@ export default {
       // console.log(tool)
       this.$router.push({
         path: 'toolbox/tool',
-        query: { toolID: tool.id, toolName: tool.toolName },
+        query: { toolID: tool.id, toolName: tool.toolName }
       })
     },
-  },
+    // 删除所有工具
+    clearAllTool() {
+      this.$confirm(
+        '此操作将删除所有工具,所有配置,以及所有已完成的任务, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+        .then(async () => {
+          // console.log(id)
+          const { data: res } = await this.$http.delete('tools')
+
+          if (res.meta.status_code == 200) this.GetToolsList()
+          return this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    }
+  }
 }
 </script>
 

@@ -18,6 +18,18 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2021/10/26" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 解决了一个SSH建立连接时Ciphers异常引起的panic
+            <br />
+            2. 现在已完成的任务可以被清空了
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2021/10/25" placement="top">
         <el-card>
           <h4>更新内容</h4>

@@ -2,7 +2,7 @@
 
 [README](README_en.md) | [中文文档](README.md)
 
-yToolsBox is an All-In-One platform which is for tool storage and scheduling。It currently supports storing and scheduling scripts (_.py _.sh) and containers.
+yToolsBox is an All-In-One platform which is for tool storage and scheduling。It currently supports storing and scheduling scripts (*.py *.sh) and containers.
 
 ## Why would I develop this yToolsBox ？
 
@@ -18,7 +18,9 @@ Therefore, the significance of yToolsBox is that it is a platform for storing an
 
 ### Manually deploy
 
-#### 1. Excute the following cmds
+#### 1. Install
+
+Excute the following cmds
 
 ```shell
 docker network create --driver bridge ytoolsbox_network
@@ -32,85 +34,31 @@ docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e
 docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.1.1
 ```
 
-#### 2. The cmds result
+#### 2. Verify the result
+
+Execute "docker ps" to verify the status of the containers
 
 ![manu_deploy](/doc/pic/manu_deploy1.png)
 
-#### 3. Testing
-
-Visit http://yourIP to verify whether the platform has been deployed
+Visit http://yourIP to verify whether the frontend has been deployed
 
 ### Use docker-compose
 
-#### 1. docker-compose.yml
-
-```yaml
-  version: '3'
-  services:
-    yToolsBox-db:
-      container_name: 'yToolsBox-db'
-      image: postgres
-      restart: always
-      ports:
-        - 5432:5432
-      volumes:
-        - db-data:/var/lib/postgresql/data
-      networks:
-        - network
-      environment:
-        POSTGRES_PASSWORD: test123456
-
-    yToolsBox-api:
-      container_name: 'yToolsBox-api'
-      build:
-        context: ./ytoolsbox-gin
-        dockerfile: Dockerfile
-      image: yanqiaoyu/ytoolsbox-api:v0.1.1
-      depends_on:
-        - yToolsBox-db
-      networks:
-        - network
-      volumes:
-        - /home/yToolsBox/api/Script:/root/Script
-      # should be same as above path
-      environment:
-        HOST_SCRIPT_PATH: /home/yToolsBox/api/Script
-      ports:
-        - 8081:8081
-      command: ["sh", "wait-for", "yToolsBox-db:5432", "--", "./main", "-m", "production"]
-
-    yToolsBox-dashboard:
-      container_name: 'yToolsBox-dashboard'
-      build:
-        context: ./ytoolsbox-vue
-        dockerfile: Dockerfile
-      image: yanqiaoyu/ytoolsbox-dashboard:v0.1.1
-      networks:
-        - network
-      ports:
-        - 80:80
-      depends_on:
-        - yToolsBox-db
-        - yToolsBox-api
-
-  volumes:
-    db-data:
-  networks:
-    network:
-      driver: bridge
-```
-
-#### 2.Deploy
-
-Excute the following cmds
+#### 1. Install
 
 ```shell
+Notice：It's not recommended to use docker-compose if your envirement lack of dependencies which will be used for compiling docker images 
+```
+
+```shell
+git clone https://github.com/yanqiaoyu/yToolsBox.git
+cd yToolsBox
 docker-compose up -d
 ```
 
-#### 3.Testing
+#### 2. Verify the result
 
-Same things as above
+Same  as above
 
 ## Tutorial
 
@@ -118,5 +66,5 @@ Same things as above
 
 ## Develop Progress
 
-As of 15:06:52, October 8, 2021
+As of 23:30:37, October 25, 2021
 ![developProgress](/doc/pic/developProgress.png)

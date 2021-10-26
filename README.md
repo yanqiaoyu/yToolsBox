@@ -2,7 +2,7 @@
 
 [README](README_en.md) | [中文文档](README.md)
 
-yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收纳调度脚本(_.py _.sh)与 docker 容器。
+yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收纳调度脚本(*.py *.sh)与 docker 容器。
 
 
 
@@ -10,9 +10,8 @@ yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收
    * [为什么开发 yToolsBox ？](#为什么开发-ytoolsbox-)
    * [部署](#部署)
       * [手动部署](#手动部署)
-         * [1. 依次执行如下指令](#1-依次执行如下指令)
-         * [2. 部署结果](#2-部署结果)
-         * [3. 验证结果](#3-验证结果)
+         * [1. 安装](#1-安装)
+         * [2. 验证安装结果](#2-验证安装结果)
       * [用 docker-compose 部署](#用-docker-compose-部署)
          * [1.安装](#1安装)
          * [2.验证安装结果](#2验证安装结果)
@@ -54,7 +53,9 @@ yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收
 
 ### 手动部署
 
-#### 1. 依次执行如下指令
+#### 1. 安装
+
+依次执行如下指令
 
 ```shell
 docker network create --driver bridge ytoolsbox_network
@@ -68,13 +69,11 @@ docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e
 docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.2.1
 ```
 
-#### 2. 部署结果
+#### 2. 验证安装结果
 
 执行docker ps出现以下结果，则证明镜像拉起成功
 
 ![manu_deploy](/doc/pic/manu_deploy1.png)
-
-#### 3. 验证结果
 
 访问 http://yourIP 验证是否安装成功
 

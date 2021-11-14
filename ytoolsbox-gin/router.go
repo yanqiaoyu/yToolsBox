@@ -44,6 +44,8 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.POST(URL_Prefix+"/tools", controller.PostNewTool)
 	// 查询所有工具
 	r.GET(URL_Prefix+"/tools", controller.GetAllTools)
+	// 删除所有工具
+	r.DELETE(URL_Prefix+"/tools", controller.DeleteAllTools)
 	// 查询某个工具的所有配置
 	r.GET(URL_Prefix+"/tools/config/:toolID", controller.GetSpecifiedToolConfig)
 	// 查询某个工具的某个配置
@@ -63,6 +65,8 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.GET(URL_Prefix+"/tasks/cascader", controller.GetCascader)
 	// 查询所有的TaskItem(任务进度)
 	r.GET(URL_Prefix+"/tasks", controller.GetTaskItem)
+	// 查询所有的TaskItem(任务进度)
+	r.DELETE(URL_Prefix+"/tasks", controller.DeleteAllTask)
 
 	return r
 

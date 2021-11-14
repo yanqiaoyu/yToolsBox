@@ -448,7 +448,7 @@ export default {
         ],
         toolName: [
           { required: true, message: '请填写工具名称', trigger: 'blur' },
-          { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' }
+          { min: 0, max: 30, message: '最好控制在30个字符内', trigger: 'blur' }
         ],
         toolDesc: [
           { min: 0, max: 100, message: '100个字符内', trigger: 'blur' }

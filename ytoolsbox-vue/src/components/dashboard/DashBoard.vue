@@ -43,6 +43,9 @@
         <!-- 这个列里面放的是添加按钮 -->
         <el-col :span="6">
           <el-button type="primary" @click="openDialog">新建任务</el-button>
+          <el-button type="danger" @click="openClearTaskDialog"
+            >清空任务</el-button
+          >
         </el-col>
       </el-row>
 
@@ -204,12 +207,20 @@ export default {
       taskDetailDialogVisible: false,
       loading: false,
       configIDList: [],
-      taskDetail: ''
+      taskDetail: '',
+      //定时器
+      timer: ''
     }
   },
   created() {
     // 要获取任务的列表
     this.GetTasksList()
+    // 每隔10秒定时更新任务详情
+    this.timer = setInterval(this.GetTasksList, 10000)
+  },
+  // 销毁时记得要清理定时器
+  beforeDestroy() {
+    clearInterval(this.timer)
   },
   methods: {
     // 获取任务列表的请求
@@ -269,6 +280,29 @@ export default {
       this.dialogVisible = true
       // 打开的时候，请求工具以及对应的工具配置
       this.GetCascaderList()
+    },
+    openClearTaskDialog() {
+      this.$confirm('此操作将删除所有已完成任务, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // console.log(id)
+          const { data: res } = await this.$http.delete('tasks')
+
+          if (res.meta.status_code == 200) this.GetTasksList()
+          return this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 关闭新增任务的对话框
     closeDialog() {

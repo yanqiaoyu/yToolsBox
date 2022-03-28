@@ -1,7 +1,7 @@
 server:
   port: 8081
 datasource:
-  testhost: 103.44.241.227
+  testhost: yToolsBox-db
   productionhost: yToolsBox-db
   port: 5432
   database: postgres

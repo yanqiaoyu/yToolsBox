@@ -12,9 +12,7 @@
         line-height: 40px;
         color: #1989fa;
       }"
-      >
-        UP
-      </div>
+      >UP</div>
     </el-backtop>
 
     <!-- 面包屑路径 -->
@@ -43,9 +41,7 @@
         <!-- 这个列里面放的是添加按钮 -->
         <el-col :span="6">
           <el-button type="primary" @click="openDialog">新建任务</el-button>
-          <el-button type="danger" @click="openClearTaskDialog"
-            >清空任务</el-button
-          >
+          <el-button type="danger" @click="openClearTaskDialog">清空任务</el-button>
         </el-col>
       </el-row>
 
@@ -55,22 +51,16 @@
       <!-- 任务列表展示区 -->
       <el-table :data="tasksList" stripe border style="width: 100%">
         <!-- 只要添加了type=index，就能序号列 -->
-        <el-table-column
-          type="index"
-          label="任务序号"
-          align="center"
-          width="90"
-        ></el-table-column>
+        <el-table-column type="index" label="任务序号" align="center" width="90"></el-table-column>
         <el-table-column prop="toolName" label="选择的工具"></el-table-column>
-        <el-table-column
-          prop="toolConfigName"
-          label="选择的配置"
-        ></el-table-column>
+        <el-table-column prop="toolConfigName" label="选择的配置"></el-table-column>
         <el-table-column label="新建时间" align="center" width="200">
           <!-- <template slot-scope="scope">{{ scope.row.addTime | formatDate }}</template> -->
-          <template slot-scope="scope">{{
+          <template slot-scope="scope">
+            {{
             FomatDate(scope.row.CreatedAt)
-          }}</template>
+            }}
+          </template>
         </el-table-column>
         <el-table-column label="完成时间" align="center" width="200">
           <template slot-scope="scope">
@@ -82,11 +72,7 @@
         </el-table-column>
         <el-table-column prop="toolTaskProgress" label="任务进度" width="150">
           <template slot-scope="scope">
-            <el-progress
-              :text-inside="true"
-              :stroke-width="26"
-              :percentage="scope.row.progress"
-            ></el-progress>
+            <el-progress :text-inside="true" :stroke-width="26" :percentage="scope.row.progress"></el-progress>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150">
@@ -191,6 +177,7 @@
 export default {
   data() {
     return {
+      // 与级联选择器绑定的列表
       finalList: [],
       options: [],
       props: { multiple: true },
@@ -199,7 +186,7 @@ export default {
         // 这行属性其实就是当前在第几页
         pagenum: 1,
         // 这行属性其实就是当前每页展示多少条数据，这里最好与page-sizes里面的第一个元素值保持一致，否则在刷新的时候会出Bug
-        pagesize: 10
+        pagesize: 10,
       },
       tasksList: [],
       total: 0,
@@ -209,7 +196,7 @@ export default {
       configIDList: [],
       taskDetail: '',
       //定时器
-      timer: ''
+      timer: '',
     }
   },
   created() {
@@ -227,7 +214,7 @@ export default {
     async GetTasksList() {
       // console.log('Get Task')
       const { data: res } = await this.$http.get('tasks', {
-        params: this.queryInfo
+        params: this.queryInfo,
       })
       if (res.meta.status_code !== 200)
         return this.$message.error('获取任务列表失败')
@@ -237,9 +224,9 @@ export default {
     },
     // 获取级联选择器中的信息的请求
     async GetCascaderList() {
-      // console.log('Get Cascader Info')
+      console.log('打开了工具配置窗口')
       const { data: res } = await this.$http.get('tasks/cascader')
-      // console.log(res)
+      console.log('所有工具的配置如下', res)
       if (res.meta.status_code !== 200)
         return this.$message.error('获取配置信息失败')
 
@@ -253,12 +240,14 @@ export default {
         this.configIDList.push(this.finalList[i]['1'])
       }
 
+      console.log('选中的配置如下', this.configIDList)
+
       if (this.finalList.length == 0) {
         this.loading = false
         return this.$message.error('未选择配置信息,无法创建任务')
       }
       const { data: res } = await this.$http.post('tasks', {
-        ConfigList: JSON.stringify(this.configIDList)
+        ConfigList: JSON.stringify(this.configIDList),
       })
       if (res.meta.status_code !== 200) {
         this.loading = false
@@ -270,6 +259,8 @@ export default {
       this.dialogVisible = false
       // 清空Cascader的选中条目
       this.finalList = []
+      // 清空configIDList
+      this.configIDList = []
     },
     // 取消任务
     CancelTask() {},
@@ -285,7 +276,7 @@ export default {
       this.$confirm('此操作将删除所有已完成任务, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       })
         .then(async () => {
           // console.log(id)
@@ -294,13 +285,13 @@ export default {
           if (res.meta.status_code == 200) this.GetTasksList()
           return this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: '删除成功!',
           })
         })
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消删除',
           })
         })
     },
@@ -330,8 +321,8 @@ export default {
     opentaskDetailDialog(row) {
       this.taskDetailDialogVisible = true
       this.taskDetail = row.returnContent
-    }
-  }
+    },
+  },
 }
 </script>
 

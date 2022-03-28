@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
-    "core-js": "^3.18.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "core-js": "^3.21.1",
     "element-ui": "^2.15.6",
     "github-markdown-css": "^5.0.0",
     "highlight.js": "^11.3.1",

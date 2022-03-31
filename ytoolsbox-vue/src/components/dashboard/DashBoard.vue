@@ -71,7 +71,7 @@
             <el-progress :text-inside="true" :stroke-width="26" :percentage="scope.row.progress"></el-progress>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="150">
+        <el-table-column label="操作" align="center" width="180">
           <template slot-scope="scope">
             <!-- 取消任务 -->
             <el-tooltip
@@ -87,6 +87,22 @@
                 circle
                 @click="cancelTask(scope.row.id)"
                 :disabled="scope.row.isDone"
+              ></el-button>
+            </el-tooltip>
+            <!-- 再次执行 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="再次执行任务"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="success"
+                icon="el-icon-refresh-left"
+                circle
+                @click="restartTask(scope.row.id)"
+                :disabled="!scope.row.isDone"
               ></el-button>
             </el-tooltip>
             <!-- 任务详情 -->

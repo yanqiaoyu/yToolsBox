@@ -101,7 +101,7 @@
                 type="success"
                 icon="el-icon-refresh-left"
                 circle
-                @click="restartTask(scope.row.id)"
+                @click="RestartTask(scope.row)"
                 :disabled="!scope.row.isDone"
               ></el-button>
             </el-tooltip>
@@ -275,7 +275,14 @@ export default {
       this.configIDList = []
     },
     // 取消任务
-    CancelTask() {},
+    CancelTask() {
+      console.log('取消任务')
+    },
+    // 重新执行任务
+    RestartTask(row) {
+      console.log('重新执行任务')
+      console.log(row)
+    },
     // 打开新增任务的对话框
     openDialog() {
       // 清空Cascader的选中条目
@@ -284,6 +291,7 @@ export default {
       // 打开的时候，请求工具以及对应的工具配置
       this.GetCascaderList()
     },
+    // 打开清除任务的对话框
     openClearTaskDialog() {
       this.$confirm('此操作将删除所有已完成任务, 是否继续?', '提示', {
         confirmButtonText: '确定',

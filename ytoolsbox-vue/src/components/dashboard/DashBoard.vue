@@ -56,11 +56,7 @@
         <el-table-column prop="toolConfigName" label="选择的配置"></el-table-column>
         <el-table-column label="新建时间" align="center" width="200">
           <!-- <template slot-scope="scope">{{ scope.row.addTime | formatDate }}</template> -->
-          <template slot-scope="scope">
-            {{
-            FomatDate(scope.row.CreatedAt)
-            }}
-          </template>
+          <template slot-scope="scope">{{ FomatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column label="完成时间" align="center" width="200">
           <template slot-scope="scope">
@@ -116,7 +112,7 @@
       <el-dialog
         title="添加任务"
         :visible.sync="dialogVisible"
-        width="30%"
+        width="550px"
         :close-on-click-modal="false"
         @close="closeDialog"
         v-loading="loading"
@@ -326,4 +322,5 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+</style>

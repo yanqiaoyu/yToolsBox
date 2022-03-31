@@ -19,19 +19,13 @@
               @clear="GetToolConfig"
               @change="GetToolConfig"
             >
-              <el-button
-                slot="append"
-                icon="el-icon-search"
-                @click="GetToolConfig"
-              ></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="GetToolConfig"></el-button>
             </el-input>
           </el-col>
 
           <!-- 这个列里面放的是添加配置的框 -->
           <el-col :span="6">
-            <el-button type="primary" @click="showAddConfigDialog"
-              >添加配置</el-button
-            >
+            <el-button type="primary" @click="showAddConfigDialog">添加配置</el-button>
           </el-col>
         </el-row>
         <!-- 分割线 -->
@@ -40,21 +34,9 @@
         <!-- 工具配置展示区 -->
         <el-table :data="allConfigForm" stripe border style="width: 100%">
           <!-- 只要添加了type=index，就能序号列 -->
-          <el-table-column
-            type="index"
-            label="序号"
-            width="100"
-          ></el-table-column>
-          <el-table-column
-            prop="toolConfigName"
-            label="配置名称"
-            width="450"
-          ></el-table-column>
-          <el-table-column
-            prop="toolConfigDesc"
-            label="配置描述"
-            width="797"
-          ></el-table-column>
+          <el-table-column type="index" label="序号" width="100"></el-table-column>
+          <el-table-column prop="toolConfigName" label="配置名称" width="450"></el-table-column>
+          <el-table-column prop="toolConfigDesc" label="配置描述" width="797"></el-table-column>
           <el-table-column label="操作" width="300" align="center">
             <template slot-scope="scope">
               <!-- 编辑 -->
@@ -87,7 +69,7 @@
           :total="total"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="工具评价"> 工具评价 </el-tab-pane>
+      <el-tab-pane label="工具评价">工具评价</el-tab-pane>
     </el-tabs>
 
     <!-- 查看配置详情的对话框 -->
@@ -120,11 +102,7 @@
         </el-form-item>
         <el-form-item label="工具类型" prop="toolType">
           <!-- 选择工具类型下拉框 -->
-          <el-select
-            disabled
-            v-model="editConfigForm.toolType"
-            placeholder="请选择工具类型"
-          >
+          <el-select disabled v-model="editConfigForm.toolType" placeholder="请选择工具类型">
             <el-option label="容器化工具" value="container"></el-option>
             <el-option label="脚本工具" value="script"></el-option>
           </el-select>
@@ -133,11 +111,7 @@
         <!-- 选择了脚本工具，出现这个 -->
         <div v-if="editConfigForm.toolType == 'script'">
           <el-form-item label="脚本名称" prop="toolScriptName">
-            <el-input
-              :disabled="true"
-              v-model="editConfigForm.toolScriptName"
-              placeholder="脚本名称"
-            ></el-input>
+            <el-input :disabled="true" v-model="editConfigForm.toolScriptName" placeholder="脚本名称"></el-input>
           </el-form-item>
           <!-- python版本选择器 -->
           <el-form-item
@@ -361,8 +335,7 @@
           type="primary"
           @click="confirmEdit"
           :disabled="disableEditDefaultConfig(editConfigForm.toolConfigName)"
-          >确认修改</el-button
-        >
+        >确认修改</el-button>
       </span>
     </el-dialog>
 
@@ -390,11 +363,7 @@
         </el-form-item>
         <el-form-item label="工具类型" prop="toolType">
           <!-- 选择工具类型下拉框 -->
-          <el-select
-            v-model="addConfigForm.toolType"
-            placeholder="请选择工具类型"
-            disabled
-          >
+          <el-select v-model="addConfigForm.toolType" placeholder="请选择工具类型" disabled>
             <el-option label="容器化工具" value="container"></el-option>
             <el-option label="脚本工具" value="script"></el-option>
           </el-select>
@@ -403,11 +372,7 @@
         <!-- 选择了脚本工具，出现这个 -->
         <div v-if="addConfigForm.toolType == 'script'">
           <el-form-item label="脚本名称" prop="toolScriptName">
-            <el-input
-              :disabled="true"
-              v-model="addConfigForm.toolScriptName"
-              placeholder="脚本名称"
-            ></el-input>
+            <el-input :disabled="true" v-model="addConfigForm.toolScriptName" placeholder="脚本名称"></el-input>
           </el-form-item>
           <!-- python版本选择器 -->
           <el-form-item
@@ -529,55 +494,31 @@
         <!-- 远程执行，需要填写远程信息 -->
         <div v-if="addConfigForm.toolExecuteLocation == 'remote'">
           <el-form-item label="SSH IP地址" prop="toolRemoteIP">
-            <el-input
-              v-model="addConfigForm.toolRemoteIP"
-              placeholder="远程环境的IP"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteIP" placeholder="远程环境的IP"></el-input>
           </el-form-item>
           <el-form-item label="SSH端口" prop="toolRemoteSSH_Port">
-            <el-input
-              v-model="addConfigForm.toolRemoteSSH_Port"
-              placeholder="远程环境的端口"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteSSH_Port" placeholder="远程环境的端口"></el-input>
           </el-form-item>
           <el-form-item label="SSH账号" prop="toolRemoteSSH_Account">
-            <el-input
-              v-model="addConfigForm.toolRemoteSSH_Account"
-              placeholder="远程SSH账号"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteSSH_Account" placeholder="远程SSH账号"></el-input>
           </el-form-item>
           <el-form-item label="SSH密码" prop="toolRemoteSSH_Password">
-            <el-input
-              v-model="addConfigForm.toolRemoteSSH_Password"
-              placeholder="远程SSH密码"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteSSH_Password" placeholder="远程SSH密码"></el-input>
           </el-form-item>
         </div>
         <!-- 本地执行，需要填写本机信息 -->
         <div v-else-if="addConfigForm.toolExecuteLocation == 'local'">
           <el-form-item label="本机IP地址" prop="toolRemoteIP">
-            <el-input
-              v-model="addConfigForm.toolRemoteIP"
-              placeholder="本机的IP地址"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteIP" placeholder="本机的IP地址"></el-input>
           </el-form-item>
           <el-form-item label="本机SSH端口" prop="toolRemoteSSH_Port">
-            <el-input
-              v-model="addConfigForm.toolRemoteSSH_Port"
-              placeholder="本机的端口"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteSSH_Port" placeholder="本机的端口"></el-input>
           </el-form-item>
           <el-form-item label="本机SSH账号" prop="toolRemoteSSH_Account">
-            <el-input
-              v-model="addConfigForm.toolRemoteSSH_Account"
-              placeholder="本机的SSH账号"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteSSH_Account" placeholder="本机的SSH账号"></el-input>
           </el-form-item>
           <el-form-item label="本机SSH密码" prop="toolRemoteSSH_Password">
-            <el-input
-              v-model="addConfigForm.toolRemoteSSH_Password"
-              placeholder="本机的SSH密码"
-            ></el-input>
+            <el-input v-model="addConfigForm.toolRemoteSSH_Password" placeholder="本机的SSH密码"></el-input>
           </el-form-item>
         </div>
       </el-form>
@@ -619,9 +560,9 @@ export default {
             min: 1,
             max: 20,
             message: '长度在 2 到 20 个字符',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { validator: checkConfigName, trigger: 'blur' }
+          { validator: checkConfigName, trigger: 'blur' },
         ],
         toolConfigDesc: [
           { required: true, message: '请输入配置描述', trigger: 'blur' },
@@ -629,47 +570,47 @@ export default {
             min: 1,
             max: 50,
             message: '长度在 1 到 50 个字符',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteIP: [
-          { required: true, message: '请填写远程环境的IP', trigger: 'blur' }
+          { required: true, message: '请填写远程环境的IP', trigger: 'blur' },
         ],
         toolRemoteSSH_Port: [
           {
             required: true,
             message: '请填写远程环境的SSH端口',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Account: [
           {
             required: true,
             message: '请填写远程环境的SSH账号',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Password: [
           {
             required: true,
             message: '请填写远程环境的SSH密码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolPythonVersion: [
           {
             required: true,
             message: '请选择Python解释器版本',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolShellVersion: [
           {
             required: true,
             message: '请选择Shell解释器版本',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       // 编辑配置的对话框可见度操控
       editToolConfigVisible: false,
@@ -692,7 +633,7 @@ export default {
         toolRemoteSSH_Account: '',
         toolRemoteSSH_Password: '',
         toolPythonVersion: '',
-        toolShellVersion: ''
+        toolShellVersion: '',
       },
       // 新增配置的表单验证规则
       addConfigFormRule: {
@@ -702,9 +643,9 @@ export default {
             min: 1,
             max: 20,
             message: '长度在 2 到 20 个字符',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { validator: checkConfigName, trigger: 'blur' }
+          { validator: checkConfigName, trigger: 'blur' },
         ],
         toolConfigDesc: [
           { required: true, message: '请输入配置描述', trigger: 'blur' },
@@ -712,50 +653,50 @@ export default {
             min: 1,
             max: 50,
             message: '长度在 1 到 50 个字符',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteIP: [
-          { required: true, message: '请填写远程环境的IP', trigger: 'blur' }
+          { required: true, message: '请填写远程环境的IP', trigger: 'blur' },
         ],
         toolRemoteSSH_Port: [
           {
             required: true,
             message: '请填写远程环境的SSH端口',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Account: [
           {
             required: true,
             message: '请填写远程环境的SSH账号',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Password: [
           {
             required: true,
             message: '请填写远程环境的SSH密码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolPythonVersion: [
           {
             required: true,
             message: '请选择Python解释器版本',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolShellVersion: [
           {
             required: true,
             message: '请选择Shell解释器版本',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       // 查询配置信息的请求body
-      queryInfo: { query: '', pagenum: 1, pagesize: 10 }
+      queryInfo: { query: '', pagenum: 1, pagesize: 10 },
     }
   },
   computed: {
@@ -786,7 +727,7 @@ export default {
         toolScriptPath,
         toolOptions,
         toolPythonVersion,
-        toolShellVersion
+        toolShellVersion,
       } = this.editConfigForm
       // console.log(toolPythonVersion, toolShellVersion)
       if (toolPythonVersion) {
@@ -836,7 +777,7 @@ export default {
         toolScriptPath,
         toolOptions,
         toolPythonVersion,
-        toolShellVersion
+        toolShellVersion,
       } = this.addConfigForm
       // console.log(toolPythonVersion, toolShellVersion)
       if (toolPythonVersion) {
@@ -858,7 +799,7 @@ export default {
       }
       console.log(toolRunCMD)
       return toolRunCMD
-    }
+    },
   },
   created() {
     this.toolID = this.$route.query.toolID
@@ -873,7 +814,7 @@ export default {
       const { data: res } = await this.$http.get(
         'tools/config/' + this.toolID,
         {
-          params: this.queryInfo
+          params: this.queryInfo,
         }
       )
       this.allConfigForm = res.data.toolsConfig
@@ -904,7 +845,7 @@ export default {
     },
     // 确认修改配置
     confirmEdit() {
-      this.$refs.editConfigForm.validate(async valid => {
+      this.$refs.editConfigForm.validate(async (valid) => {
         // console.log(valid)
         if (valid) {
           const tmpVar = { ...this.editConfigForm }
@@ -945,7 +886,7 @@ export default {
       this.$confirm('此操作将永久删除该配置, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       })
         .then(async () => {
           // console.log(id)
@@ -960,7 +901,7 @@ export default {
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消删除',
           })
         })
     },
@@ -973,21 +914,26 @@ export default {
       // 脚本名称不允许修改
       this.addConfigForm.toolScriptName = this.allConfigForm[0].toolScriptName
       // 镜像名称不允许修改
-      this.addConfigForm.toolDockerImageName = this.allConfigForm[0].toolDockerImageName
+      this.addConfigForm.toolDockerImageName =
+        this.allConfigForm[0].toolDockerImageName
       // 脚本执行位置不允许修改
-      this.addConfigForm.toolExecuteLocation = this.allConfigForm[0].toolExecuteLocation
+      this.addConfigForm.toolExecuteLocation =
+        this.allConfigForm[0].toolExecuteLocation
       // 脚本远程路径不允许修改
       this.addConfigForm.toolScriptPath = this.allConfigForm[0].toolScriptPath
       // 解释器类型允许修改，但是需要给个初始值
       if (this.allConfigForm[0].toolPythonVersion) {
-        this.addConfigForm.toolPythonVersion = this.allConfigForm[0].toolPythonVersion
+        this.addConfigForm.toolPythonVersion =
+          this.allConfigForm[0].toolPythonVersion
       } else if (this.allConfigForm[0].toolShellVersion) {
-        this.addConfigForm.toolShellVersion = this.allConfigForm[0].toolShellVersion
+        this.addConfigForm.toolShellVersion =
+          this.allConfigForm[0].toolShellVersion
       }
       // 最终执行语句赋值
       // this.addConfigForm.toolRunCMD = this.allConfigForm[0].toolRunCMD
       // 本地位置不允许修改
-      this.addConfigForm.toolScriptLocalPath = this.allConfigForm[0].toolScriptLocalPath
+      this.addConfigForm.toolScriptLocalPath =
+        this.allConfigForm[0].toolScriptLocalPath
     },
     // 关闭新增配置的对话框
     closeAddConfigDialog() {
@@ -996,7 +942,7 @@ export default {
     },
     // 确认新增配置
     confirmAddConfig() {
-      this.$refs.addConfigForm.validate(async valid => {
+      this.$refs.addConfigForm.validate(async (valid) => {
         // console.log(valid)
         if (valid) {
           this.addConfigForm.toolID = this.toolID
@@ -1040,14 +986,15 @@ export default {
       // console.log(`每页 ${val} 条`)
       this.queryInfo.pagesize = val
       this.GetToolConfig()
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
 .el-form-item {
   margin-bottom: 22px;
-  width: 450px;
+  // width: 450px;
+  margin-right: 55px;
 }
 </style>

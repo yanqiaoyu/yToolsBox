@@ -263,7 +263,7 @@ export default {
       })
       if (res.meta.status_code !== 200) {
         this.loading = false
-        return this.$message.error('获取配置信息失败')
+        return this.$message.error('创建任务失败')
       }
       this.loading = false
       this.$message.success('新建任务成功')
@@ -279,9 +279,31 @@ export default {
       console.log('取消任务')
     },
     // 重新执行任务
-    RestartTask(row) {
+    async RestartTask(row) {
+      this.loading = true
+
       console.log('重新执行任务')
-      console.log(row)
+
+      if (row.length == 0) {
+        this.loading = false
+        return this.$message.error('未选择配置信息,无法重新执行任务')
+      }
+
+      const { data: res } = await this.$http.post('tasks/restart', {
+        toolName: row.toolName,
+        toolConfigName: row.toolConfigName,
+      })
+
+      if (res.meta.status_code !== 200) {
+        this.loading = false
+        return this.$message.error('重新执行任务失败')
+      }
+      console.log('重新执行任务的结果', res)
+
+      this.GetTasksList()
+
+      this.loading = false
+      this.$message.success('重新执行任务成功')
     },
     // 打开新增任务的对话框
     openDialog() {

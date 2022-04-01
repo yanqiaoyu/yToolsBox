@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"main/common"
 	"main/dao"
 	"main/dto"
@@ -24,11 +25,11 @@ func PostNewTask(ctx *gin.Context) {
 	// 这里获取到的PostNewTaskParam是一个字符串形式的数组，所以还需要处理
 	PostNewTaskParam.ConfigList = strings.TrimPrefix(PostNewTaskParam.ConfigList, "[")
 	PostNewTaskParam.ConfigList = strings.TrimSuffix(PostNewTaskParam.ConfigList, "]")
-	// log.Println(PostNewTaskParam.ConfigList)
+	log.Println(PostNewTaskParam.ConfigList)
 
 	configIDList := strings.Split(PostNewTaskParam.ConfigList, ",")
 
-	// log.Println(configIDList)
+	log.Println(configIDList)
 	// 获取每一个配置ID，新增一个任务，新增一个任务进度条目
 	for i := 0; i < len(configIDList); i++ {
 		// 从库里面把这个配置ID的全部信息查出来传给service
@@ -91,5 +92,35 @@ func DeleteAllTask(ctx *gin.Context) {
 
 	// 返回
 	Meta := dto.SuccessResponseMeta{Message: "清空所有任务成功", StatusCode: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+}
+
+// 重新开始一个任务
+func PostRestartTask(ctx *gin.Context) {
+	db := common.GetDB()
+	PostRestartTaskParam := dto.PostRestartTaskDTOReq{}
+
+	if util.ResolveParam(ctx, &PostRestartTaskParam) != nil {
+		return
+	}
+
+	configID := dao.SelectConfigIDByToolNameAndToolConfigName(db, PostRestartTaskParam)
+	log.Print(configID)
+
+	// 从库里面把这个配置ID的全部信息查出来传给service
+	configList := dao.SelectConfigByToolID(db, configID)
+
+	// 新增一个任务条目
+	TaskID := dao.InsertTaskItem(db, configList)
+
+	// 线程间通信需要用到的chan
+	resultChannel := make(chan model.Tasks, 10)
+	// 用于接收业务执行结果并更新至数据库
+	go dao.UpdateTaskProgress(db, resultChannel, TaskID)
+	// 用于关键业务的执行
+	go service.CreateNewTaskService(configList, resultChannel)
+
+	// 返回
+	Meta := dto.SuccessResponseMeta{Message: "重建任务成功", StatusCode: 200}
 	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }

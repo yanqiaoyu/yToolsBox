@@ -39,6 +39,11 @@ type PostNewTaskDTOReq struct {
 	ConfigList string `form:"ConfigList" json:"ConfigList" binding:"required"`
 }
 
+type PostRestartTaskDTOReq struct {
+	ToolName       string `form:"toolName" json:"toolName" binding:"required"`
+	ToolConfigName string `form:"toolConfigName" json:"toolConfigName" binding:"required"`
+}
+
 type GetAllTaskItemDTOReq struct {
 	Query    string `json:"query" form:"query" `
 	Pagenum  int    `json:"pagenum" form:"pagenum" binding:"required"`

@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"log"
 	"main/dto"
 	"main/model"
@@ -99,4 +100,17 @@ func DeleteAllTask(db *gorm.DB) {
 	// 根据gorm的官方文档，如果在没有任何条件的情况下执行批量删除，GORM 不会执行该操作
 	// 必须加一些条件
 	db.Unscoped().Where("\"isDone\" = true").Delete(&model.Tasks{})
+}
+
+// 根据工具名称和配置名称查询出配置ID
+func SelectConfigIDByToolNameAndToolConfigName(db *gorm.DB, obj dto.PostRestartTaskDTOReq) string {
+	type Result struct {
+		ID string
+	}
+
+	var result Result
+
+	db.Debug().Raw(fmt.Sprintf("select tc.id from tool_configs tc LEFT JOIN tools t on tc.\"toolID\" = t.id where tc.\"toolConfigName\" = '%s' and t.\"toolName\" = '%s';", obj.ToolConfigName, obj.ToolName)).Scan(&result)
+	// log.Println(result)
+	return result.ID
 }

@@ -71,7 +71,7 @@
             <el-progress :text-inside="true" :stroke-width="26" :percentage="scope.row.progress"></el-progress>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="150">
+        <el-table-column label="操作" align="center" width="180">
           <template slot-scope="scope">
             <!-- 取消任务 -->
             <el-tooltip
@@ -87,6 +87,22 @@
                 circle
                 @click="cancelTask(scope.row.id)"
                 :disabled="scope.row.isDone"
+              ></el-button>
+            </el-tooltip>
+            <!-- 再次执行 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="再次执行任务"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="success"
+                icon="el-icon-refresh-left"
+                circle
+                @click="RestartTask(scope.row)"
+                :disabled="!scope.row.isDone"
               ></el-button>
             </el-tooltip>
             <!-- 任务详情 -->
@@ -247,7 +263,7 @@ export default {
       })
       if (res.meta.status_code !== 200) {
         this.loading = false
-        return this.$message.error('获取配置信息失败')
+        return this.$message.error('创建任务失败')
       }
       this.loading = false
       this.$message.success('新建任务成功')
@@ -259,7 +275,36 @@ export default {
       this.configIDList = []
     },
     // 取消任务
-    CancelTask() {},
+    CancelTask() {
+      console.log('取消任务')
+    },
+    // 重新执行任务
+    async RestartTask(row) {
+      this.loading = true
+
+      console.log('重新执行任务')
+
+      if (row.length == 0) {
+        this.loading = false
+        return this.$message.error('未选择配置信息,无法重新执行任务')
+      }
+
+      const { data: res } = await this.$http.post('tasks/restart', {
+        toolName: row.toolName,
+        toolConfigName: row.toolConfigName,
+      })
+
+      if (res.meta.status_code !== 200) {
+        this.loading = false
+        return this.$message.error('重新执行任务失败')
+      }
+      console.log('重新执行任务的结果', res)
+
+      this.GetTasksList()
+
+      this.loading = false
+      this.$message.success('重新执行任务成功')
+    },
     // 打开新增任务的对话框
     openDialog() {
       // 清空Cascader的选中条目
@@ -268,6 +313,7 @@ export default {
       // 打开的时候，请求工具以及对应的工具配置
       this.GetCascaderList()
     },
+    // 打开清除任务的对话框
     openClearTaskDialog() {
       this.$confirm('此操作将删除所有已完成任务, 是否继续?', '提示', {
         confirmButtonText: '确定',

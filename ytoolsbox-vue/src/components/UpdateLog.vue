@@ -16,6 +16,16 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2022/04/01" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成【需求】对于已完成的任务，应该把‘取消任务’的按钮，改成‘再执行一次’ #26
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/03/31" placement="top">
         <el-card>
           <h4>更新内容</h4>

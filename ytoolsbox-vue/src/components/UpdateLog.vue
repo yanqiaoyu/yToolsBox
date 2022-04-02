@@ -16,6 +16,16 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2022/04/02" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 完成【需求】当想在某个工具下新增配置时, 应该允许从已有的配置中duplicate一下 #38
+            <br />
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/04/01" placement="top">
         <el-card>
           <h4>更新内容</h4>

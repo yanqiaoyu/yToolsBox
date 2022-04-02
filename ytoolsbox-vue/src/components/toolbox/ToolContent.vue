@@ -39,21 +39,53 @@
           <el-table-column prop="toolConfigDesc" label="配置描述" width="797"></el-table-column>
           <el-table-column label="操作" width="300" align="center">
             <template slot-scope="scope">
-              <!-- 编辑 -->
-              <el-button
-                type="primary"
-                icon="el-icon-edit"
-                circle
-                @click="showEditToolConfig(scope.row.id)"
-              ></el-button>
-              <!-- 删除 -->
-              <el-button
-                :disabled="scope.row.toolConfigName === '默认配置'"
-                type="danger"
-                icon="el-icon-delete"
-                circle
-                @click="deleteToolConfig(scope.row.id)"
-              ></el-button>
+              <!-- 编辑配置 -->
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="编辑配置"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  circle
+                  @click="showEditToolConfig(scope.row.id)"
+                ></el-button>
+              </el-tooltip>
+
+              <!-- 复制配置 -->
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="复制配置"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  type="success"
+                  icon="el-icon-document-copy"
+                  circle
+                  @click="duplicateConfig(scope.row)"
+                ></el-button>
+              </el-tooltip>
+              <!-- 删除配置 -->
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="删除配置"
+                placement="top"
+                :enterable="false"
+              >
+                <el-button
+                  :disabled="scope.row.toolConfigName === '默认配置'"
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  @click="deleteToolConfig(scope.row.id)"
+                ></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -875,6 +907,26 @@ export default {
 
       // 后续要发送请求确认修改
     },
+    // 复制配置
+    async duplicateConfig(row) {
+      const tmpVar = { ...row }
+      // 为了复用新增配置这个功能, 我们删掉里面的id(工具ID)
+      delete tmpVar.id
+      // 修改一下配置名称与配置描述
+      tmpVar.toolConfigName += '-副本'
+      tmpVar.toolConfigDesc += '-副本'
+
+      // 然后就直接复用新增配置的代码
+      const { data: res } = await this.$http.post(
+        'tools/config/' + tmpVar.toolID,
+        qs.stringify(tmpVar)
+      )
+      // 复制配置失败
+      if (res.meta.status_code !== 200)
+        return this.$message.error('复制配置失败')
+      this.$message.success('复制成功')
+      this.GetToolConfig()
+    },
     // 封装了一下针对默认配置禁止修改的条件
     disableEditDefaultConfig(configName) {
       if (configName === '默认配置') {
@@ -954,19 +1006,19 @@ export default {
             tmpVar.toolRunCMD = this.addFinalCMD
           }
 
-          // console.log('tmpVar', tmpVar)
-          // console.log('addConfigForm', this.addConfigForm)
+          console.log('tmpVar', tmpVar)
+          console.log('addConfigForm', this.addConfigForm)
 
-          // 发送请求确认修改
+          // 发送请求确认新增配置
           const { data: res } = await this.$http.post(
             'tools/config/' + this.toolID,
             qs.stringify(tmpVar)
           )
           // console.log(res)
 
-          // 获取用户失败
+          // 添加配置失败
           if (res.meta.status_code !== 200)
-            return this.$message.error('获取用户信息失败')
+            return this.$message.error('添加配置失败')
           this.$message.success('添加成功')
           this.GetToolConfig()
           this.addToolConfigVisible = false

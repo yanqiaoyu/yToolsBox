@@ -20,8 +20,11 @@
         <el-card>
           <h4>更新内容</h4>
           <p>
-            1. 完成【需求】当想在某个工具下新增配置时, 应该允许从已有的配置中duplicate一下 #38
-            <br />
+            <el-link
+              href="https://github.com/yanqiaoyu/yToolsBox/issues/38"
+              target="_blank"
+            >1. 完成【需求】当想在某个工具下新增配置时, 应该允许从已有的配置中duplicate一下</el-link>
+            <br />现在在工具的配置界面,可以直接从已有的配置复制一条新的配置出来了
           </p>
         </el-card>
       </el-timeline-item>
@@ -30,7 +33,7 @@
         <el-card>
           <h4>更新内容</h4>
           <p>
-            1. 完成【需求】对于已完成的任务，应该把‘取消任务’的按钮，改成‘再执行一次’ #26
+            1. 完成【需求】对于已完成的任务，应该把'取消任务'的按钮，改成'再执行一次' #26
             <br />
           </p>
         </el-card>

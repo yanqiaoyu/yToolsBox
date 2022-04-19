@@ -81,13 +81,15 @@
               placement="top"
               :enterable="false"
             >
-              <el-button
-                type="danger"
-                icon="el-icon-close"
-                circle
-                @click="cancelTask(scope.row.id)"
-                :disabled="scope.row.isDone"
-              ></el-button>
+              <a style="margin-right:10px; padding-top:10px">
+                <el-button
+                  type="danger"
+                  icon="el-icon-close"
+                  circle
+                  @click="cancelTask(scope.row.id)"
+                  :disabled="scope.row.isDone"
+                ></el-button>
+              </a>
             </el-tooltip>
             <!-- 再次执行 -->
             <el-tooltip

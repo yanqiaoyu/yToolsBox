@@ -146,9 +146,9 @@ func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
 func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.Tasks) error {
 	log.Println(config)
 
-	// 结果的缓存
+	// 存放任务执行结果的缓存
 	buf := bytes.Buffer{}
-	// 1.在哪里执行?
+	// Task在工具盒所在的机器上执行
 	if config.ToolExecuteLocation == "local" {
 		log.Println(">>> 直接本地执行")
 		buf.WriteString(">>> 直接本地执行\r\n")
@@ -232,7 +232,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 			resultChannel <- model.Tasks{Progress: 100, ReturnContent: buf.String(), IsDone: true}
 		}
 
-	} else if config.ToolExecuteLocation == "remote" {
+	} else if config.ToolExecuteLocation == "remote" { //在别的远程环境执行
 		log.Println(">>> 进入远程执行")
 		buf.WriteString(">>> 进入远程执行\r\n")
 		resultChannel <- model.Tasks{Progress: 25, ReturnContent: buf.String()}
@@ -316,12 +316,6 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 	// 关闭resultChannel
 	close(resultChannel)
 	return nil
-
-	// log.Print(util.Struct2MapViaJson(config))
-	// //本地文件上传到服务器
-	// cliConf.Upload(`D:\settings.txt`, `/tmp/haha.go`) // /root/haha.go
-	// //从服务器中下载文件
-	// cliConf.Download(`/root/1.py`, `D:\go\1.py`) //文件下载完毕
 }
 
 func SaveScriptFile(ctx *gin.Context) (string, string, error) {

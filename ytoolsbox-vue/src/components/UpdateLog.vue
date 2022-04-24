@@ -16,6 +16,19 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2022/04/24" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            <el-link
+              href="https://github.com/yanqiaoyu/yToolsBox/issues/42"
+              target="_blank"
+            >1. 完成【需求】允许删除任务执行的结果</el-link>
+            <br />现在在任务结果界面,可以把执行失败的任务结果删除了,看着顺眼多了
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/04/02" placement="top">
         <el-card>
           <h4>更新内容</h4>

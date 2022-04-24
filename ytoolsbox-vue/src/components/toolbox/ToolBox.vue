@@ -43,6 +43,13 @@
           <el-button type="primary" @click="addTool">添加工具</el-button>
           <el-button type="danger" @click="clearAllTool">清除所有工具</el-button>
         </el-col>
+
+        <el-col :span="6">
+          <el-radio-group v-model="tabDefault" style="margin-bottom: 30px;">
+            <el-radio-button label="卡片模式">卡片模式</el-radio-button>
+            <el-radio-button label="列表模式">列表模式</el-radio-button>
+          </el-radio-group>
+        </el-col>
       </el-row>
 
       <!-- 分割线 -->
@@ -69,6 +76,7 @@ export default {
       queryInfo: {
         query: '',
       },
+      tabDefault: '卡片模式',
     }
   },
   created() {
@@ -130,4 +138,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.switch_button {
+  display: inline-block;
+}
 </style>

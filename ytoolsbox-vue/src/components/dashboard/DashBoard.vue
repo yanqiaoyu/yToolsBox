@@ -41,7 +41,7 @@
         <!-- 这个列里面放的是添加按钮 -->
         <el-col :span="6">
           <el-button type="primary" @click="openDialog">新建任务</el-button>
-          <el-button type="danger" @click="openClearTaskDialog">清空任务</el-button>
+          <el-button type="danger" @click="openClearTaskDialog">清空所有任务</el-button>
         </el-col>
       </el-row>
 
@@ -73,6 +73,24 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="180">
           <template slot-scope="scope">
+            <!-- 删除任务 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="删除任务"
+              placement="top"
+              :enterable="false"
+              v-if="scope.row.isDone"
+            >
+              <a v-if="scope.row.isDone" style="margin-right:10px; padding-top:10px">
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  @click="DeleteTask(scope.row.ID)"
+                ></el-button>
+              </a>
+            </el-tooltip>
             <!-- 取消任务 -->
             <el-tooltip
               class="item"
@@ -80,13 +98,14 @@
               content="取消任务"
               placement="top"
               :enterable="false"
+              v-if="!scope.row.isDone"
             >
-              <a style="margin-right:10px; padding-top:10px">
+              <a v-if="!scope.row.isDone" style="margin-right:10px; padding-top:10px">
                 <el-button
                   type="danger"
                   icon="el-icon-close"
                   circle
-                  @click="cancelTask(scope.row.id)"
+                  @click="CancelTask(scope.row.ID)"
                   :disabled="scope.row.isDone"
                 ></el-button>
               </a>
@@ -99,13 +118,15 @@
               placement="top"
               :enterable="false"
             >
-              <el-button
-                type="success"
-                icon="el-icon-refresh-left"
-                circle
-                @click="RestartTask(scope.row)"
-                :disabled="!scope.row.isDone"
-              ></el-button>
+              <a style="margin-right:10px; padding-top:10px">
+                <el-button
+                  type="success"
+                  icon="el-icon-refresh-left"
+                  circle
+                  @click="RestartTask(scope.row)"
+                  :disabled="!scope.row.isDone"
+                ></el-button>
+              </a>
             </el-tooltip>
             <!-- 任务详情 -->
             <el-tooltip
@@ -279,6 +300,39 @@ export default {
     // 取消任务
     CancelTask() {
       console.log('取消任务')
+    },
+    // 删除任务
+    DeleteTask(TaskID) {
+      console.log('删除任务:', TaskID)
+      this.$confirm('确定删除此任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          // console.log(id)
+          const { data: res } = await this.$http.delete('tasks/' + TaskID)
+
+          if (res.meta.status_code == 200) {
+            this.GetTasksList()
+            return this.$message({
+              type: 'success',
+              message: '删除成功!',
+            })
+          } else {
+            this.GetTasksList()
+            return this.$message({
+              type: 'fail',
+              message: '删除失败!',
+            })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除',
+          })
+        })
     },
     // 重新执行任务
     async RestartTask(row) {

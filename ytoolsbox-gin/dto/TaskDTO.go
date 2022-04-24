@@ -35,6 +35,10 @@ type CascaderSonNode struct {
 	Label string `json:"label" gorm:"column:toolConfigName"`
 }
 
+type DeleteSpecifiedTaskReq struct {
+	TaskID uint `uri:"taskID" binding:"required"`
+}
+
 type PostNewTaskDTOReq struct {
 	ConfigList string `form:"ConfigList" json:"ConfigList" binding:"required"`
 }

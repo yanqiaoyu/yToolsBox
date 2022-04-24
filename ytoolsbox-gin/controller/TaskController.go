@@ -95,6 +95,23 @@ func DeleteAllTask(ctx *gin.Context) {
 	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }
 
+// 删除特定任务
+func DeleteSpecifiedTask(ctx *gin.Context) {
+	db := common.GetDB()
+
+	DeleteSpecifiedTaskReq := dto.DeleteSpecifiedTaskReq{}
+
+	if util.ResolveURI(ctx, &DeleteSpecifiedTaskReq) != nil {
+		return
+	}
+
+	dao.DeleteTaskByTaskID(db, DeleteSpecifiedTaskReq.TaskID)
+
+	// 返回
+	Meta := dto.SuccessResponseMeta{Message: "清空任务成功", StatusCode: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+}
+
 // 重新开始一个任务
 func PostRestartTask(ctx *gin.Context) {
 	db := common.GetDB()

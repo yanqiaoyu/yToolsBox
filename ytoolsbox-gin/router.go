@@ -72,8 +72,10 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 		v1.GET("/tasks/cascader", controller.GetCascader)
 		// 查询所有的TaskItem(任务进度)
 		v1.GET("/tasks", controller.GetTaskItem)
-		// 查询所有的TaskItem(任务进度)
+		// 清空所有任务
 		v1.DELETE("/tasks", controller.DeleteAllTask)
+		// 删除特定任务
+		v1.DELETE("/tasks/:taskID", controller.DeleteSpecifiedTask)
 		// 重新开始执行一个任务
 		v1.POST("/tasks/restart", controller.PostRestartTask)
 	}

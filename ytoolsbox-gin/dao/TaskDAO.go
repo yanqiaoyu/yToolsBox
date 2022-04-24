@@ -102,6 +102,11 @@ func DeleteAllTask(db *gorm.DB) {
 	db.Unscoped().Where("\"isDone\" = true").Delete(&model.Tasks{})
 }
 
+// 根据TaskID删除任务
+func DeleteTaskByTaskID(db *gorm.DB, taskID uint) {
+	db.Debug().Delete(&model.Tasks{}, taskID)
+}
+
 // 根据工具名称和配置名称查询出配置ID
 func SelectConfigIDByToolNameAndToolConfigName(db *gorm.DB, obj dto.PostRestartTaskDTOReq) string {
 	type Result struct {

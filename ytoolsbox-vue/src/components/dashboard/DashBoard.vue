@@ -311,7 +311,7 @@ export default {
       })
         .then(async () => {
           // console.log(id)
-          const { data: res } = await this.$http.delete('tasks/111')
+          const { data: res } = await this.$http.delete('tasks/' + TaskID)
 
           if (res.meta.status_code == 200) {
             this.GetTasksList()

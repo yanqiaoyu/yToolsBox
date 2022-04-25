@@ -130,6 +130,11 @@ func InitTaskTable(db *gorm.DB) {
 	db.AutoMigrate(&model.Tasks{})
 }
 
+// 初始化定时任务列表
+func InitCronTaskTable(db *gorm.DB) {
+	db.AutoMigrate(&model.Tasks{})
+}
+
 func GetDB() *gorm.DB {
 	return DB
 }

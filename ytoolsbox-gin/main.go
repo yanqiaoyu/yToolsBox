@@ -20,8 +20,9 @@ import (
 func main() {
 	// 1.首先初始化读取配置文件
 	InitConfig()
-	// 2.从配置文件中拿到了配置，那么可以初始化数据库了
+	// 2.从配置文件中拿到了配置，那么可以初始化数据库和定时计划了
 	common.InitDB()
+	common.InitScheduler()
 	// 3.初始化一个服务器
 	r := gin.Default()
 	r.Use(middleware.Cors())

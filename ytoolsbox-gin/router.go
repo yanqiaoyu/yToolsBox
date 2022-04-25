@@ -78,8 +78,14 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 		v1.DELETE("/tasks/:taskID", controller.DeleteSpecifiedTask)
 		// 重新开始执行一个任务
 		v1.POST("/tasks/restart", controller.PostRestartTask)
+
+		/***
+			以下是定时任务相关的路由表
+		***/
+
+		// 新建一个定时任务
+		v1.POST("/crontasks", controller.PostNewCronTask)
+
 	}
-
 	return r
-
 }

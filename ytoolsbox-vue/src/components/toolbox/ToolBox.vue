@@ -44,8 +44,8 @@
           <el-button type="danger" @click="clearAllTool">清除所有工具</el-button>
         </el-col>
 
-        <el-col :span="6">
-          <el-radio-group v-model="tabDefault" style="margin-bottom: 30px;">
+        <el-col :span="3.5" :offset="8" style="width: 260px; float: right; text-align: right;">
+          <el-radio-group v-model="tabDefault">
             <el-radio-button label="卡片模式">卡片模式</el-radio-button>
             <el-radio-button label="列表模式">列表模式</el-radio-button>
           </el-radio-group>
@@ -139,6 +139,8 @@ export default {
 
 <style lang="less" scoped>
 .switch_button {
-  display: inline-block;
+  // display: inline-block;
+  // float: right;
+  // text-align: right;
 }
 </style>

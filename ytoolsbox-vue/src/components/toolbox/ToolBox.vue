@@ -44,8 +44,9 @@
           <el-button type="danger" @click="clearAllTool">清除所有工具</el-button>
         </el-col>
 
+        <!-- 这个列里面放的是切换展示模式的按钮 -->
         <el-col :span="3.5" :offset="8" style="width: 260px; float: right; text-align: right;">
-          <el-radio-group v-model="tabDefault">
+          <el-radio-group v-model="tabDefault" @change="handleRadioClick">
             <el-radio-button label="卡片模式">卡片模式</el-radio-button>
             <el-radio-button label="列表模式">列表模式</el-radio-button>
           </el-radio-group>
@@ -55,8 +56,21 @@
       <!-- 分割线 -->
       <el-divider></el-divider>
 
-      <DisplayByCard :tools-list="toolsList" :add-tool="addTool" :to-tool-content="toToolContent"></DisplayByCard>
-      <DisplayByList></DisplayByList>
+      <!-- 卡片模式 -->
+      <DisplayByCard
+        v-if="tabDefault == '卡片模式'"
+        :tools-list="toolsList"
+        :add-tool="addTool"
+        :to-tool-content="toToolContent"
+      ></DisplayByCard>
+
+      <!-- 列表模式 -->
+      <DisplayByList
+        v-else-if="tabDefault == '列表模式'"
+        :tools-list="toolsList"
+        :add-tool="addTool"
+        :to-tool-content="toToolContent"
+      ></DisplayByList>
     </el-card>
   </div>
 </template>
@@ -83,9 +97,11 @@ export default {
     this.GetToolsList()
   },
   methods: {
+    // 添加工具,跳转页面
     addTool() {
       this.$router.push('/toolbox/add')
     },
+    // 请求所有的工具信息
     async GetToolsList() {
       const { data: res } = await this.$http.get('tools', {
         params: this.queryInfo,
@@ -133,14 +149,17 @@ export default {
         query: { toolID: tool.id, toolName: tool.toolName },
       })
     },
+    // 处理tab点击事件
+    handleRadioClick(tab) {
+      this.tabDefault = tab
+      console.log('切换到', tab)
+      console.log('现在默认模式为', this.tabDefault)
+      // 在切换的时候, 进行一次请求
+      this.GetToolsList()
+    },
   },
 }
 </script>
 
 <style lang="less" scoped>
-.switch_button {
-  // display: inline-block;
-  // float: right;
-  // text-align: right;
-}
 </style>

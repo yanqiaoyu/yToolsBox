@@ -85,6 +85,8 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 
 		// 新建一个定时任务
 		v1.POST("/crontasks", controller.PostNewCronTask)
+		// 清除所有定时任务
+		v1.DELETE("/crontasks", controller.DeleteAllCronTask)
 
 	}
 	return r

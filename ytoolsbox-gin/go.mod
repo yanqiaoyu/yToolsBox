@@ -10,6 +10,7 @@ require (
 	github.com/gin-gonic/gin v1.7.2 // indirect
 	github.com/jasonlvhit/gocron v0.0.1 // indirect
 	github.com/pkg/sftp v1.13.4
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.8.1 // indirect
 	github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77 // indirect
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect

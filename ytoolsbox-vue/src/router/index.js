@@ -7,7 +7,8 @@ import UpdateLog from '../components/UpdateLog.vue'
 import Rights from '../components/power/Rights.vue'
 import ToolBox from '../components/toolbox/ToolBox.vue'
 import About from '../components/About.vue'
-import DashBoard from '../components/dashboard/DashBoard.vue'
+import Task from '../components/task/Task.vue'
+import CronTask from '../components/task/CronTask.vue'
 import AddTool from '../components/toolbox/AddTool.vue'
 import ToolContent from '../components/toolbox/ToolContent.vue'
 Vue.use(VueRouter)
@@ -40,7 +41,8 @@ const routes = [
       { path: '/rights', component: Rights, meta: { title: '权限管理' } },
       { path: '/toolbox', component: ToolBox, meta: { title: '工具盒' } },
       { path: '/about', component: About, meta: { title: '关于' } },
-      { path: '/dashboard', component: DashBoard, meta: { title: '任务' } },
+      { path: '/task', component: Task, meta: { title: '普通任务' } },
+      { path: '/crontask', component: CronTask, meta: { title: '定时任务' } },
       { path: '/toolbox/add', component: AddTool, meta: { title: '添加工具' } },
       { path: '/toolbox/tool', component: ToolContent, meta: { title: '工具详情' } },
     ]

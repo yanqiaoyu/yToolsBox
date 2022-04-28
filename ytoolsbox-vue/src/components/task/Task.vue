@@ -18,7 +18,7 @@
     <!-- 面包屑路径 -->
     <el-breadcrumb>
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>任务</el-breadcrumb-item>
+      <el-breadcrumb-item>普通任务</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 底部背景卡片 -->
@@ -40,7 +40,7 @@
 
         <!-- 这个列里面放的是添加按钮 -->
         <el-col :span="6">
-          <el-button type="primary" @click="openDialog">新建任务</el-button>
+          <el-button type="primary" @click="openDialog">新建普通任务</el-button>
           <el-button type="danger" @click="openClearTaskDialog">清空所有任务</el-button>
         </el-col>
       </el-row>
@@ -158,21 +158,14 @@
         element-loading-text="创建任务中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"
+        destroy-on-close
       >
         <!-- 任务配置的级联选择器 -->
-        <div>
-          <span style="margin-right: 20px">选择配置</span>
-          <el-cascader
-            v-model="finalList"
-            :options="options"
-            :props="props"
-            collapse-tags
-            clearable
-            size="medium"
-            filterable
-            placeholder="搜索工具名称或配置名称"
-          ></el-cascader>
-        </div>
+        <TaskCascader
+          :final-list.sync="finalList"
+          :options="options"
+          @deliverOptions="deliverOptions"
+        ></TaskCascader>
 
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -209,13 +202,18 @@
 </template>
 
 <script>
+import TaskCascader from './Task_Cascader.vue'
+
 export default {
+  components: {
+    TaskCascader,
+  },
   data() {
     return {
       // 与级联选择器绑定的列表
       finalList: [],
       options: [],
-      props: { multiple: true },
+
       queryInfo: {
         query: '',
         // 这行属性其实就是当前在第几页
@@ -257,16 +255,6 @@ export default {
       this.tasksList = res.data.TaskItemList
       this.total = res.data.Total
     },
-    // 获取级联选择器中的信息的请求
-    async GetCascaderList() {
-      console.log('打开了工具配置窗口')
-      const { data: res } = await this.$http.get('tasks/cascader')
-      console.log('所有工具的配置如下', res)
-      if (res.meta.status_code !== 200)
-        return this.$message.error('获取配置信息失败')
-
-      this.options = res.data.CascaderList
-    },
     // 确认新增一个任务
     async PostAddTask() {
       this.loading = true
@@ -289,7 +277,7 @@ export default {
         return this.$message.error('创建任务失败')
       }
       this.loading = false
-      this.$message.success('新建任务成功')
+      this.$message.success('新建普通任务成功')
       // 成功了关闭对话框
       this.dialogVisible = false
       // 清空Cascader的选中条目
@@ -361,13 +349,15 @@ export default {
       this.loading = false
       this.$message.success('重新执行任务成功')
     },
+    // 接收子组件传过来的options
+    deliverOptions(data) {
+      this.options = data
+    },
     // 打开新增任务的对话框
     openDialog() {
       // 清空Cascader的选中条目
       this.finalList = []
       this.dialogVisible = true
-      // 打开的时候，请求工具以及对应的工具配置
-      this.GetCascaderList()
     },
     // 打开清除任务的对话框
     openClearTaskDialog() {

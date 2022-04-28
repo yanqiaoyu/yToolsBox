@@ -160,11 +160,13 @@
         element-loading-background="rgba(0, 0, 0, 0.8)"
         destroy-on-close
       >
+        <span style="margin-right: 20px">选择配置</span>
         <!-- 任务配置的级联选择器 -->
         <TaskCascader
           :final-list.sync="finalList"
           :options="options"
           @deliverOptions="deliverOptions"
+          :my-width="'400px'"
         ></TaskCascader>
 
         <span slot="footer" class="dialog-footer">

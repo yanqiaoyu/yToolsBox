@@ -1,6 +1,5 @@
 <template>
   <div class="myCasDiv">
-    <span style="margin-right: 20px">选择配置</span>
     <el-cascader
       v-model="tmpFinalList"
       :options="options"
@@ -10,6 +9,7 @@
       size="medium"
       filterable
       placeholder="搜索工具名称或配置名称"
+      :style="{width: myWidth}"
     ></el-cascader>
   </div>
 </template>
@@ -28,6 +28,12 @@ export default {
       type: Array,
       default: function () {
         return []
+      },
+    },
+    myWidth: {
+      type: String,
+      default: function () {
+        return ''
       },
     },
   },
@@ -66,5 +72,8 @@ export default {
 <style lang="less" scoped>
 .myCasDiv {
   display: inline-block;
+  .el-cascader-menu__list {
+    width: 30px !important;
+  }
 }
 </style>

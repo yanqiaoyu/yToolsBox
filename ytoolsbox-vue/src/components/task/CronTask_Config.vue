@@ -48,15 +48,20 @@
           <el-input v-model="addCronTaskForm.cronTaskDesc"></el-input>
         </el-form-item>
 
-        <el-form-item label-width="auto">
-          <TaskCascader></TaskCascader>
+        <el-form-item label="配置选择" prop="cronTaskCascader">
+          <TaskCascader
+            :my-width="'335px'"
+            :final-list.sync="finalList"
+            :options="options"
+            @deliverOptions="deliverOptions"
+          ></TaskCascader>
         </el-form-item>
       </el-form>
 
       <!-- 底部的按钮 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeCronTaskDialog">取 消</el-button>
-        <el-button type="primary" @click="confirmAddCronTask">新增配置</el-button>
+        <el-button type="primary" @click="confirmAddCronTask">新增定时任务</el-button>
       </span>
     </el-dialog>
   </div>
@@ -78,6 +83,10 @@ export default {
   },
   data() {
     return {
+      // 与级联选择器绑定的列表
+      finalList: [],
+      options: [],
+
       queryInfo: {
         // 查询字符
         query: '',
@@ -92,6 +101,8 @@ export default {
       addCronTaskForm: {
         cronTaskName: '',
         cronTaskDesc: '',
+
+        cronTaskCascader: '',
       },
       // 新增定时任务的表单验证规则
       addCronTaskFormRule: {
@@ -109,6 +120,11 @@ export default {
     }
   },
   methods: {
+    // 接收子组件传过来的options
+    deliverOptions(data) {
+      this.options = data
+    },
+
     // 打开创建定时任务的对话框
     openCreateCronTaskDialog() {
       this.addCronTaskDialogVisible = true
@@ -118,7 +134,9 @@ export default {
       this.addCronTaskDialogVisible = false
     },
     // 确认添加定时任务
-    confirmAddCronTask() {},
+    confirmAddCronTask() {
+      console.log(this.addCronTaskForm, this.finalList, this.options)
+    },
 
     // 清除所有定时任务
     openClearCronTaskDialog() {

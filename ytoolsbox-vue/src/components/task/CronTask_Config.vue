@@ -48,7 +48,7 @@
           <el-input v-model="addCronTaskForm.cronTaskDesc"></el-input>
         </el-form-item>
 
-        <el-form-item label="配置选择" prop="cronTaskCascader">
+        <el-form-item label="配置选择" prop="cronTaskFinalList">
           <TaskCascader
             :my-width="'335px'"
             :final-list.sync="finalList"
@@ -101,8 +101,7 @@ export default {
       addCronTaskForm: {
         cronTaskName: '',
         cronTaskDesc: '',
-
-        cronTaskCascader: '',
+        cronTaskFinalList: '',
       },
       // 新增定时任务的表单验证规则
       addCronTaskFormRule: {
@@ -116,8 +115,16 @@ export default {
           },
           //   { validator: checkConfigName, trigger: 'blur' },
         ],
+        cronTaskFinalList: [
+          { required: true, message: '请选择任务配置', trigger: 'blur' },
+        ],
       },
     }
+  },
+  watch: {
+    finalList(newVal) {
+      this.addCronTaskForm.cronTaskFinalList = newVal
+    },
   },
   methods: {
     // 接收子组件传过来的options
@@ -135,7 +142,23 @@ export default {
     },
     // 确认添加定时任务
     confirmAddCronTask() {
-      console.log(this.addCronTaskForm, this.finalList, this.options)
+      this.$refs.addCronTaskForm.validate(async (valid) => {
+        if (valid) {
+          this.loading = true
+          // console.log(this.addCronTaskForm, this.finalList, this.options)
+
+          this.loading = false
+          // 成功了关闭对话框
+          this.addCronTaskDialogVisible = false
+          // 清空Cascader的选中条目
+          this.finalList = []
+
+          this.$message.success('添加成功')
+          this.dialogVisible = false
+        } else {
+          this.$message.error('添加信息验证失败')
+        }
+      })
     },
 
     // 清除所有定时任务

@@ -22,7 +22,7 @@
       </el-col>
     </el-row>
 
-    <!-- 新增配置的对话框 -->
+    <!-- 新增定时任务的对话框 -->
     <el-dialog
       title="新增定时任务"
       :visible.sync="addCronTaskDialogVisible"
@@ -32,8 +32,9 @@
       element-loading-text="创建任务中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
+      destroy-on-close
     >
-      <!-- 新增配置的表单 -->
+      <!-- 新增定时任务的表单 -->
       <el-form
         :model="addCronTaskForm"
         :rules="addCronTaskFormRule"
@@ -55,6 +56,25 @@
             :options="options"
             @deliverOptions="deliverOptions"
           ></TaskCascader>
+        </el-form-item>
+
+        <el-form-item>
+          <el-switch
+            v-model="addCronTaskForm.cronTaskTimeType"
+            active-text="按时间间隔执行"
+            active-value="internal"
+            inactive-text="按时间点执行"
+            inactive-value="time_point"
+          ></el-switch>
+          <!-- 针对执行位置的说明提示 -->
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="选择远程执行,如果是脚本,会把脚本上传到远程环境再执行;如果是容器,那么会先ssh进入远程环境后再拉取镜像"
+            placement="top-start"
+          >
+            <i class="header-icon el-icon-info" style="margin-left:10px"></i>
+          </el-tooltip>
         </el-form-item>
       </el-form>
 
@@ -102,6 +122,7 @@ export default {
         cronTaskName: '',
         cronTaskDesc: '',
         cronTaskFinalList: '',
+        cronTaskTimeType: '',
       },
       // 新增定时任务的表单验证规则
       addCronTaskFormRule: {
@@ -138,6 +159,7 @@ export default {
     },
     // 关闭创建定时任务的对话框
     closeCronTaskDialog() {
+      this.$refs.addCronTaskForm.resetFields()
       this.addCronTaskDialogVisible = false
     },
     // 确认添加定时任务
@@ -145,7 +167,7 @@ export default {
       this.$refs.addCronTaskForm.validate(async (valid) => {
         if (valid) {
           this.loading = true
-          // console.log(this.addCronTaskForm, this.finalList, this.options)
+          console.log(this.addCronTaskForm)
 
           this.loading = false
           // 成功了关闭对话框

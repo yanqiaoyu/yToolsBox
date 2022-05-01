@@ -49,7 +49,7 @@
           <el-input v-model="addCronTaskForm.cronTaskDesc"></el-input>
         </el-form-item>
 
-        <el-form-item label="配置选择" prop="cronTaskFinalList">
+        <el-form-item label="工具配置选择" prop="cronTaskFinalList">
           <TaskCascader
             :my-width="'335px'"
             :final-list.sync="finalList"
@@ -67,12 +67,21 @@
             inactive-value="time_point"
           ></el-switch>
           <!-- 针对执行位置的说明提示 -->
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="选择远程执行,如果是脚本,会把脚本上传到远程环境再执行;如果是容器,那么会先ssh进入远程环境后再拉取镜像"
-            placement="top-start"
-          >
+          <el-tooltip class="item" effect="dark" placement="top-start">
+            <div slot="content">
+              *(秒) *(分) *(时) *(日) *(月) *(星期)
+              <br />
+              <br />按时间间隔执行
+              <br />每隔5秒执行一次：*/5 * * * * ?
+              <br />每隔1分钟执行一次：0 */1 * * * ?
+              <br />
+              <br />按时间点执行
+              <br />每天23点执行一次：0 0 23 * * ?
+              <br />每天凌晨1点执行一次：0 0 1 * * ?
+              <br />每月1号凌晨1点执行一次：0 0 1 1 * ?
+              <br />在26分、29分、33分执行一次：0 26,29,33 * * * ?
+              <br />每天的0点、13点、18点、21点都执行一次：0 0 0,13,18,21 * * ?
+            </div>
             <i class="header-icon el-icon-info" style="margin-left:10px"></i>
           </el-tooltip>
         </el-form-item>

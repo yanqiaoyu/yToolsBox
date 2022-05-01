@@ -62,7 +62,7 @@ docker network create --driver bridge ytoolsbox_network
 
 docker volume create ytoolsbox_db-data
 
-docker run -itd -p 5432:5432 --name yToolsBox-db --network ytoolsbox_network -e POSTGRES_PASSWORD=test123456 -v ytoolsbox_db-data:/var/lib/postgresql/data postgres
+docker run -itd -p 5432:5432 --name yToolsBox-db --network ytoolsbox_network -e POSTGRES_PASSWORD=`YOUR_PASSWORD` -v ytoolsbox_db-data:/var/lib/postgresql/data postgres
 
 docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e HOST_SCRIPT_PATH=/home/yToolsBox/api/Script -v /home/yToolsBox/api/Script:/root/Script yanqiaoyu/ytoolsbox-api:v0.2.3  supervisord -c /etc/supervisord.conf
 

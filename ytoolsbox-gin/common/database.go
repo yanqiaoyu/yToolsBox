@@ -69,6 +69,7 @@ func InitAllTables(db *gorm.DB) {
 	InitToolsTable(db)
 	InitToolsConfigTable(db)
 	InitTaskTable(db)
+	InitCronTaskTable(db)
 }
 
 // 初始化工具基础信息表
@@ -132,7 +133,7 @@ func InitTaskTable(db *gorm.DB) {
 
 // 初始化定时任务列表
 func InitCronTaskTable(db *gorm.DB) {
-	db.AutoMigrate(&model.Tasks{})
+	db.AutoMigrate(&model.CronTasks{})
 }
 
 func GetDB() *gorm.DB {

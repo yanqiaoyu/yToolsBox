@@ -33,8 +33,3 @@ body,
 .el-cascader-menu {
   height: 300px;
 }
-
-/* 级联选择器输入框的长度 */
-.el-cascader .el-input {
-  /* width: 300px; */
-}

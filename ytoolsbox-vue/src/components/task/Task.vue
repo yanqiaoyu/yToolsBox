@@ -56,14 +56,14 @@
         <el-table-column prop="toolConfigName" label="选择的配置"></el-table-column>
         <el-table-column label="新建时间" align="center" width="200">
           <!-- <template slot-scope="scope">{{ scope.row.addTime | formatDate }}</template> -->
-          <template slot-scope="scope">{{ FomatDate(scope.row.CreatedAt) }}</template>
+          <template slot-scope="scope">{{ $commonFun.FormatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column label="完成时间" align="center" width="200">
           <template slot-scope="scope">
             <!-- 未完成 -->
             <div v-if="scope.row.isDone == false">未完成</div>
             <!-- 已完成 -->
-            <div v-else>{{ FomatDate(scope.row.UpdatedAt) }}</div>
+            <div v-else>{{ $commonFun.FormatDate(scope.row.UpdatedAt) }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="toolTaskProgress" label="任务进度" width="150">
@@ -390,10 +390,6 @@ export default {
       // 关闭的时候，请求一次任务列表
       this.GetTasksList()
       this.dialogVisible = false
-    },
-    // 转换时间戳
-    FomatDate(unixtime) {
-      return this.$moment.unix(unixtime).format('YYYY-MM-DD HH:mm:ss')
     },
     // 翻页
     handleCurrentChange(val) {

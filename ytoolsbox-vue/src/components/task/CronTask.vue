@@ -21,9 +21,10 @@
       <el-breadcrumb-item>定时任务</el-breadcrumb-item>
     </el-breadcrumb>
 
+    <!-- 可切换的标签页 -->
     <el-tabs type="border-card">
       <el-tab-pane label="定时任务配置中心">
-        <Config :get-cron-tasks-list="getCronTasksList"></Config>
+        <Config></Config>
       </el-tab-pane>
       <el-tab-pane label="定时任务执行结果">
         <ExeResult></ExeResult>
@@ -38,12 +39,10 @@ import ExeResult from './CronTask_ExeResult.vue'
 
 export default {
   components: { Config, ExeResult },
-  methods: {
-    //获取定时任务列表
-    async getCronTasksList() {
-      console.log('查询定时任务列表')
-    },
+  data() {
+    return {}
   },
+  methods: {},
 }
 </script>
 

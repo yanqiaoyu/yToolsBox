@@ -22,6 +22,7 @@ func PostNewTask(ctx *gin.Context) {
 	if util.ResolveParam(ctx, &PostNewTaskParam) != nil {
 		return
 	}
+	log.Println("未处理前的ConfigList: ", PostNewTaskParam.ConfigList)
 	// 这里获取到的PostNewTaskParam是一个字符串形式的数组，所以还需要处理
 	PostNewTaskParam.ConfigList = strings.TrimPrefix(PostNewTaskParam.ConfigList, "[")
 	PostNewTaskParam.ConfigList = strings.TrimSuffix(PostNewTaskParam.ConfigList, "]")

@@ -1,6 +1,7 @@
 <template>
   <div class="myCasDiv">
     <el-cascader
+      :key="avoidClearCascaderBug"
       v-model="tmpFinalList"
       :options="options"
       :props="props"
@@ -10,6 +11,7 @@
       filterable
       placeholder="搜索工具名称或配置名称"
       :style="{width: myWidth}"
+      ref="toolsAndConfigsCascader"
     ></el-cascader>
   </div>
 </template>
@@ -36,6 +38,12 @@ export default {
         return ''
       },
     },
+    avoidClearCascaderBug: {
+      type: Number,
+      default: function () {
+        return 0
+      },
+    },
   },
   data() {
     return {
@@ -51,6 +59,10 @@ export default {
   created() {
     console.log('级联选择器已经被创建')
     this.GetCascaderList()
+  },
+
+  beforeDestroy() {
+    console.log('级联选择器即将被销毁')
   },
 
   methods: {

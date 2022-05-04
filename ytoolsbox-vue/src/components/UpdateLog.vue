@@ -16,6 +16,19 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2022/05/04" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            <el-link
+              href="https://github.com/yanqiaoyu/yToolsBox/issues/40"
+              target="_blank"
+            >1. 完成【需求】实现 "定时任务" 模组</el-link>
+            <br />花了五一假期中的3天时间,实装了定时执行功能模块
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/04/25" placement="top">
         <el-card>
           <h4>更新内容</h4>

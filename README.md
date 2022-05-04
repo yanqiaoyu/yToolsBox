@@ -94,7 +94,7 @@ yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收
 
 ### 手动部署
 
-#### 1. 安装
+#### 1. 在线安装
 
 依次执行如下指令
 
@@ -120,21 +120,9 @@ docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard 
 
 ### 用 docker-compose 部署
 
-#### 1. 安装
+#### 2. 离线安装
 
-```shell
-注：使用docker-compose的安装方式会现场编译一次镜像，若环境中缺少相关的依赖，不建议采用这种方式安装
-```
-
-```shell
-git clone https://github.com/yanqiaoyu/yToolsBox.git
-cd yToolsBox
-docker-compose up -d
-```
-
-#### 2.验证安装结果
-
-同上
+待施工
 
 ## 使用教程
 

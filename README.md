@@ -2,7 +2,7 @@
 
 [README](README_en.md) | [中文文档](README.md)
 
-yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收纳调度脚本(*.py *.sh)与 docker 容器。
+yToolsBox 是一套可以完成不同类型工具的收纳与调度的PaaS化解决方案
 
 
 

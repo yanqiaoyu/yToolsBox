@@ -10,12 +10,8 @@ yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收
    * [为什么开发 yToolsBox ？](#为什么开发-ytoolsbox-)
    * [关键价值](#关键价值)
    * [部署](#部署)
-      * [手动部署](#手动部署)
-         * [1. 安装](#1-安装)
-         * [2. 验证安装结果](#2-验证安装结果)
-      * [用 docker-compose 部署](#用-docker-compose-部署)
-         * [1.安装](#1安装)
-         * [2.验证安装结果](#2验证安装结果)
+      * [1. 在线安装](#1-在线安装)
+      * [2. 离线安装](#2-离线安装)
    * [使用教程](#使用教程)
       * [1. 执行脚本类工具](#1-执行脚本类工具)
          * [1.1 准备好一个脚本文件](#11-准备好一个脚本文件)
@@ -92,9 +88,7 @@ yToolsBox 是一个 All-In-One 的 工具收纳与调度平台。目前支持收
 
 ## 部署
 
-### 手动部署
-
-#### 1. 在线安装
+### 1. 在线安装
 
 依次执行如下指令
 
@@ -110,7 +104,7 @@ docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e
 docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.2.3
 ```
 
-#### 2. 验证安装结果
+### 2. 验证安装结果
 
 执行docker ps出现以下结果，则证明镜像拉起成功
 

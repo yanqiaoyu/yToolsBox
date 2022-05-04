@@ -19,10 +19,12 @@ import axios from 'axios'
 import nProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+import commonFun from './assets/js/common.js'
+
 // 测试，生产环境，不同的请求的路径
 if (process.env.NODE_ENV == 'production') {
-  let host = window.location.host; //主机
-  axios.defaults.baseURL = 'http://'+ host +'/api/auth/';
+  let host = window.location.host //主机
+  axios.defaults.baseURL = 'http://' + host + '/api/auth/'
 } else {
   axios.defaults.baseURL = 'http://localhost:8081/api/auth/'
 }
@@ -46,6 +48,8 @@ axios.interceptors.response.use(config => {
 Vue.prototype.$http = axios
 // 在Vue的原型上挂载Moment，让所有实例都能调用时间戳转换
 Vue.prototype.$moment = Moment
+// 在Vue的原型上挂载common，让所有实例都能调用公共方法
+Vue.prototype.$commonFun = commonFun
 
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {

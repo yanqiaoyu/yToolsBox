@@ -78,8 +78,30 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 		v1.DELETE("/tasks/:taskID", controller.DeleteSpecifiedTask)
 		// 重新开始执行一个任务
 		v1.POST("/tasks/restart", controller.PostRestartTask)
+
+		/***
+			以下是定时任务相关的路由表
+		***/
+
+		// 新建一个定时任务
+		v1.POST("/crontasks", controller.PostNewCronTask)
+		// 清除所有定时任务
+		v1.DELETE("/crontasks", controller.DeleteAllCronTask)
+		// 清除特定定时任务
+		v1.DELETE("/crontasks/:cronTaskOriginID/:cronTaskScheduleID", controller.DeleteSpecifiedCrontask)
+
+		// 查询所有特定定时任务
+		v1.GET("/crontasks", controller.GetAllCronTask)
+		// 根据scheduleID查询特定定时任务
+		v1.GET("/crontasks/:cronTaskScheduleID", controller.GetSpecifiedCrontaskByScheduleID)
+
+		// 查询所有定时任务执行结果
+		v1.GET("/crontasksresult", controller.GetAllCronTaskResult)
+		// 删除所有定时任务执行结果
+		v1.DELETE("crontasksresult", controller.DeleteAllCronTaskResult)
+		// 删除特定定时任务执行结果
+		v1.DELETE("crontasksresult/:cronTaskResultID", controller.DeleteSpecifiedCrontaskResult)
+
 	}
-
 	return r
-
 }

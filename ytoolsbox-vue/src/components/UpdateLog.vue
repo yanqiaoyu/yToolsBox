@@ -16,6 +16,19 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2022/04/25" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            <el-link
+              href="https://github.com/yanqiaoyu/yToolsBox/issues/30"
+              target="_blank"
+            >1. 完成【需求】工具盒展示列表中, 除了卡片模式, 还应该可以切换成列表模式</el-link>
+            <br />现在工具既可以以卡片模式展示,也可以以列表模式展示了,后续在列表模式中添加诸如删除工具的功能
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/04/24" placement="top">
         <el-card>
           <h4>更新内容</h4>

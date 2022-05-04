@@ -11,12 +11,7 @@
     <el-card>
       <!-- 步骤条 -->
       <el-steps :active="activeIndex" finish-status="success" align-center>
-        <el-step
-          class="stepClass"
-          v-for="(step, index) in stepList"
-          :key="index"
-          :title="step"
-        ></el-step>
+        <el-step class="stepClass" v-for="(step, index) in stepList" :key="index" :title="step"></el-step>
       </el-steps>
     </el-card>
 
@@ -27,19 +22,9 @@
     <!-- 表单数据 -->
     <el-card style="width:70%;margin:0 auto">
       <!-- 引导信息 -->
-      <el-alert
-        :title="stepList[activeIndex]"
-        type="success"
-        center
-        :closable="false"
-      ></el-alert>
+      <el-alert :title="stepList[activeIndex]" type="success" center :closable="false"></el-alert>
 
-      <el-form
-        :model="toolForm"
-        :rules="toolRules"
-        ref="addToolForm"
-        label-width="130px"
-      >
+      <el-form :model="toolForm" :rules="toolRules" ref="addToolForm" label-width="130px">
         <!-- 填写工具基本信息 -->
         <div
           v-if="activeIndex === 0 || activeIndex === stepList.length - 1"
@@ -121,10 +106,7 @@
                 content="这里的名称与拉取镜像挂钩 例如:填写hello-world,后续拉取时会执行 docker pull hello-world"
                 placement="top-start"
               >
-                <i
-                  class="header-icon el-icon-info"
-                  style="margin-left:10px"
-                ></i>
+                <i class="header-icon el-icon-info" style="margin-left:10px"></i>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="运行参数" prop="toolOptions">
@@ -169,18 +151,14 @@
                 :on-success="handleUploadSuc"
                 :on-error="handleUploadErr"
               >
-                <el-button slot="trigger" size="small" type="primary"
-                  >选取文件</el-button
-                >
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <!-- <el-button
                   style="margin-left: 10px;"
                   size="small"
                   type="success"
                   @click="submitUpload"
                 >上传到服务器</el-button>-->
-                <div slot="tip" class="el-upload__tip">
-                  只能上传一个py或者sh文件，且不超过10MB
-                </div>
+                <div slot="tip" class="el-upload__tip">只能上传一个py或者sh文件，且不超过10MB</div>
               </el-upload>
             </el-form-item>
 
@@ -193,11 +171,7 @@
               ></el-input>
             </el-form-item>
 
-            <el-form-item
-              label="Python版本"
-              v-if="isPythonScript"
-              prop="toolPythonVersion"
-            >
+            <el-form-item label="Python版本" v-if="isPythonScript" prop="toolPythonVersion">
               <!-- Python版本下拉框 -->
               <el-select
                 :disabled="activeIndex == stepList.length - 1"
@@ -215,11 +189,7 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item
-              label="Shell版本"
-              v-if="isShellScript"
-              prop="toolShellVersion"
-            >
+            <el-form-item label="Shell版本" v-if="isShellScript" prop="toolShellVersion">
               <!-- Shell版本下拉框 -->
               <el-select
                 :disabled="activeIndex == stepList.length - 1"
@@ -365,12 +335,7 @@
         <el-button-group>
           <!-- 在第一步 -->
           <div v-if="activeIndex === 0">
-            <el-button
-              type="primary"
-              icon="el-icon-arrow-left"
-              @click="back2ToolBoxPage"
-              >取消</el-button
-            >
+            <el-button type="primary" icon="el-icon-arrow-left" @click="back2ToolBoxPage">取消</el-button>
             <el-button type="primary" @click="nextStep">
               下一步
               <i class="el-icon-arrow-right el-icon--right"></i>
@@ -379,9 +344,7 @@
 
           <!-- 在最后一步 -->
           <div v-else-if="activeIndex === stepList.length - 1">
-            <el-button type="primary" icon="el-icon-arrow-left" @click="preStep"
-              >上一步</el-button
-            >
+            <el-button type="primary" icon="el-icon-arrow-left" @click="preStep">上一步</el-button>
             <el-button type="primary" @click="PostNewTool">
               确认提交
               <i class="el-icon-check"></i>
@@ -390,9 +353,7 @@
 
           <!-- 在中间 -->
           <div v-else>
-            <el-button type="primary" icon="el-icon-arrow-left" @click="preStep"
-              >上一步</el-button
-            >
+            <el-button type="primary" icon="el-icon-arrow-left" @click="preStep">上一步</el-button>
             <el-button type="primary" @click="nextStep">
               下一步
               <i class="el-icon-arrow-right el-icon--right"></i>
@@ -431,85 +392,85 @@ export default {
         toolRemoteSSH_Account: '',
         toolRemoteSSH_Password: '',
         toolPythonVersion: '',
-        toolShellVersion: ''
+        toolShellVersion: '',
       },
       toolRules: {
         toolType: [
-          { required: true, message: '请选择工具类型', trigger: 'change' }
+          { required: true, message: '请选择工具类型', trigger: 'change' },
         ],
         toolDockerImageName: [
-          { required: true, message: '请输入Docker镜像名称', trigger: 'blur' }
+          { required: true, message: '请输入Docker镜像名称', trigger: 'blur' },
         ],
         toolScriptName: [
-          { required: true, message: '请输入脚本名称', trigger: 'input' }
+          { required: true, message: '请输入脚本名称', trigger: 'input' },
         ],
         toolScriptPath: [
-          { required: true, message: '请输入脚本绝对路径', trigger: 'blur' }
+          { required: true, message: '请输入脚本绝对路径', trigger: 'blur' },
         ],
         toolName: [
           { required: true, message: '请填写工具名称', trigger: 'blur' },
-          { min: 0, max: 30, message: '最好控制在30个字符内', trigger: 'blur' }
+          { min: 0, max: 30, message: '最好控制在30个字符内', trigger: 'blur' },
         ],
         toolDesc: [
-          { min: 0, max: 100, message: '100个字符内', trigger: 'blur' }
+          { min: 0, max: 100, message: '100个字符内', trigger: 'blur' },
         ],
         toolRemoteIP: [
-          { required: true, message: '请填写远程环境的IP', trigger: 'blur' }
+          { required: true, message: '请填写远程环境的IP', trigger: 'blur' },
         ],
         toolRemoteSSH_Port: [
           {
             required: true,
             message: '请填写远程环境的SSH端口',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Account: [
           {
             required: true,
             message: '请填写远程环境的SSH账号',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolRemoteSSH_Password: [
           {
             required: true,
             message: '请填写远程环境的SSH密码',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolAuthor: [
           {
             required: true,
             message: '请填写作者名称',
-            trigger: 'blur'
+            trigger: 'blur',
           },
-          { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' }
+          { min: 0, max: 10, message: '最好控制在10个字符内', trigger: 'blur' },
         ],
         toolPythonVersion: [
           {
             required: true,
             message: '请选择Python解释器版本',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         toolShellVersion: [
           {
             required: true,
             message: '请选择Shell解释器版本',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
 
       fileList: [],
       isPythonScript: false,
       isShellScript: false,
       uploadDataObj: {
-        toolName: ''
+        toolName: '',
       },
       uploadHeaderObj: {
-        Authorization: ''
-      }
+        Authorization: '',
+      },
     }
   },
   computed: {
@@ -540,7 +501,7 @@ export default {
         toolScriptPath,
         toolOptions,
         toolPythonVersion,
-        toolShellVersion
+        toolShellVersion,
       } = this.toolForm
 
       if (this.isPythonScript) {
@@ -574,7 +535,7 @@ export default {
           'http://' + window.location.hostname + ':8081/api/auth/upload'
         return uploadPath
       }
-    }
+    },
   },
   methods: {
     clickStep(index) {
@@ -589,7 +550,7 @@ export default {
       this.activeIndex -= 1
     },
     nextStep() {
-      this.$refs.addToolForm.validate(valid => {
+      this.$refs.addToolForm.validate((valid) => {
         if (valid) {
           if (this.activeIndex == this.stepList.length - 1) {
             return
@@ -610,7 +571,7 @@ export default {
       this.$confirm('参数确认无误, 确认新增此工具?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       })
         .then(async () => {
           // 新建工具的请求
@@ -627,7 +588,7 @@ export default {
           if (res.meta.status_code == 200) {
             this.$message({
               type: 'success',
-              message: '添加工具成功!'
+              message: '添加工具成功!',
             })
             this.$router.push('/toolbox')
           } else if (res.meta.message == '不允许重复的工具名称') {
@@ -637,7 +598,7 @@ export default {
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '添加工具失败'
+            message: '添加工具失败',
           })
         })
     },
@@ -646,9 +607,8 @@ export default {
     },
     async submitUpload() {
       // 上传前为请求头添加授权
-      this.uploadHeaderObj.Authorization = window.sessionStorage.getItem(
-        'token'
-      )
+      this.uploadHeaderObj.Authorization =
+        window.sessionStorage.getItem('token')
       // 把工具名也传过去，方便建立唯一的文件夹存储脚本
       this.uploadDataObj.toolName = this.toolForm.toolName
       console.log(window.location.host)
@@ -706,7 +666,7 @@ export default {
     handleUploadErr(err) {
       console.log(err)
       this.$message.error({
-        message: '上传文件失败!'
+        message: '上传文件失败!',
       })
     },
     // 上传成功的钩子函数
@@ -714,11 +674,11 @@ export default {
       if (res.meta.status_code == 200) {
         this.$message({
           type: 'success',
-          message: '上传文件成成功!'
+          message: '上传文件成成功!',
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

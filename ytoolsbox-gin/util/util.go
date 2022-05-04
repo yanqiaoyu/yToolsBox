@@ -54,7 +54,7 @@ func Struct2MapViaJson(obj interface{}) map[string]interface{} {
 func ResolveParam(ctx *gin.Context, obj interface{}) error {
 	err := ctx.ShouldBind(obj)
 	if err != nil {
-		msg := dto.FailResponseMeta{StatusCode: 400, Message: "必填字段为空"}
+		msg := dto.FailResponseMeta{StatusCode: 400, Message: "必填字段为空:" + err.Error()}
 		response.Fail(ctx, nil, Struct2MapViaJson(msg))
 		return err
 	}

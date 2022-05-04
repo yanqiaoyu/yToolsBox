@@ -330,7 +330,6 @@ export default {
     async showEditDialog(id) {
       const { data: res } = await this.$http.get('users/' + id)
       this.editUserDialogVisible = true
-      // console.log(id)
       this.editRuleForm = res.data
     },
     closeEditDialog() {

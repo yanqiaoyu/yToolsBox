@@ -27,7 +27,7 @@
         <Config></Config>
       </el-tab-pane>
       <el-tab-pane label="定时任务执行结果">
-        <ExeResult></ExeResult>
+        <CronTaskResult></CronTaskResult>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -35,10 +35,10 @@
 
 <script>
 import Config from './CronTask_Config.vue'
-import ExeResult from './CronTask_ExeResult.vue'
+import CronTaskResult from './CronTask_Result.vue'
 
 export default {
-  components: { Config, ExeResult },
+  components: { Config, CronTaskResult },
   data() {
     return {}
   },

@@ -31,7 +31,6 @@
       <el-table-column type="index" label="序号" align="center" width="90"></el-table-column>
       <el-table-column prop="cronTaskName" label="定时任务名称"></el-table-column>
       <el-table-column prop="cronTaskDesc" label="定时任务描述"></el-table-column>
-      <el-table-column prop="cronTaskFinalList" label="使用的工具与配置"></el-table-column>
       <el-table-column prop="cronTaskTime" label="定时语句"></el-table-column>
       <el-table-column label="新建时间" align="center" width="200">
         <template slot-scope="scope">{{ $commonFun.FormatDate(scope.row.CreatedAt) }}</template>
@@ -46,21 +45,26 @@
             placement="top"
             :enterable="false"
           >
-            <el-button type="danger" icon="el-icon-delete" circle @click="DeleteTask(scope.row.ID)"></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click="deleteCronTask(scope.row.ID, scope.row.cronTaskScheduleID)"
+            ></el-button>
           </el-tooltip>
-          <!-- 任务详情 -->
+          <!-- 编辑任务 -->
           <el-tooltip
             class="item"
             effect="dark"
-            content="任务执行详情"
+            content="编辑定时任务"
             placement="top"
             :enterable="false"
           >
             <el-button
-              type="warning"
-              icon="el-icon-question"
-              @click="openCronTaskDetailDialog(scope.row)"
+              type="primary"
+              icon="el-icon-edit"
               circle
+              @click="showEditCronTaskDialog(scope.row.cronTaskScheduleID)"
             ></el-button>
           </el-tooltip>
         </template>
@@ -149,6 +153,71 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
     ></el-pagination>
+
+    <!-- 修改定时任务的提示框 -->
+    <el-dialog
+      title="修改定时任务"
+      :visible.sync="editCronTaskDialogVisible"
+      width="550px"
+      :close-on-click-modal="false"
+      @close="closeEditCronTaskDialog"
+      destroy-on-close
+    >
+      <el-form
+        :model="editCronTaskForm"
+        :rules="editCronTaskFormRule"
+        ref="editCronTaskForm"
+        label-width="120px"
+      >
+        <el-form-item label="定时任务名称" prop="cronTaskName">
+          <el-input v-model="editCronTaskForm.cronTaskName" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="定时任务描述" prop="cronTaskDesc">
+          <el-input v-model="editCronTaskForm.cronTaskDesc" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="工具配置选择">
+          <!-- 这里没有复用那个Cascader组件 是因为有一个Bug查了一天没解决...... -->
+          <el-cascader
+            v-model="editCronTaskForm.cronTaskCascaderSelectedInfo"
+            :options="editCronTaskForm.cronTaskCascaderAllInfo"
+            :props="{ multiple: true }"
+            collapse-tags
+            clearable
+            size="medium"
+            filterable
+            placeholder="搜索工具名称或配置名称"
+            style="width: 335px"
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item label="定时语句" prop="cronTaskTime">
+          <el-input v-model="editCronTaskForm.cronTaskTime" class="timeSpanClass" clearable></el-input>
+          <el-tooltip class="item" effect="dark" placement="top-start">
+            <div slot="content">
+              *(秒) *(分) *(时) *(日) *(月) *(星期)
+              <br />
+              <br />按时间间隔执行
+              <br />每隔5秒执行一次：*/5 * * * * ?
+              <br />每隔1分钟执行一次：0 */1 * * * ?
+              <br />
+              <br />按时间点执行
+              <br />每天23点执行一次：0 0 23 * * ?
+              <br />每天凌晨1点执行一次：0 0 1 * * ?
+              <br />每月1号凌晨1点执行一次：0 0 1 1 * ?
+              <br />在26分、29分、33分执行一次：0 26,29,33 * * * ?
+              <br />每天的0点、13点、18点、21点都执行一次：0 0 0,13,18,21 * * ?
+            </div>
+            <i class="header-icon el-icon-info" style="margin-left:10px"></i>
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="addCronTaskForm.cronRunAtOnce" checked disabled>添加任务后立即执行一次</el-checkbox>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeEditCronTaskDialog">取 消</el-button>
+        <el-button type="primary" @click="editCronTask">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -161,10 +230,15 @@ export default {
   },
   data() {
     return {
-      // 与级联选择器绑定的列表
+      // 与新增对话框中的级联选择器绑定的列表
       finalList: [],
       options: [],
       avoidClearCascaderBug: 0,
+
+      // 与编辑对话框中的级联选择器绑定的列表
+      editFinalList: [],
+      editOptions: [],
+      editAvoidClearCascaderBug: 0,
 
       // 存储查询结果
       cronTasksList: [],
@@ -210,6 +284,37 @@ export default {
         ],
       },
 
+      // 编辑定时任务的对话框能见度
+      editCronTaskDialogVisible: false,
+      // 编辑定时任务的表单
+      editCronTaskForm: {
+        cronTaskName: '',
+        cronTaskDesc: '',
+        cronTaskTime: '0 */1 * * * ?',
+        cronRunAtOnce: true,
+        cronTaskCascaderAllInfo: '',
+        cronTaskCascaderSelectedInfo: [],
+      },
+      // 编辑定时任务的表单的规则
+      editCronTaskFormRule: {
+        cronTaskName: [
+          { required: true, message: '请输入定时任务名称', trigger: 'blur' },
+          {
+            min: 1,
+            max: 30,
+            message: '长度在 1 到 30 个字符',
+            trigger: 'blur',
+          },
+          //   { validator: checkConfigName, trigger: 'blur' },
+        ],
+        cronTaskFinalList: [
+          { required: true, message: '请选择任务配置', trigger: 'blur' },
+        ],
+        cronTaskTime: [
+          { required: true, message: '请选择填写定时语句', trigger: 'blur' },
+        ],
+      },
+
       // 遮罩控制
       loading: false,
     }
@@ -223,9 +328,13 @@ export default {
     this.getCronTasksList()
   },
   methods: {
-    // 接收子组件传过来的options
+    // 接收新增子组件传过来的options
     deliverOptions(data) {
       this.options = data
+    },
+    // 接收编辑子组件传过来的options
+    editDeliverOptions(data) {
+      this.editOptions = data
     },
     // 打开创建定时任务的对话框
     openCreateCronTaskDialog() {
@@ -236,6 +345,10 @@ export default {
       // 关闭的时候请求一次列表
       this.getCronTasksList()
       this.$refs.addCronTaskForm.resetFields()
+      // https://blog.csdn.net/qq_34451048/article/details/106198550
+      ++this.avoidClearCascaderBug
+      this.finalList = []
+      this.options = []
       this.addCronTaskDialogVisible = false
     },
     // 确认添加定时任务
@@ -259,6 +372,8 @@ export default {
             ),
             cronTaskTime: this.addCronTaskForm.cronTaskTime,
             cronRunAtOnce: this.addCronTaskForm.cronRunAtOnce,
+            cronTaskCascaderAllInfo: JSON.stringify(this.options),
+            cronTaskCascaderSelectedInfo: JSON.stringify(this.finalList),
           })
           if (res.meta.status_code !== 200) {
             this.loading = false
@@ -305,8 +420,32 @@ export default {
           })
         })
     },
-    // 打开任务详情的框
-    openCronTaskDetailDialog() {},
+
+    // 打开 编辑定时任务详情的框
+    async showEditCronTaskDialog(cronTaskScheduleID) {
+      const { data: res } = await this.$http.get(
+        'crontasks/' + cronTaskScheduleID
+      )
+      res.data.cronTaskCascaderAllInfo = JSON.parse(
+        res.data.cronTaskCascaderAllInfo
+      )
+
+      res.data.cronTaskCascaderSelectedInfo = JSON.parse(
+        res.data.cronTaskCascaderSelectedInfo
+      )
+
+      this.editCronTaskForm = res.data
+      this.editCronTaskDialogVisible = true
+      console.log('获取特定的定时任务的细节: ', this.editCronTaskForm)
+    },
+    // 关闭 编辑定时任务详情的框
+    closeEditCronTaskDialog() {
+      this.editCronTaskDialogVisible = false
+    },
+    // 确认 编辑定时任务
+    editCronTask() {
+      this.editCronTaskDialogVisible = false
+    },
 
     // 查询所有定时任务
     async getCronTasksList() {
@@ -320,6 +459,42 @@ export default {
 
       this.cronTasksList = res.data.cronTaskItemList
       this.total = res.data.total
+    },
+
+    // 删除定时任务
+    deleteCronTask(cronTaskOriginID, cronTaskScheduleID) {
+      console.log('删除定时任务:', cronTaskScheduleID)
+      this.$confirm('确定删除此定时任务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          // console.log(id)
+          const { data: res } = await this.$http.delete(
+            'crontasks/' + cronTaskOriginID + '/' + cronTaskScheduleID
+          )
+
+          if (res.meta.status_code == 200) {
+            this.getCronTasksList()
+            return this.$message({
+              type: 'success',
+              message: '删除成功!',
+            })
+          } else {
+            this.getCronTasksList()
+            return this.$message({
+              type: 'fail',
+              message: '删除失败!',
+            })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除',
+          })
+        })
     },
 
     // 翻页

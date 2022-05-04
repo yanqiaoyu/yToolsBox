@@ -11,7 +11,7 @@
       filterable
       placeholder="搜索工具名称或配置名称"
       :style="{width: myWidth}"
-      ref="toolsAndConfigsCascader"
+      :ref="myCascaderRef"
     ></el-cascader>
   </div>
 </template>
@@ -44,6 +44,12 @@ export default {
         return 0
       },
     },
+    myCascaderRef: {
+      type: String,
+      default: function () {
+        return ''
+      },
+    },
   },
   data() {
     return {
@@ -55,12 +61,13 @@ export default {
     tmpFinalList(newVal) {
       this.$emit('update:final-list', newVal)
     },
+    immediate: true,
   },
   created() {
+    this.tmpFinalList = this.finalList
     console.log('级联选择器已经被创建')
     this.GetCascaderList()
   },
-
   beforeDestroy() {
     console.log('级联选择器即将被销毁')
   },

@@ -88,10 +88,19 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 		// 清除所有定时任务
 		v1.DELETE("/crontasks", controller.DeleteAllCronTask)
 		// 清除特定定时任务
-		v1.DELETE("/crontasks/:crontaskID", controller.DeleteSpecifiedCrontask)
+		v1.DELETE("/crontasks/:cronTaskOriginID/:cronTaskScheduleID", controller.DeleteSpecifiedCrontask)
 
 		// 查询所有特定定时任务
 		v1.GET("/crontasks", controller.GetAllCronTask)
+		// 根据scheduleID查询特定定时任务
+		v1.GET("/crontasks/:cronTaskScheduleID", controller.GetSpecifiedCrontaskByScheduleID)
+
+		// 查询所有定时任务执行结果
+		v1.GET("/crontasksresult", controller.GetAllCronTaskResult)
+		// 删除所有定时任务执行结果
+		v1.DELETE("crontasksresult", controller.DeleteAllCronTaskResult)
+		// 删除特定定时任务执行结果
+		v1.DELETE("crontasksresult/:cronTaskResultID", controller.DeleteSpecifiedCrontaskResult)
 
 	}
 	return r

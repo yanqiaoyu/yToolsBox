@@ -104,8 +104,6 @@ docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e
 docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.2.5
 ```
 
-### 2. 验证安装结果
-
 执行docker ps出现以下结果，则证明镜像拉起成功
 
 ![manu_deploy](/doc/pic/manu_deploy1.png)

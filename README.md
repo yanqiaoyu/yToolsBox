@@ -112,9 +112,7 @@ docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard 
 
 访问 http://yourIP 验证是否安装成功
 
-### 用 docker-compose 部署
-
-#### 2. 离线安装
+### 2. 离线安装
 
 待施工
 

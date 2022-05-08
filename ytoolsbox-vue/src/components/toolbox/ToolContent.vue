@@ -101,7 +101,9 @@
           :total="total"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="工具评价">工具评价</el-tab-pane>
+      <el-tab-pane label="使用说明">
+        <ToolContentTutorial></ToolContentTutorial>
+      </el-tab-pane>
     </el-tabs>
 
     <!-- 查看配置详情的对话框 -->
@@ -566,8 +568,12 @@
 
 <script>
 import qs from 'qs'
+import ToolContentTutorial from './ToolContent_Tutorial.vue'
 
 export default {
+  components: {
+    ToolContentTutorial,
+  },
   data() {
     var checkConfigName = (rule, value, callback) => {
       if (value != '默认配置') {

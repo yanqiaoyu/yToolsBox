@@ -44,11 +44,11 @@ func SelectAllTools(db *gorm.DB, obj dto.GetAllToolsDTOReq) []dto.BriefToolsInfo
 	if query == "" {
 		// 内联查询
 		// 添加了一个where语句的限定条件，是为了去重,这里其实也可以用distinct
-		db.Order("tools.id").Model(&model.Tool{}).Where("tool_configs.\"toolConfigName\" = ?", "默认配置").Select("tools.id, tools.\"toolName\", tools.\"toolDesc\", tools.\"toolAuthor\", tools.\"toolRate\", tools.\"toolRateCount\", tool_configs.\"toolType\"").Joins("join tool_configs on tools.id = tool_configs.\"toolID\"").Find(&briefToolsInfoList)
+		db.Order("tools.id").Model(&model.Tool{}).Where("tool_configs.\"toolConfigName\" = ?", "默认配置").Select("tools.id, tools.\"toolName\", tools.\"toolDesc\", tools.\"toolAuthor\", tools.\"toolRate\", tools.\"toolRateCount\", tool_configs.\"toolType\", tools.\"toolTutorial\"").Joins("join tool_configs on tools.id = tool_configs.\"toolID\"").Find(&briefToolsInfoList)
 	} else {
 		// toolNames加了双引号，是为了解决pgsql自动变小写的问题
 		// 而且这里不能加单引号，否则查询失败
-		db.Order("tools.id").Where("tools.\"toolName\" LIKE ?", "%"+query+"%").Model(&model.Tool{}).Select("tools.id, tools.\"toolName\", tools.\"toolDesc\", tools.\"toolAuthor\", tools.\"toolRate\", tools.\"toolRateCount\", tool_configs.\"toolType\"").Joins("join tool_configs on tools.id = tool_configs.\"toolID\"").Find(&briefToolsInfoList)
+		db.Order("tools.id").Where("tools.\"toolName\" LIKE ?", "%"+query+"%").Model(&model.Tool{}).Select("tools.id, tools.\"toolName\", tools.\"toolDesc\", tools.\"toolAuthor\", tools.\"toolRate\", tools.\"toolRateCount\", tool_configs.\"toolType\", tools.\"toolTutorial\"").Joins("join tool_configs on tools.id = tool_configs.\"toolID\"").Find(&briefToolsInfoList)
 	}
 	// log.Println(briefToolsInfoList)
 

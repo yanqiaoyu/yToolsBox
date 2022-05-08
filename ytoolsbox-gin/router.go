@@ -43,6 +43,10 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 		// 获取权限
 		v1.GET("/rights", controller.GetRights)
 
+		/***
+			以下是工具相关的路由表
+		***/
+
 		// 添加新工具
 		v1.POST("/tools", controller.PostNewTool)
 		// 查询所有工具

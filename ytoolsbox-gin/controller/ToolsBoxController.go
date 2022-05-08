@@ -194,3 +194,5 @@ func PutSpecifiedToolConfigByConfigID(ctx *gin.Context) {
 	Meta := model.Meta{Msg: "更新配置成功", Status_code: 200}
 	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }
+
+// 查询某个工具的使用说明

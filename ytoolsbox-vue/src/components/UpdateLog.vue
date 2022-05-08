@@ -25,6 +25,7 @@
               target="_blank"
             >1. 完成【需求】实现 "定时任务" 模组</el-link>
             <br />花了五一假期中的3天时间,实装了定时执行功能模块
+            <br />2.发布了v0.2.5版本
           </p>
         </el-card>
       </el-timeline-item>

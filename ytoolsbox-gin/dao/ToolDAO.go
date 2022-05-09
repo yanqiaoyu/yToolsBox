@@ -131,3 +131,12 @@ func UpdateSpecifiedToolConfigByConfigID(db *gorm.DB, configID uint, obj dto.Put
 		},
 	)
 }
+
+func UpdateSpecifiedToolTutorialByToolID(db *gorm.DB, PutSpecifiedToolTutorialByToolIDParam dto.PutSpecifiedToolTutorialByToolIDDTOReq) {
+
+	db.Debug().Model(&model.Tool{}).Where("id = ?", PutSpecifiedToolTutorialByToolIDParam.ToolID).Updates(
+		model.Tool{
+			ToolTutorial: PutSpecifiedToolTutorialByToolIDParam.ToolTutorial,
+		},
+	)
+}

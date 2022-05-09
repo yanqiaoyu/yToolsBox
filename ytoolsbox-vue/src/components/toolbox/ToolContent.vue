@@ -102,7 +102,7 @@
         ></el-pagination>
       </el-tab-pane>
       <el-tab-pane label="使用说明">
-        <ToolContentTutorial :tool-tutorial="toolTutorial"></ToolContentTutorial>
+        <ToolContentTutorial :father-tool-tutorial="toolTutorial"></ToolContentTutorial>
       </el-tab-pane>
     </el-tabs>
 
@@ -844,6 +844,7 @@ export default {
     this.toolID = this.$route.query.toolID
     this.toolName = this.$route.query.toolName
     this.toolTutorial = this.$route.params.toolTutorial
+    // console.log(this.toolTutorial)
 
     // 拿到这个工具的配置信息
     this.GetToolConfig()

@@ -81,6 +81,12 @@ type PutSpecifiedToolConfigByConfigIDDTOReqQuery struct {
 	ToolConfig BriefToolConfigDTO `json:"toolConfig"`
 }
 
+// 更新某个工具的使用说明
+type PutSpecifiedToolTutorialByToolIDDTOReq struct {
+	ToolID       int16  `form:"toolID" json:"toolID" gorm:"column:toolID"`
+	ToolTutorial string `form:"toolTutorial" json:"toolTutorial" gorm:"column:toolTutorial"`
+}
+
 // 删除某个工具的某个配置请求DTO
 type DeleteSpecifiedConfigDTOReq struct {
 	ToolID int16 `uri:"toolID" gorm:"column:toolID" binding:"required"`

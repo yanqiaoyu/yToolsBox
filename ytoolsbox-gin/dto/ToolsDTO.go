@@ -24,6 +24,8 @@ type BriefToolsInfoDTO struct {
 	ToolRateCount int8 `form:"toolRateCount" json:"toolRateCount" gorm:"column:toolRateCount"`
 	// 工具类型：脚本，容器
 	ToolType string `form:"toolType" json:"toolType" gorm:"column:toolType"`
+	// 工具使用说明
+	ToolTutorial string `form:"toolTutorial" json:"toolTutorial" gorm:"column:toolTutorial"`
 }
 
 // 查询所有工具卡片信息的请求DTO
@@ -77,6 +79,12 @@ type PutSpecifiedToolConfigByConfigIDDTOReqURI struct {
 // 更新某个工具的某个配置请求DTO(QueryInfo)
 type PutSpecifiedToolConfigByConfigIDDTOReqQuery struct {
 	ToolConfig BriefToolConfigDTO `json:"toolConfig"`
+}
+
+// 更新某个工具的使用说明
+type PutSpecifiedToolTutorialByToolIDDTOReq struct {
+	ToolID       int16  `form:"toolID" json:"toolID" gorm:"column:toolID"`
+	ToolTutorial string `form:"toolTutorial" json:"toolTutorial" gorm:"column:toolTutorial"`
 }
 
 // 删除某个工具的某个配置请求DTO

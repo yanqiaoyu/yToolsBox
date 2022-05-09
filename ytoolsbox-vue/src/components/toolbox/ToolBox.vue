@@ -144,9 +144,19 @@ export default {
     },
     // 工具详情跳转
     toToolContent(tool) {
+      // console.log(tool.toolTutorial)
       this.$router.push({
-        path: 'toolbox/tool',
-        query: { toolID: tool.id, toolName: tool.toolName },
+        // path: 'toolbox/tool',
+        name: 'toolbox_tool',
+        query: {
+          toolID: tool.id,
+          toolName: tool.toolName,
+        },
+        // props: { toolTutorial: tool.toolTutorial },
+        // 新增了工具使用说明的功能 这里要传过去
+        // 如果提供了 path，params 会被忽略
+        // 所以把path换成了name 当然router那里也要配置一下
+        params: { toolTutorial: tool.toolTutorial },
       })
     },
     // 处理tab点击事件

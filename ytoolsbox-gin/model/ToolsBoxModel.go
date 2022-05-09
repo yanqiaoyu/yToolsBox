@@ -17,6 +17,8 @@ type Tool struct {
 	ToolRate float32 `form:"toolRate" json:"toolRate" gorm:"column:toolRate"`
 	//  工具评分人数
 	ToolRateCount int8 `form:"toolRateCount" json:"toolRateCount" gorm:"column:toolRateCount"`
+	// 工具使用说明
+	ToolTutorial string `form:"toolTutorial" json:"toolTutorial" gorm:"column:toolTutorial"`
 }
 
 // 工具的配置信息

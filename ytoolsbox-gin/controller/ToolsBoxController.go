@@ -194,3 +194,19 @@ func PutSpecifiedToolConfigByConfigID(ctx *gin.Context) {
 	Meta := model.Meta{Msg: "更新配置成功", Status_code: 200}
 	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
 }
+
+// 更新某个工具的使用说明
+func PutSpecifiedToolTutorialByToolID(ctx *gin.Context) {
+	db := common.GetDB()
+
+	PutSpecifiedToolTutorialByToolIDParam := dto.PutSpecifiedToolTutorialByToolIDDTOReq{}
+
+	if util.ResolveParam(ctx, &PutSpecifiedToolTutorialByToolIDParam) != nil {
+		return
+	}
+
+	dao.UpdateSpecifiedToolTutorialByToolID(db, PutSpecifiedToolTutorialByToolIDParam)
+
+	Meta := model.Meta{Msg: "更新使用说明成功", Status_code: 200}
+	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+}

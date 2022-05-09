@@ -44,7 +44,12 @@ const routes = [
       { path: '/task', component: Task, meta: { title: '普通任务' } },
       { path: '/crontask', component: CronTask, meta: { title: '定时任务' } },
       { path: '/toolbox/add', component: AddTool, meta: { title: '添加工具' } },
-      { path: '/toolbox/tool', component: ToolContent, meta: { title: '工具详情' } },
+      {
+        path: '/toolbox/tool',
+        name: 'toolbox_tool',
+        component: ToolContent,
+        meta: { title: '工具详情' }
+      }
     ]
   }
 ]

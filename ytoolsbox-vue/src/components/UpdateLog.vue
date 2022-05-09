@@ -16,6 +16,19 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2022/05/09" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            <el-link
+              href="https://github.com/yanqiaoyu/yToolsBox/issues/29"
+              target="_blank"
+            >1. 完成【需求】降低"工具评价"开发的优先级,先开发"使用说明"</el-link>
+            <br />现在进入工具详情后,编辑工具的使用说明并保存至数据库表中了
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/05/04" placement="top">
         <el-card>
           <h4>更新内容</h4>

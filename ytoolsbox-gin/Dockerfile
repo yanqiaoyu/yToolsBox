@@ -12,17 +12,17 @@ RUN go build -o main .
 
 # 然后把可执行程序放进最小环境里面
 FROM alpine:latest AS production
-RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-RUN apk add --no-cache --virtual .persistent-deps netcat-openbsd supervisor
+RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
+    apk add --no-cache --virtual .persistent-deps netcat-openbsd supervisor
 # 设置工作目录
 WORKDIR /root/
 # 拷贝必须的文件
-COPY --from=development /go/src/yToolsBox-gin/main .
-COPY --from=development /go/src/yToolsBox-gin/config ./config
-COPY --from=development /go/src/yToolsBox-gin/Script ./Script
-COPY --from=development /go/src/yToolsBox-gin/wait-for ./
-COPY --from=development /go/src/yToolsBox-gin/tmp /tmp
-COPY --from=development /go/src/yToolsBox-gin/etc/supervisord.conf /etc/supervisord.conf
+COPY --from=development /go/src/yToolsBox-gin/main ./ && \
+    --from=development /go/src/yToolsBox-gin/config ./config && \
+    --from=development /go/src/yToolsBox-gin/Script ./Script && \
+    --from=development /go/src/yToolsBox-gin/wait-for ./ && \
+    --from=development /go/src/yToolsBox-gin/tmp /tmp && \
+    --from=development /go/src/yToolsBox-gin/etc/ /etc/
 # 挂载容器目录
 VOLUME ["/root/config", "/root/Script"]
 # 执行

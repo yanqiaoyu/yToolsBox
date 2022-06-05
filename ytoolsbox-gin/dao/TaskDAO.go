@@ -5,7 +5,7 @@ import (
 	"log"
 	"main/dto"
 	"main/model"
-	"main/util"
+	"main/utils"
 
 	"gorm.io/gorm"
 )
@@ -74,12 +74,12 @@ func SelectAllTaskItem(db *gorm.DB, obj dto.GetAllTaskItemDTOReq) ([]map[string]
 	// 把一个自定义结构体的array 转换成map的array
 	// 这里用了json的方法 虽然效率低 但是解决了返回给前端大小写的问题
 	for i := 0; i < DefaultLength; i++ {
-		map_item := util.Struct2MapViaJson(taskItem[i])
+		map_item := utils.Struct2MapViaJson(taskItem[i])
 		map_taskItemList = append(map_taskItemList, map_item)
 	}
 
 	// 计算一下需要如何切割数组
-	ArrayStart, ArrayEnd := util.CalculateReturnMapLength(pagenum, pagesize, map_taskItemList)
+	ArrayStart, ArrayEnd := utils.CalculateReturnMapLength(pagenum, pagesize, map_taskItemList)
 	// 返回切片后的结果
 	return map_taskItemList[ArrayStart:ArrayEnd], DefaultLength
 }

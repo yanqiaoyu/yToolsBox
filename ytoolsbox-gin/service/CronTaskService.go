@@ -1,26 +1,17 @@
 package service
 
 import (
-	"bytes"
-	"log"
 	"main/common"
 	"main/dao"
 	"main/dto"
 	"main/model"
-	"os"
-	"runtime"
-	"strconv"
-	"strings"
+	"main/utils"
 )
 
 func AddNewCronTaskService(PostNewcronTaskParam *dto.PostNewcronTaskDTOReq, cronTaskOriginID uint) {
 	db := common.GetDB()
 	// 这里获取到的PostNewTaskParam是一个字符串形式的数组，所以还需要处理
-	PostNewcronTaskParam.CronTaskFinalList = strings.TrimPrefix(PostNewcronTaskParam.CronTaskFinalList, "[")
-	PostNewcronTaskParam.CronTaskFinalList = strings.TrimSuffix(PostNewcronTaskParam.CronTaskFinalList, "]")
-
-	configIDList := strings.Split(PostNewcronTaskParam.CronTaskFinalList, ",")
-	log.Println(configIDList)
+	configIDList := utils.TreatTaskConfigListFromFrontEnd(PostNewcronTaskParam.CronTaskFinalList)
 
 	// 获取每一个配置ID，新增一个任务，新增一个任务进度条目
 	for i := 0; i < len(configIDList); i++ {
@@ -39,7 +30,26 @@ func AddNewCronTaskService(PostNewcronTaskParam *dto.PostNewcronTaskDTOReq, cron
 }
 
 func CreateNewCronTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.CronTasksResult) error {
-	log.Println(config)
+	utils.ExecuteTask(
+		config.ToolExecuteLocation,
+		resultChannel,
+		config.ToolRemoteSSH_Port,
+		config.ToolRemoteIP,
+		config.ToolRemoteSSH_Account,
+		config.ToolRemoteSSH_Password,
+		config.ToolType,
+		config.ToolRunCMD,
+		config.ToolScriptLocalPath,
+		config.ToolScriptPath,
+		config.ToolScriptName,
+	)
+	// 关闭resultChannel
+	utils.CloseMyChannel(resultChannel)
+	return nil
+}
+
+/*
+func CreateNewCronTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.CronTasksResult) error {
 
 	// 存放任务执行结果的缓存
 	buf := bytes.Buffer{}
@@ -51,8 +61,9 @@ func CreateNewCronTaskService(config dto.BriefToolConfigDTO, resultChannel chan 
 
 		// 准备好连接本地的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
-		cliConf := new(ClientConfig)
-		errCreateClient := cliConf.createClient(
+		cliConf := new(utils.ClientConfig)
+		// cliConf := &utils.ClientConfig{}
+		errCreateClient := cliConf.CreateClient(
 			config.ToolRemoteIP,
 			int64(port),
 			config.ToolRemoteSSH_Account,
@@ -133,8 +144,8 @@ func CreateNewCronTaskService(config dto.BriefToolConfigDTO, resultChannel chan 
 		resultChannel <- model.CronTasksResult{Progress: 25, ReturnContent: buf.String()}
 		// 准备好远程连接的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
-		cliConf := new(ClientConfig)
-		errCreateClient := cliConf.createClient(
+		cliConf := new(utils.ClientConfig)
+		errCreateClient := cliConf.CreateClient(
 			config.ToolRemoteIP,
 			int64(port),
 			config.ToolRemoteSSH_Account,
@@ -212,3 +223,4 @@ func CreateNewCronTaskService(config dto.BriefToolConfigDTO, resultChannel chan 
 	close(resultChannel)
 	return nil
 }
+*/

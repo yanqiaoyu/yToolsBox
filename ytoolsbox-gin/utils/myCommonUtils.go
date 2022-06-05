@@ -6,7 +6,7 @@
  * @LastEditTime: 2021-06-22 12:59:10
  * @FilePath: \golang_web\util\util.go
  */
-package util
+package utils
 
 import (
 	"encoding/json"

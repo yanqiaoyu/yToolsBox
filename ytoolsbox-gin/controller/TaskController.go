@@ -8,8 +8,7 @@ import (
 	"main/model"
 	"main/response"
 	"main/service"
-	"main/util"
-	"strings"
+	"main/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,18 +18,13 @@ func PostNewTask(ctx *gin.Context) {
 	db := common.GetDB()
 	PostNewTaskParam := dto.PostNewTaskDTOReq{}
 
-	if util.ResolveParam(ctx, &PostNewTaskParam) != nil {
+	if utils.ResolveParam(ctx, &PostNewTaskParam) != nil {
 		return
 	}
-	log.Println("未处理前的ConfigList: ", PostNewTaskParam.ConfigList)
+
 	// 这里获取到的PostNewTaskParam是一个字符串形式的数组，所以还需要处理
-	PostNewTaskParam.ConfigList = strings.TrimPrefix(PostNewTaskParam.ConfigList, "[")
-	PostNewTaskParam.ConfigList = strings.TrimSuffix(PostNewTaskParam.ConfigList, "]")
-	log.Println(PostNewTaskParam.ConfigList)
+	configIDList := utils.TreatTaskConfigListFromFrontEnd(PostNewTaskParam.ConfigList)
 
-	configIDList := strings.Split(PostNewTaskParam.ConfigList, ",")
-
-	log.Println(configIDList)
 	// 获取每一个配置ID，新增一个任务，新增一个任务进度条目
 	for i := 0; i < len(configIDList); i++ {
 		// 从库里面把这个配置ID的全部信息查出来传给service
@@ -48,7 +42,7 @@ func PostNewTask(ctx *gin.Context) {
 
 	// 返回
 	Meta := dto.SuccessResponseMeta{Message: "新建任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }
 
 // 获取级联选择器中的信息
@@ -60,7 +54,7 @@ func GetCascader(ctx *gin.Context) {
 	ToolData := dto.CascaderInfo{Total: int64(len(CascaderTree)), CascaderList: CascaderTree}
 	Meta := dto.SuccessResponseMeta{Message: "获取配置信息成功", StatusCode: 200}
 
-	response.Success(ctx, util.Struct2MapViaJson(ToolData), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(ToolData), utils.Struct2MapViaJson(Meta))
 }
 
 // 获取所有TasksItem(任务进度)
@@ -68,7 +62,7 @@ func GetTaskItem(ctx *gin.Context) {
 	db := common.GetDB()
 
 	GetAllTaskItemParam := dto.GetAllTaskItemDTOReq{}
-	if util.ResolveParam(ctx, &GetAllTaskItemParam) != nil {
+	if utils.ResolveParam(ctx, &GetAllTaskItemParam) != nil {
 		return
 	}
 
@@ -82,7 +76,7 @@ func GetTaskItem(ctx *gin.Context) {
 	TaskItemData := dto.GetAllTaskItemDTOResp{Total: int64(DefaultLength), TaskItemList: TaskItemList}
 	Meta := dto.SuccessResponseMeta{Message: "获取任务列表成功", StatusCode: 200}
 
-	response.Success(ctx, util.Struct2MapViaJson(TaskItemData), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(TaskItemData), utils.Struct2MapViaJson(Meta))
 }
 
 // 清空所有任务
@@ -93,7 +87,7 @@ func DeleteAllTask(ctx *gin.Context) {
 
 	// 返回
 	Meta := dto.SuccessResponseMeta{Message: "清空所有任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }
 
 // 删除特定任务
@@ -102,7 +96,7 @@ func DeleteSpecifiedTask(ctx *gin.Context) {
 
 	DeleteSpecifiedTaskReq := dto.DeleteSpecifiedTaskReq{}
 
-	if util.ResolveURI(ctx, &DeleteSpecifiedTaskReq) != nil {
+	if utils.ResolveURI(ctx, &DeleteSpecifiedTaskReq) != nil {
 		return
 	}
 
@@ -110,7 +104,7 @@ func DeleteSpecifiedTask(ctx *gin.Context) {
 
 	// 返回
 	Meta := dto.SuccessResponseMeta{Message: "清空任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }
 
 // 重新开始一个任务
@@ -118,7 +112,7 @@ func PostRestartTask(ctx *gin.Context) {
 	db := common.GetDB()
 	PostRestartTaskParam := dto.PostRestartTaskDTOReq{}
 
-	if util.ResolveParam(ctx, &PostRestartTaskParam) != nil {
+	if utils.ResolveParam(ctx, &PostRestartTaskParam) != nil {
 		return
 	}
 
@@ -140,5 +134,5 @@ func PostRestartTask(ctx *gin.Context) {
 
 	// 返回
 	Meta := dto.SuccessResponseMeta{Message: "重建任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }

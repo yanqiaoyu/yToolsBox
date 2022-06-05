@@ -15,7 +15,7 @@ import (
 	"main/dto"
 	"main/model"
 	"main/response"
-	"main/util"
+	"main/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +25,7 @@ func GetAllUser(ctx *gin.Context) {
 	db := common.GetDB()
 	GetAllerUserReqParam := dto.GetAllUserDTOReq{}
 
-	if util.ResolveParam(ctx, &GetAllerUserReqParam) != nil {
+	if utils.ResolveParam(ctx, &GetAllerUserReqParam) != nil {
 		return
 	}
 
@@ -36,7 +36,7 @@ func GetAllUser(ctx *gin.Context) {
 	UserData := dto.GetAllUserDTOResp{Total: DefaultLength, Pagenum: GetAllerUserReqParam.Pagenum, Users: userList}
 	Meta := dto.SuccessResponseMeta{Message: "获取用户成功", StatusCode: 200}
 
-	response.Success(ctx, util.Struct2MapViaJson(UserData), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(UserData), utils.Struct2MapViaJson(Meta))
 }
 
 // 返回特定用户的状态
@@ -44,7 +44,7 @@ func GetSpecifiedUser(ctx *gin.Context) {
 	db := common.GetDB()
 	GetSpecifiedUserDTOReq := dto.GetSpecifiedUserDTOReq{}
 
-	if util.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
+	if utils.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
 		return
 	}
 
@@ -53,7 +53,7 @@ func GetSpecifiedUser(ctx *gin.Context) {
 	// 构造返回的结构体
 	Meta := model.Meta{Msg: "获取用户状态成功", Status_code: 200}
 
-	response.Success(ctx, util.Struct2MapViaJson(struct_userList), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(struct_userList), utils.Struct2MapViaJson(Meta))
 }
 
 // 更新用户的状态
@@ -61,7 +61,7 @@ func PutUserState(ctx *gin.Context) {
 	db := common.GetDB()
 	PutUserStateDTOReq := dto.PutUserStateDTOReq{}
 
-	if util.ResolveParam(ctx, &PutUserStateDTOReq) != nil {
+	if utils.ResolveParam(ctx, &PutUserStateDTOReq) != nil {
 		return
 	}
 
@@ -76,11 +76,11 @@ func PutUserInfo(ctx *gin.Context) {
 	PutUserInfoDTOReq := dto.PutUserInfoDTOReq{}
 	GetSpecifiedUserDTOReq := dto.GetSpecifiedUserDTOReq{}
 
-	if util.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
+	if utils.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
 		return
 	}
 
-	if util.ResolveParam(ctx, &PutUserInfoDTOReq) != nil {
+	if utils.ResolveParam(ctx, &PutUserInfoDTOReq) != nil {
 		return
 	}
 
@@ -92,7 +92,7 @@ func PostNewUser(ctx *gin.Context) {
 	db := common.GetDB()
 	PostNewUserReq := dto.PostNewUserReq{}
 	// 提取参数
-	if util.ResolveParam(ctx, &PostNewUserReq) != nil {
+	if utils.ResolveParam(ctx, &PostNewUserReq) != nil {
 		return
 	}
 	// 写入数据库
@@ -104,12 +104,12 @@ func DeleteSpecifiedUser(ctx *gin.Context) {
 	db := common.GetDB()
 	GetSpecifiedUserDTOReq := dto.GetSpecifiedUserDTOReq{}
 
-	if util.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
+	if utils.ResolveURI(ctx, &GetSpecifiedUserDTOReq) != nil {
 		return
 	}
 	struct_userList := dao.DeleteSpecifiedUser(db, int(GetSpecifiedUserDTOReq.UserID))
 
 	// 构造返回的结构体
 	Meta := model.Meta{Msg: "删除用户成功", Status_code: 200}
-	response.Success(ctx, util.Struct2MapViaJson(struct_userList), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(struct_userList), utils.Struct2MapViaJson(Meta))
 }

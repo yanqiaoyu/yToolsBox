@@ -4,7 +4,7 @@ import (
 	"log"
 	"main/dto"
 	"main/model"
-	"main/util"
+	"main/utils"
 
 	"github.com/robfig/cron/v3"
 	"gorm.io/gorm"
@@ -87,12 +87,12 @@ func SelectAllCronTask(db *gorm.DB, GetAllCronTaskParam dto.GetAllCronTaskDTOReq
 	// 把一个自定义结构体的array 转换成map的array
 	// 这里用了json的方法 虽然效率低 但是解决了返回给前端大小写的问题
 	for i := 0; i < DefaultLength; i++ {
-		map_item := util.Struct2MapViaJson(cronTaskItem[i])
+		map_item := utils.Struct2MapViaJson(cronTaskItem[i])
 		map_taskItemList = append(map_taskItemList, map_item)
 	}
 
 	// 计算一下需要如何切割数组
-	ArrayStart, ArrayEnd := util.CalculateReturnMapLength(pagenum, pagesize, map_taskItemList)
+	ArrayStart, ArrayEnd := utils.CalculateReturnMapLength(pagenum, pagesize, map_taskItemList)
 	// 返回切片后的结果
 	return map_taskItemList[ArrayStart:ArrayEnd], DefaultLength
 }
@@ -120,12 +120,12 @@ func SelectAllCronTaskResult(db *gorm.DB, GetAllCronTaskResultParam dto.GetAllCr
 	// 把一个自定义结构体的array 转换成map的array
 	// 这里用了json的方法 虽然效率低 但是解决了返回给前端大小写的问题
 	for i := 0; i < DefaultLength; i++ {
-		map_item := util.Struct2MapViaJson(cronTaskResultItem[i])
+		map_item := utils.Struct2MapViaJson(cronTaskResultItem[i])
 		map_cronTaskResultList = append(map_cronTaskResultList, map_item)
 	}
 
 	// 计算一下需要如何切割数组
-	ArrayStart, ArrayEnd := util.CalculateReturnMapLength(pagenum, pagesize, map_cronTaskResultList)
+	ArrayStart, ArrayEnd := utils.CalculateReturnMapLength(pagenum, pagesize, map_cronTaskResultList)
 	// 返回切片后的结果
 	return map_cronTaskResultList[ArrayStart:ArrayEnd], DefaultLength
 }

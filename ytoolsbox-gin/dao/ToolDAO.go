@@ -4,7 +4,7 @@ import (
 	"log"
 	"main/dto"
 	"main/model"
-	"main/util"
+	"main/utils"
 
 	"gorm.io/gorm"
 )
@@ -80,12 +80,12 @@ func SelectSpecifiedToolConfig(db *gorm.DB, toolID int, QueryInfo dto.GetSpecifi
 	// 把一个自定义结构体的array 转换成map的array
 	// 这里用了json的方法 虽然效率低 但是解决了返回给前端大小写的问题
 	for i := 0; i < DefaultLength; i++ {
-		map_item := util.Struct2MapViaJson(configList[i])
+		map_item := utils.Struct2MapViaJson(configList[i])
 		map_configList = append(map_configList, map_item)
 	}
 
 	// 计算一下需要如何切割数组
-	ArrayStart, ArrayEnd := util.CalculateReturnMapLength(pagenum, pagesize, map_configList)
+	ArrayStart, ArrayEnd := utils.CalculateReturnMapLength(pagenum, pagesize, map_configList)
 	// 返回切片后的结果
 	return map_configList[ArrayStart:ArrayEnd], DefaultLength
 
@@ -112,7 +112,7 @@ func DeleteSpecifiedConfig(db *gorm.DB, configID uint) {
 
 // 更新配置信息
 func UpdateSpecifiedToolConfigByConfigID(db *gorm.DB, configID uint, obj dto.PutSpecifiedToolConfigByConfigIDDTOReqQuery) {
-	log.Println(util.Struct2MapViaJson(obj))
+	log.Println(utils.Struct2MapViaJson(obj))
 	db.Debug().Model(&model.ToolConfig{}).Where("id = ?", configID).Updates(
 		model.ToolConfig{
 			ToolExecuteLocation:    obj.ToolConfig.ToolExecuteLocation,

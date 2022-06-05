@@ -7,7 +7,7 @@ import (
 	"main/dto"
 	"main/response"
 	"main/service"
-	"main/util"
+	"main/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
@@ -20,7 +20,7 @@ func PostNewCronTask(ctx *gin.Context) {
 	schedule := common.GetScheduler()
 	PostNewcronTaskParam := dto.PostNewcronTaskDTOReq{}
 
-	if util.ResolveParam(ctx, &PostNewcronTaskParam) != nil {
+	if utils.ResolveParam(ctx, &PostNewcronTaskParam) != nil {
 		return
 	}
 
@@ -33,7 +33,7 @@ func PostNewCronTask(ctx *gin.Context) {
 		msg := dto.FailResponseMeta{}
 		msg.StatusCode = 400
 		msg.Message = "定时任务写入数据库失败: " + result.Error.Error()
-		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
+		response.Fail(ctx, nil, utils.Struct2MapViaJson(msg))
 		return
 	}
 
@@ -55,13 +55,13 @@ func PostNewCronTask(ctx *gin.Context) {
 		msg := dto.FailResponseMeta{}
 		msg.StatusCode = 400
 		msg.Message = "新增定时任务失败:" + err.Error()
-		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
+		response.Fail(ctx, nil, utils.Struct2MapViaJson(msg))
 		return
 	}
 
 	// 返回
 	Meta := dto.SuccessResponseMeta{Message: "新建定时任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }
 
 // 删除所有定时任务
@@ -83,7 +83,7 @@ func DeleteAllCronTask(ctx *gin.Context) {
 	dao.DeleteAllCronTask(db)
 
 	Meta := dto.SuccessResponseMeta{Message: "删除所有定时任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }
 
 // 删除特定定时任务
@@ -92,7 +92,7 @@ func DeleteSpecifiedCrontask(ctx *gin.Context) {
 	schedule := common.GetScheduler()
 	DeleteSpecifiedTaskReq := dto.DeleteSpecifiedcronTaskReq{}
 
-	if util.ResolveURI(ctx, &DeleteSpecifiedTaskReq) != nil {
+	if utils.ResolveURI(ctx, &DeleteSpecifiedTaskReq) != nil {
 		return
 	}
 
@@ -105,12 +105,12 @@ func DeleteSpecifiedCrontask(ctx *gin.Context) {
 		msg := dto.FailResponseMeta{}
 		msg.StatusCode = 400
 		msg.Message = "删除任务记录失败: " + result.Error.Error()
-		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
+		response.Fail(ctx, nil, utils.Struct2MapViaJson(msg))
 		return
 	}
 
 	Meta := dto.SuccessResponseMeta{Message: "删除定时任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }
 
 // 查询定时任务
@@ -118,7 +118,7 @@ func GetAllCronTask(ctx *gin.Context) {
 	db := common.GetDB()
 	GetAllCronTaskParam := dto.GetAllCronTaskDTOReq{}
 
-	if util.ResolveParam(ctx, &GetAllCronTaskParam) != nil {
+	if utils.ResolveParam(ctx, &GetAllCronTaskParam) != nil {
 		return
 	}
 
@@ -128,7 +128,7 @@ func GetAllCronTask(ctx *gin.Context) {
 	cronTaskItemData := dto.GetAllCronTaskItemDTOResp{Total: int64(DefaultLength), CronTaskItemList: cronTaskItemList}
 	Meta := dto.SuccessResponseMeta{Message: "获取定时任务列表成功", StatusCode: 200}
 
-	response.Success(ctx, util.Struct2MapViaJson(cronTaskItemData), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(cronTaskItemData), utils.Struct2MapViaJson(Meta))
 }
 
 // 根据scheduleID查询特定定时任务
@@ -136,7 +136,7 @@ func GetSpecifiedCrontaskByScheduleID(ctx *gin.Context) {
 	db := common.GetDB()
 	GetSpecifiedCrontaskByScheduleIDParam := dto.GetSpecifiedCrontaskByScheduleIDDTOReq{}
 
-	if util.ResolveURI(ctx, &GetSpecifiedCrontaskByScheduleIDParam) != nil {
+	if utils.ResolveURI(ctx, &GetSpecifiedCrontaskByScheduleIDParam) != nil {
 		return
 	}
 
@@ -145,7 +145,7 @@ func GetSpecifiedCrontaskByScheduleID(ctx *gin.Context) {
 		msg := dto.FailResponseMeta{}
 		msg.StatusCode = 400
 		msg.Message = "查询定时任务信息失败: " + result.Error.Error()
-		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
+		response.Fail(ctx, nil, utils.Struct2MapViaJson(msg))
 		return
 	}
 
@@ -153,14 +153,14 @@ func GetSpecifiedCrontaskByScheduleID(ctx *gin.Context) {
 
 	// 构造返回的结构体
 	Meta := dto.SuccessResponseMeta{Message: "获取定时任务列表成功", StatusCode: 200}
-	response.Success(ctx, util.Struct2MapViaJson(cronTaskItem), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(cronTaskItem), utils.Struct2MapViaJson(Meta))
 }
 
 // 查询所有定时任务执行结果
 func GetAllCronTaskResult(ctx *gin.Context) {
 	db := common.GetDB()
 	GetAllCronTaskResultParam := dto.GetAllCronTaskResultDTOReq{}
-	if util.ResolveParam(ctx, &GetAllCronTaskResultParam) != nil {
+	if utils.ResolveParam(ctx, &GetAllCronTaskResultParam) != nil {
 		return
 	}
 
@@ -170,7 +170,7 @@ func GetAllCronTaskResult(ctx *gin.Context) {
 	cronTaskItemData := dto.GetAllCronTaskItemDTOResp{Total: int64(DefaultLength), CronTaskItemList: cronTaskResutlItemList}
 	Meta := dto.SuccessResponseMeta{Message: "获取定时任务执行结果列表成功", StatusCode: 200}
 
-	response.Success(ctx, util.Struct2MapViaJson(cronTaskItemData), util.Struct2MapViaJson(Meta))
+	response.Success(ctx, utils.Struct2MapViaJson(cronTaskItemData), utils.Struct2MapViaJson(Meta))
 }
 
 // 删除所有定时任务执行结果
@@ -181,7 +181,7 @@ func DeleteAllCronTaskResult(ctx *gin.Context) {
 	dao.DeleteAllCronTaskResult(db)
 
 	Meta := dto.SuccessResponseMeta{Message: "删除所有定时任务成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }
 
 // 删除特定定时任务执行结果
@@ -189,7 +189,7 @@ func DeleteSpecifiedCrontaskResult(ctx *gin.Context) {
 	db := common.GetDB()
 	DeleteSpecifiedcronTaskResultParam := dto.DeleteSpecifiedcronTaskResultReq{}
 
-	if util.ResolveURI(ctx, &DeleteSpecifiedcronTaskResultParam) != nil {
+	if utils.ResolveURI(ctx, &DeleteSpecifiedcronTaskResultParam) != nil {
 		return
 	}
 
@@ -199,10 +199,10 @@ func DeleteSpecifiedCrontaskResult(ctx *gin.Context) {
 		msg := dto.FailResponseMeta{}
 		msg.StatusCode = 400
 		msg.Message = "删除定时任务执行记录失败: " + result.Error.Error()
-		response.Fail(ctx, nil, util.Struct2MapViaJson(msg))
+		response.Fail(ctx, nil, utils.Struct2MapViaJson(msg))
 		return
 	}
 
 	Meta := dto.SuccessResponseMeta{Message: "删除定时任务结果成功", StatusCode: 200}
-	response.Success(ctx, nil, util.Struct2MapViaJson(Meta))
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }

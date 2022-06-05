@@ -1,150 +1,37 @@
 package service
 
 import (
-	"bytes"
-	"fmt"
-	"io"
-	"log"
 	"main/dto"
 	"main/model"
-	"main/util"
-	"net"
+	"main/utils"
 	"os"
 	"path/filepath"
-	"runtime"
-	"strconv"
-	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pkg/sftp"
 	"github.com/spf13/viper"
-	"golang.org/x/crypto/ssh"
 )
 
-//连接的配置
-type ClientConfig struct {
-	Host       string       //ip
-	Port       int64        // 端口
-	Username   string       //用户名
-	Password   string       //密码
-	sshClient  *ssh.Client  //ssh client
-	sftpClient *sftp.Client //sftp client
-	LastResult string       //最近一次运行的结果
-}
-
-func (cliConf *ClientConfig) createClient(host string, port int64, username, password string) error {
-	var (
-		sshClient  *ssh.Client
-		sftpClient *sftp.Client
-		err        error
+func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.Tasks) error {
+	utils.ExecuteTask(
+		config.ToolExecuteLocation,
+		resultChannel,
+		config.ToolRemoteSSH_Port,
+		config.ToolRemoteIP,
+		config.ToolRemoteSSH_Account,
+		config.ToolRemoteSSH_Password,
+		config.ToolType,
+		config.ToolRunCMD,
+		config.ToolScriptLocalPath,
+		config.ToolScriptPath,
+		config.ToolScriptName,
 	)
-	cliConf.Host = host
-	cliConf.Port = port
-	cliConf.Username = username
-	cliConf.Password = password
-	cliConf.Port = port
-
-	// 捕捉panic异常
-	defer func() {
-		if errPanic := recover(); errPanic != nil {
-			log.Println("Panic:", errPanic)
-			// return "Something Wrong During Create SSH Connection"
-		}
-	}()
-
-	config := ssh.ClientConfig{
-		Config: ssh.Config{
-			Ciphers: []string{"aes256-cbc", "aes128-ctr", "aes192-ctr", "aes256-ctr", "aes128-gcm@openssh.com", "arcfour256", "arcfour128", "aes128-cbc", "3des-cbc", "aes192-cbc"},
-		},
-		User: cliConf.Username,
-		Auth: []ssh.AuthMethod{ssh.Password(password)},
-		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
-			return nil
-		},
-		Timeout: 5 * time.Second,
-	}
-	addr := fmt.Sprintf("%s:%d", cliConf.Host, cliConf.Port)
-
-	if sshClient, err = ssh.Dial("tcp", addr, &config); err != nil {
-		log.Println("Dial error occurred:", err)
-		return err
-	}
-	cliConf.sshClient = sshClient
-
-	//此时获取了sshClient，下面使用sshClient构建sftpClient
-	if sftpClient, err = sftp.NewClient(sshClient); err != nil {
-		log.Println("NewClient error occurred:", err)
-		return err
-	}
-	cliConf.sftpClient = sftpClient
-
+	// 关闭resultChannel
+	utils.CloseMyChannel(resultChannel)
 	return nil
 }
 
-func (cliConf *ClientConfig) RunShell(shell string) string {
-	var (
-		session *ssh.Session
-		err     error
-	)
-
-	//获取session，这个session是用来远程执行操作的
-	if session, err = cliConf.sshClient.NewSession(); err != nil {
-		log.Println("error occurred:", err)
-		return err.Error()
-	}
-	//执行shell
-	if output, err := session.CombinedOutput(shell); err != nil {
-		log.Println(shell)
-		log.Println("error occurred:", err, string(output))
-		return err.Error() + string(output)
-	} else {
-		cliConf.LastResult = string(output)
-	}
-	return cliConf.LastResult
-}
-
-func (cliConf *ClientConfig) Upload(srcPath, dstPath string) string {
-	srcFile, err := os.Open(srcPath) //本地
-	log.Println(srcFile, err)
-	dstFile, _ := cliConf.sftpClient.Create(dstPath) //远程
-	defer func() {
-		_ = srcFile.Close()
-		_ = dstFile.Close()
-	}()
-	buf := make([]byte, 1024)
-	for {
-		n, err := srcFile.Read(buf)
-		if err != nil {
-			if err != io.EOF {
-				log.Println("error occurred:", err)
-				return err.Error()
-			} else {
-				break
-			}
-		}
-		_, _ = dstFile.Write(buf[:n])
-	}
-	fmt.Println(cliConf.RunShell(fmt.Sprintf("ls %s", dstPath)))
-	return ">>> 上传成功至" + dstPath + "\r\n目标路径存在如下文件:\r\n" + cliConf.RunShell(fmt.Sprintf("ls %s", dstPath))
-}
-
-func (cliConf *ClientConfig) Download(srcPath, dstPath string) {
-	srcFile, _ := cliConf.sftpClient.Open(srcPath) //远程
-	dstFile, _ := os.Create(dstPath)               //本地
-	defer func() {
-		_ = srcFile.Close()
-		_ = dstFile.Close()
-	}()
-
-	if _, err := srcFile.WriteTo(dstFile); err != nil {
-		log.Println("error occurred", err)
-	}
-	fmt.Println("文件下载完毕")
-}
-
+/*
 func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan model.Tasks) error {
-	log.Println(config)
 
 	// 存放任务执行结果的缓存
 	buf := bytes.Buffer{}
@@ -156,8 +43,8 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 
 		// 准备好连接本地的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
-		cliConf := new(ClientConfig)
-		errCreateClient := cliConf.createClient(
+		cliConf := new(utils.ClientConfig)
+		errCreateClient := cliConf.CreateClient(
 			config.ToolRemoteIP,
 			int64(port),
 			config.ToolRemoteSSH_Account,
@@ -238,8 +125,8 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 		resultChannel <- model.Tasks{Progress: 25, ReturnContent: buf.String()}
 		// 准备好远程连接的素材
 		port, _ := strconv.Atoi(config.ToolRemoteSSH_Port)
-		cliConf := new(ClientConfig)
-		errCreateClient := cliConf.createClient(
+		cliConf := new(utils.ClientConfig)
+		errCreateClient := cliConf.CreateClient(
 			config.ToolRemoteIP,
 			int64(port),
 			config.ToolRemoteSSH_Account,
@@ -317,7 +204,7 @@ func CreateNewTaskService(config dto.BriefToolConfigDTO, resultChannel chan mode
 	close(resultChannel)
 	return nil
 }
-
+*/
 func SaveScriptFile(ctx *gin.Context) (string, string, error) {
 	// 获取文件名
 	file, err := ctx.FormFile("file")
@@ -336,7 +223,7 @@ func SaveScriptFile(ctx *gin.Context) (string, string, error) {
 	FinalFilePath := filepath.Join(AbsPath, BasePath, toolName)
 	// log.Println("文件存放路径: ", FinalFilePath)
 
-	util.CreateDir(FinalFilePath)
+	utils.CreateDir(FinalFilePath)
 
 	FileDST := filepath.Join(FinalFilePath, fileName)
 

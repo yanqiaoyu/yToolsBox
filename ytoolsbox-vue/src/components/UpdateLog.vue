@@ -16,6 +16,19 @@
     </el-backtop>
 
     <el-timeline>
+      <el-timeline-item timestamp="2022/06/05" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            <el-link
+              href="https://github.com/yanqiaoyu/yToolsBox/issues/52"
+              target="_blank"
+            >1. 解决【Bug】定时任务会引起执行任务的宿主机内存泄漏</el-link>
+            <br />2. 针对任务执行做了大量的逻辑抽象，代码复用
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/05/09" placement="top">
         <el-card>
           <h4>更新内容</h4>

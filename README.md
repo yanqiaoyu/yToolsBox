@@ -97,11 +97,17 @@ docker network create --driver bridge ytoolsbox_network
 
 docker volume create ytoolsbox_db-data
 
-docker run -itd -p 5432:5432 --name yToolsBox-db --network ytoolsbox_network -e POSTGRES_PASSWORD=`YOUR_PASSWORD` -v ytoolsbox_db-data:/var/lib/postgresql/data postgres
+docker run -itd -p 5432:5432 --name yToolsBox-db --network ytoolsbox_network -e POSTGRES_PASSWORD=`YOUR_PASSWORD` -v ytoolsbox_db-data:/var/lib/postgresql/data  yanqiaoyu/ytoolsbox-db:v0.0.1
 
-docker run -itd -p 8081:8081 --name yToolsBox-api --network ytoolsbox_network -e HOST_SCRIPT_PATH=/home/yToolsBox/api/Script -v /home/yToolsBox/api/Script:/root/Script yanqiaoyu/ytoolsbox-api:v0.2.5  supervisord -c /etc/supervisord.conf
+docker run -itd -p 8081:8081 --name yToolsBox-api-custom --network ytoolsbox_network -e HOST_SCRIPT_PATH=/home/yToolsBox/api/Script -v /home/yToolsBox/api/Script:/root/Script yanqiaoyu/ytoolsbox-api-custom:v0.1.16 supervisord -c /etc/supervisord.conf
 
-docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard yanqiaoyu/ytoolsbox-dashboard:v0.2.5
+docker run -itd -p 80:80 --network ytoolsbox_network --name yToolsBox-dashboard-custom yanqiaoyu/ytoolsbox-dashboard-custom:v0.1.16
+
+docker run -itd --name yToolsBox-replay-custom --net host yanqiaoyu/ytoolsbox-replay-custom:v0.0.1
+
+docker run -itd -p 2468:2468 --network ytoolsbox_network --name yToolsBox-req-custom yanqiaoyu/ytoolsbox-req-custom:v0.0.4
+
+docker run -itd -p 3579:3579 --network ytoolsbox_network --name recognize_service yanqiaoyu/recognize_service:v0.1
 ```
 
 执行docker ps出现以下结果，则证明镜像拉起成功

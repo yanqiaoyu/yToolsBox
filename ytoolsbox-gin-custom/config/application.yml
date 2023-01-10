@@ -1,0 +1,41 @@
+server:
+  port: 8081
+datasource:
+  testhost: yToolsBox-db
+  productionhost: yToolsBox-db
+  port: 5432
+  database: postgres
+  dataleakge_database: 演示库
+  username: postgres
+  password: test123456
+  charset: utf8
+
+tool:
+  scriptBasePath: Script
+agentinstall:
+  dscAgentInstallPath: /dsc-agent/
+  dscAgentPackageName: hecate_agent-v2.0.0.175-20211228.rpm
+  dasAgentInstallPath: /das-agent/
+  dasAgentPackageName: agent_installer.bin
+
+pocconfig:
+  dscAgentConfigName: das_agent.ini
+  dscAgentConfigPath: /etc/hecate_agent/
+  restartDscAgentShell: hecate_agent.sh restart
+  accountExtractContainerName: dsc_api_rich
+  accountExtractConfigPath: /dsc/data/meta-data/account/
+  authConfigName: auth.conf
+  appConfigName: app.conf
+  dscDasContainerName: dsc_das
+
+tcpreplayconfig:
+  replaycontainername: yToolsBox-replay-custom
+  pcappath: /pcap/
+  multiaccountpcap: two_account.pcap
+  multiaccountcach: two_account.cach
+  multiaccounttemp: tmp_two_account.pcap
+
+cleanerconfig:
+  clickhousecontainername: dsc_hosting_dsc_clickhouse
+  dbcontainername: dsc_hosting_dsc_db
+  siemcontainername: dsc_hosting_dsc_siem

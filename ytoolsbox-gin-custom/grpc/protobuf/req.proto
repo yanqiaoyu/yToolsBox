@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+option go_package = ".;proto";
+
+// 面向DSC的grpc服务
+service DSCService {
+    rpc ModifyRiskThreshold(ModifyRiskThresholdRequest) returns (ModifyRiskThresholdResponse){}
+}
+
+// 修改阈值的请求
+message ModifyRiskThresholdRequest{
+    // 数据安全大脑的IP
+    string dsc_ip = 1;
+    // 数据安全大脑的前端账号
+    string dsc_fe_account = 2;
+    // 数据安全大脑的前端账号
+    string dsc_fe_password = 3;
+    // 模式,是poc还是default
+    string modify_mode = 4;
+}
+
+// 修改阈值的响应
+message ModifyRiskThresholdResponse {
+    string Data = 1;
+    string Meta = 2;
+}

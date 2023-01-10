@@ -1,53 +1,90 @@
-  version: '3'
-  services:
-    yToolsBox-db:
-      container_name: 'yToolsBox-db'
-      image: postgres
-      restart: always
-      ports:
-        - 5432:5432
-      volumes:
-        - db-data:/var/lib/postgresql/data
-      networks:
-        - network
-      environment:
-        POSTGRES_PASSWORD: test123456
+version: '3'
+services:
+  # 编译涵盖假数据的数据库的镜像
+  yToolsBox-db:
+    container_name: 'yToolsBox-db'
+    build:
+      context: ./ytoolsbox-db
+      dockerfile: Dockerfile
+    image: 'yanqiaoyu/ytoolsbox-db:${DB_TAG}'
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ytoolsbox_db-data:/var/lib/postgresql/data
+    networks:
+      - ytoolsbox_network
+    environment:
+      POSTGRES_PASSWORD: test123456
+  # 编译api服务的镜像
+  yToolsBox-api-custom:
+    container_name: 'yToolsBox-api-custom'
+    build:
+      context: ./ytoolsbox-gin-custom
+      dockerfile: Dockerfile
+    image: 'yanqiaoyu/ytoolsbox-api-custom:${API_TAG}'
+    depends_on:
+      - yToolsBox-db
+    networks:
+      - ytoolsbox_network
+    volumes:
+      - /home/yToolsBox-custom/api/Script:/root/Script
+    # should be same as above path
+    environment:
+      HOST_SCRIPT_PATH: /home/yToolsBox-custom/api/Script
+    ports:
+      - 8081:8081
+    command:
+      [
+        'sh',
+        'wait-for',
+        'yToolsBox-db:5432',
+        '--',
+        'supervisord',
+        '-c',
+        '/etc/supervisord.conf'
+      ]
+  # 编译前端服务的镜像
+  yToolsBox-dashboard-custom:
+    container_name: 'yToolsBox-dashboard-custom'
+    build:
+      context: ./ytoolsbox-vue-custom
+      dockerfile: Dockerfile
+    image: 'yanqiaoyu/ytoolsbox-dashboard-custom:${DASHBOARD_TAG}'
+    networks:
+      - ytoolsbox_network
+    ports:
+      - 80:80
+    depends_on:
+      - yToolsBox-db
+      - yToolsBox-api-custom
+  # 编译与大脑进行交互请求的镜像
+  yToolsBox-req-custom:
+    container_name: 'yToolsBox-req-custom'
+    build:
+      context: ./ytoolsbox-req-custom
+      dockerfile: Dockerfile
+    image: 'yanqiaoyu/ytoolsbox-req-custom:${REQ_TAG}'
+    networks:
+      - ytoolsbox_network
+    ports:
+      - 2468:2468
+    command: [ "supervisord", "-c", "/etc/supervisord.conf" ]
+  # 编译回放服务的镜像
+  yToolsBox-replay-custom:
+    container_name: 'yToolsBox-replay-custom'
+    build:
+      context: ./ytoolsbox-replay-custom
+      dockerfile: Dockerfile
+    image: 'yanqiaoyu/ytoolsbox-replay-custom:${REPLAY_TAG}'
+    networks:
+      - ytoolsbox_network
+    command: [ "tail", "-f", "/dev/null" ]
+  # 拉起图像识别的镜像
 
-    yToolsBox-api:
-      container_name: 'yToolsBox-api'
-      build:
-        context: ./ytoolsbox-gin
-        dockerfile: Dockerfile
-      image: "yanqiaoyu/ytoolsbox-api:${TAG}"
-      depends_on:
-        - yToolsBox-db
-      networks:
-        - network
-      volumes:
-        - /home/yToolsBox/api/Script:/root/Script
-      # should be same as above path
-      environment:
-        HOST_SCRIPT_PATH: /home/yToolsBox/api/Script
-      ports:
-        - 8081:8081
-      command: ["sh", "wait-for", "yToolsBox-db:5432", "--", "supervisord", "-c", "/etc/supervisord.conf"]
 
-    yToolsBox-dashboard:
-      container_name: 'yToolsBox-dashboard'
-      build:
-        context: ./ytoolsbox-vue
-        dockerfile: Dockerfile
-      image: "yanqiaoyu/ytoolsbox-dashboard:${TAG}"
-      networks:
-        - network
-      ports:
-        - 80:80
-      depends_on:
-        - yToolsBox-db
-        - yToolsBox-api
-
-  volumes:
-    db-data:
-  networks:
-    network:
-      driver: bridge
+volumes:
+  ytoolsbox_db-data:
+networks:
+  ytoolsbox_network:
+    driver: bridge

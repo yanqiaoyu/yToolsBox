@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package proto;
+option go_package = ".;proto";
+
+service AddDataClassifyService {
+    rpc AddDataClassify(AddDataClassifyRequest) returns(AddDataClassifyResponse) {}
+}
+
+message AddDataClassifyRequest {
+    // 数据安全大脑的IP
+    string dsc_ip = 1;
+    // 数据安全大脑的前端账号
+    string dsc_fe_account = 2;
+    // 数据安全大脑的前端密码
+    string dsc_fe_password = 3;
+    // POC工具盒,也就是postgres所在机器的IP
+    string postgreSQL_ip = 4;
+}
+
+message AddDataClassifyResponse{
+    string Data = 1;
+    string Meta = 2;    
+}

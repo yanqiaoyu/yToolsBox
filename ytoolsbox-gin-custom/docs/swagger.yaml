@@ -1,0 +1,345 @@
+basePath: /api/auth
+definitions:
+  dto.SuccessResponseMeta:
+    properties:
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+info:
+  contact:
+    email: yqy1160058763@qq.com
+    name: yanqiaoyu
+    url: https://github.com/yanqiaoyu/yToolsBox/tree/poc-master
+  description: 用于数据安全POC测试的工具盒
+  title: POC工具盒
+  version: v0.2.12
+paths:
+  /api/settings/values:
+    get:
+      description: 模拟SonarQube未授权访问, 这里的路径不能加/api/auth这个前缀
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟SonarQube未授权访问
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/AuthInURL:
+    get:
+      description: 模拟鉴权信息在url中
+      parameters:
+      - description: 路径中存在鉴权信息,例如sessionid=1
+        in: path
+        name: sessionid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟鉴权信息在url中
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/DataAmountCanBeModified:
+    get:
+      description: 模拟敏感接口返回数据量可修改, 例如path中存在 query=1&pagenum=1&pagesize=10
+      parameters:
+      - description: query是一个可修改的参数, 例如query=1
+        in: path
+        name: query
+        required: true
+        type: integer
+      - description: pagenum是一个可修改的参数, 例如pagenum=1
+        in: path
+        name: pagenum
+        required: true
+        type: integer
+      - description: pagesize是一个可修改的参数, 例如pagesize=1
+        in: path
+        name: pagesize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟敏感接口返回数据量可修改
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/DeleteInGet:
+    get:
+      description: 模拟 GET方式执行危险操作
+      parameters:
+      - description: 路径中存在delete参数,例如delete=1
+        in: path
+        name: delete
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟 GET方式执行危险操作
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/DifferentDesensePolicy:
+    get:
+      description: 模拟脱敏策略不一致, 例如返回2种不同类型的脱敏数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟脱敏策略不一致
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/NoneSensitiveAPINotSec:
+    post:
+      description: 模拟非敏感接口未鉴权,请求中不要带鉴权信息即可
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟非敏感接口未鉴权
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/PswdInCookie:
+    get:
+      description: 模拟cookie中存在密码信息,这个接口需要请求头中携带cookie这个字段,并且其中含有密码信息
+      parameters:
+      - description: 'cookie中填写明文的密码信息,例如Cookie: expires=Thu, 01 Jan 1970 00:00:00
+          GMT; password=qwert'
+        in: header
+        name: cookie
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟cookie中存在密码信息
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/PswdInPlainText:
+    post:
+      description: 模拟请求数据存在明文密码信息
+      parameters:
+      - description: query中填写明文的密码信息,例如password=123456
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟请求数据存在明文密码信息
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/PswdInPlainTextResp:
+    get:
+      description: 模拟响应数据存在密码信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟响应数据存在密码信息
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/PswdInResp:
+    get:
+      description: 模拟响应数据存在密码信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟响应数据存在密码信息
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/PswdInURL:
+    get:
+      consumes:
+      - application/json
+      description: 模拟url中存在密码信息
+      parameters:
+      - description: 填写明文的密码信息
+        in: path
+        name: password
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟url中存在密码信息
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/SensitiveAPINotSec:
+    post:
+      description: 模拟敏感接口未鉴权,请求中不要带鉴权信息即可
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟敏感接口未鉴权
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/SensitiveDataInURL:
+    get:
+      description: 模拟敏感信息在url中
+      parameters:
+      - description: 路径中存在敏感信息,例如phone=13687148956
+        in: path
+        name: phone
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟敏感信息在url中
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/TooMuchDataInSingleRequest:
+    get:
+      description: 模拟单次访问数据量过大, 例如返回200个姓名
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟单次访问数据量过大
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/TooMuchTypeInSingleRequest:
+    get:
+      description: 模拟单次访问敏感类型过多, 例如返回15种类型的敏感数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟单次访问敏感类型过多
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/WeakPasswd:
+    post:
+      description: 模拟登录弱密码
+      parameters:
+      - description: query中填写明文的密码信息,例如password=123456
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: query中填写明文的账号信息,name=admin
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟登录弱密码
+      tags:
+      - 模拟脆弱性相关的接口
+  /custom/mock/vulnerability/ws/v1/cluster/apps/new-application:
+    post:
+      description: 模拟Hadoop未授权访问
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟Hadoop未授权访问
+      tags:
+      - 模拟脆弱性相关的接口
+  /fileDownload:
+    post:
+      description: 模拟ssh secret key信息泄露
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟ssh secret key信息泄露
+      tags:
+      - 模拟脆弱性相关的接口
+  /nacos/v1/auth/users:
+    post:
+      description: 模拟Alibaba Nacos未授权访问
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟Alibaba Nacos未授权访问
+      tags:
+      - 模拟脆弱性相关的接口
+  /xxl-conf-admin/conf/find:
+    post:
+      description: 模拟JDBC连接字符串信息泄露
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回成功
+          schema:
+            $ref: '#/definitions/dto.SuccessResponseMeta'
+      summary: 模拟JDBC连接字符串信息泄露
+      tags:
+      - 模拟脆弱性相关的接口
+swagger: "2.0"

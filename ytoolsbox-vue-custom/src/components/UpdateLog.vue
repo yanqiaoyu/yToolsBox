@@ -15,6 +15,15 @@
       >UP</div>
     </el-backtop>
     <el-timeline>
+      <el-timeline-item timestamp="2023/01/13" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            <br />1. 为20个脆弱性添加swag接口文档,现在点击左上角的"POC工具盒"文字,即可跳转进入swag
+          </p>
+        </el-card>
+      </el-timeline-item>
+
       <el-timeline-item timestamp="2022/12/28" placement="top">
         <el-card>
           <h4>更新内容</h4>

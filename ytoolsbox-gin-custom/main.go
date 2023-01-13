@@ -15,8 +15,20 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+
+	docs "main/docs"
+
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title POC工具盒
+// @version v0.2.12
+// @description 用于数据安全POC测试的工具盒
+// @contact.name yanqiaoyu
+// @contact.url https://github.com/yanqiaoyu/yToolsBox/tree/poc-master
+// @contact.email yqy1160058763@qq.com
+// @BasePath /api/auth
 func main() {
 	// 1.首先初始化读取配置文件
 	InitConfig()
@@ -26,6 +38,11 @@ func main() {
 	common.InitScheduler()
 	// 3.初始化一个服务器
 	r := gin.Default()
+
+	// 3.1 swagger相关内容
+	docs.SwaggerInfo.BasePath = "/api/auth"
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 	r.Use(middleware.Cors())
 	// 4.收集所有的路由，统一管理
 	r = CollectRouter(r)

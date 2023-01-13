@@ -5,7 +5,14 @@
         <!-- <img src="../assets/cat.png" alt="" class="catImage" /> -->
         <!-- 需要require引入资源 -->
         <el-avatar :size="55" fit="fit" :src="require('../assets/cat.png')"></el-avatar>
-        <span>POC工具盒</span>
+        <span>
+          <a
+            :href="'http://' + ip + ':8081/swagger/index.html#/'"
+            target="_blank"
+            text-decoration="None"
+          >POC工具盒</a>
+        </span>
+
         <span style="font-size: 10px;">适配数据安全大脑3.0.11</span>
       </div>
       <el-button type="warning" @click="logout">退出</el-button>
@@ -88,6 +95,7 @@ export default {
         402: 'el-icon-cpu',
       },
       isCollapse: false,
+      ip: window.location.host.split(':', 1),
     }
   },
   created() {
@@ -187,5 +195,15 @@ export default {
   text-align: center;
   letter-spacing: 0.2em;
   cursor: pointer;
+}
+
+/* 清除a标签下划线样式 */
+a,
+a:link,
+a:hover,
+a:visited,
+a:active {
+  text-decoration: none;
+  color: #fff;
 }
 </style>

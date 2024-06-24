@@ -327,7 +327,7 @@ func ModifyDSCThreshold(ctx *gin.Context) {
 			return
 		}
 
-		Meta := dto.SuccessResponseMeta{Message: "调整阈值成功", StatusCode: 200}
+		Meta := dto.SuccessResponseMeta{Message: "原风险阈值配置备份成功，且调整阈值成功", StatusCode: 200}
 		response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 		return
 	} else if mode == "default" {

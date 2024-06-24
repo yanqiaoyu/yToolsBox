@@ -1,10 +1,16 @@
 package controller
 
 import (
+	// "strconv"
+	// "log"
+	// "strings"
+	// "os/exec"
+
 	"main/common"
 	"main/dao"
 	"main/dto"
 	"main/response"
+	"main/service"
 	"main/utils"
 
 	"github.com/gin-gonic/gin"
@@ -28,7 +34,7 @@ func GetAllSecurityEvents(ctx *gin.Context) {
 	response.Success(ctx, utils.Struct2MapViaJson(SecurityEventsListData), utils.Struct2MapViaJson(Meta))
 }
 
-// 参数遍历获取大量敏感数据
+// 参数遍历获取大量敏感数据 或 频繁访问获取大量敏感数据 或 异常时间段频繁访问获取大量敏感数据
 func RequestTraverseAndReturnTooMuchSensitiveData(ctx *gin.Context) {
 	var data map[string]interface{} = make(map[string]interface{})
 	data["1"] = "张一"
@@ -38,4 +44,17 @@ func RequestTraverseAndReturnTooMuchSensitiveData(ctx *gin.Context) {
 	data["5"] = "张五"
 	Meta := dto.SuccessResponseMeta{Message: "模拟参数遍历获取大量敏感数据", StatusCode: 200}
 	response.Success(ctx, data, utils.Struct2MapViaJson(Meta))
+}
+
+// 账号失陷并下载了大量敏感数据
+func OneAccountGetSensitiveData(ctx *gin.Context) {
+	err := service.ReplayMultiAccount("InnerSourceIP", "tcpreplayconfig")
+	if err != nil {
+		Meta := dto.SuccessResponseMeta{Message: "回放包失败", StatusCode: 401}
+		response.Fail(ctx, nil, utils.Struct2MapViaJson(Meta))
+		return
+	}
+
+	Meta := dto.SuccessResponseMeta{Message: "模拟疑似账号失陷并获取大量敏感数据", StatusCode: 200}
+	response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 }

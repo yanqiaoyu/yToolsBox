@@ -14,7 +14,13 @@ require (
 	github.com/go-openapi/spec v0.20.7 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
+	github.com/google/uuid v1.3.0 // indirect
+	github.com/hamba/avro v1.8.0 // indirect
+	github.com/hamba/avro/v2 v2.7.0 // indirect
+	github.com/icrowley/fake v0.0.0-20221112152111-d7b7e2276db2 // indirect
 	github.com/jasonlvhit/gocron v0.0.1 // indirect
+	github.com/linkedin/goavro v1.0.5 // indirect
+	github.com/linkedin/goavro/v2 v2.12.0 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/pkg/sftp v1.13.4
 	github.com/robfig/cron/v3 v3.0.1

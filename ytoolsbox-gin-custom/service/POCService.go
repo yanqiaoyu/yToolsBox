@@ -8,42 +8,40 @@ import (
 	"main/dao"
 	"main/model"
 	"main/utils"
-	"math/rand"
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/spf13/viper"
 )
 
-var InnerSourceIPList = []string{
-	// sz
-	"119.132.243.144",
-	// dongguan
-	"121.12.145.25",
-	// sh
-	"121.5.26.3",
-	// yun fu
-	"121.10.25.74",
-	// tang shan
-	"121.20.25.74",
-	// zhong guo
-	"121.5.26.3",
-	// shang hai
-	"121.5.26.3",
-}
+// var InnerSourceIPList = []string{
+// 	// sz
+// 	"119.132.243.144",
+// 	// dongguan
+// 	"121.12.145.25",
+// 	// sh
+// 	"121.5.26.3",
+// 	// yun fu
+// 	"121.10.25.74",
+// 	// tang shan
+// 	"121.20.25.74",
+// 	// zhong guo
+// 	"121.5.26.3",
+// 	// shang hai
+// 	"121.5.26.3",
+// }
 
-var ForiegnSourceIPList = []string{
-	"172.15.36.25",
-	"25.110.36.25",
-	"27.110.36.25",
-	"94.77.2.12",
-	"92.2.62.45",
-	"1.6.224.28",
-	"95.3.63.84",
-	"122.1.16.79",
-}
+// var ForiegnSourceIPList = []string{
+// 	"172.15.36.25",
+// 	"25.110.36.25",
+// 	"27.110.36.25",
+// 	"94.77.2.12",
+// 	"92.2.62.45",
+// 	"1.6.224.28",
+// 	"95.3.63.84",
+// 	"122.1.16.79",
+// }
 
 func GenerateLocalAgentConfigFile(POCConfig model.POCConfig) (string, error) {
 	// 先根据工具盒的IP反查一下网卡名称
@@ -223,18 +221,16 @@ func GenerateLocalAccountExtractFile(POCConfig model.POCConfig) (string, string,
 				"field_extract_conf": {
 					"account": [
 						{
-							"pos": "req_body_orig",
+							"pos": "req_body",
 							"operator": [
-								"www-form-urldecode",
 								"eq:name"
 							]
 						}
 					],
 					"password": [
 						{
-							"pos": "req_body_orig",
+							"pos": "req_body",
 							"operator": [
-								"www-form-urldecode",
 								"eq:password"
 							]
 						}
@@ -259,18 +255,84 @@ func GenerateLocalAccountExtractFile(POCConfig model.POCConfig) (string, string,
 				"field_extract_conf": {
 					"account": [
 						{
-							"pos": "req_body_orig",
+							"pos": "req_body",
 							"operator": [
-								"www-form-urldecode",
 								"eq:name"
 							]
 						}
 					],
 					"password": [
 						{
-							"pos": "req_body_orig",
+							"pos": "req_body",
 							"operator": [
-								"www-form-urldecode",
+								"eq:password"
+							]
+						}
+					],
+					"app_token": [
+						{
+							"pos": "res_body",
+							"operator": [
+								"eq:token"
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "test_auth_003",
+				"relation_app_ids": [
+					"my_tool_box3"
+				],
+				"type": "token",
+				"url": "regex:%s/api/auth/custom/mock/risk/SingleAccountReturnNewTypeSensiDataOnce",
+				"field_extract_conf": {
+					"account": [
+						{
+							"pos": "req_body",
+							"operator": [
+								"eq:name"
+							]
+						}
+					],
+					"password": [
+						{
+							"pos": "req_body",
+							"operator": [
+								"eq:password"
+							]
+						}
+					],
+					"app_token": [
+						{
+							"pos": "res_body",
+							"operator": [
+								"eq:token"
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "test_auth_004",
+				"relation_app_ids": [
+					"my_tool_box4"
+				],
+				"type": "token",
+				"url": "regex:%s/*",
+				"field_extract_conf": {
+					"account": [
+						{
+							"pos": "req_body",
+							"operator": [
+								"eq:name"
+							]
+						}
+					],
+					"password": [
+						{
+							"pos": "req_body",
+							"operator": [
 								"eq:password"
 							]
 						}
@@ -287,7 +349,7 @@ func GenerateLocalAccountExtractFile(POCConfig model.POCConfig) (string, string,
 			}
 		]
 	}
-`, POCConfig.ToolBoxAddress)
+`, POCConfig.ToolBoxAddress, POCConfig.ToolBoxAddress, POCConfig.ToolBoxAddress)
 
 	appConfContent := fmt.Sprintf(`
 	{
@@ -322,10 +384,40 @@ func GenerateLocalAccountExtractFile(POCConfig model.POCConfig) (string, string,
 						}
 					]
 				}
+			},
+			{
+				"id": "my_tool_box3",
+				"auth_id": "test_auth_003",
+				"url": "regex:%s/*",
+				"field_extract_conf": {
+					"app_token": [
+						{
+							"pos": "req_header:authorization",
+							"operator": [
+								"regex:(?<=Bearer ).*"
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "my_tool_box4",
+				"auth_id": "test_auth_004",
+				"url": "regex:%s/*",
+				"field_extract_conf": {
+					"app_token": [
+						{
+							"pos": "req_header:authorization",
+							"operator": [
+								"regex:(?<=Bearer ).*"
+							]
+						}
+					]
+				}
 			}
 		]
 	}
-`, POCConfig.ToolBoxAddress)
+`, POCConfig.ToolBoxAddress, POCConfig.ToolBoxAddress, POCConfig.ToolBoxAddress)
 
 	log.Println("auth_Conf内容", authConfContent)
 	log.Println("app_Conf内容", appConfContent)
@@ -390,7 +482,7 @@ func ForceDASContainerAuditAndGenerateLog(POCConfig model.POCConfig) (string, er
 	}()
 
 	// 拿到所有名称里面含有DAS的容器ID
-	result := cliConf.RunShell(fmt.Sprintf("echo -n `docker ps  | grep %s: | cut -d ' ' -f 1`", viper.GetString("pocconfig.dscDasContainerName")))
+	result := cliConf.RunShell(fmt.Sprintf("echo -n `docker ps | grep %s | cut -d ' ' -f 1`", viper.GetString("pocconfig.dscDasContainerName")))
 	if result != "" {
 		log.Print("DAS容器ID如下: ", result)
 		resultList := strings.SplitAfter(result, " ")
@@ -461,8 +553,7 @@ func UploadAndInstallAgentPackage(AgentInstallConfigParam model.AgentInstallConf
 }
 
 // 回放包
-func ReplayPcap(sourceIP string, netcardName string, POCConfig model.POCConfig, originPcap string, cachPcap string, tempPcap string) error {
-
+func ReplayPcap(config string, netcardName string, POCConfig model.POCConfig, Pcap string) error {
 	// 准备好远程连接的素材
 	port, _ := strconv.Atoi(POCConfig.ToolBoxSSHPort)
 	cliConf := new(utils.ClientConfig)
@@ -475,30 +566,13 @@ func ReplayPcap(sourceIP string, netcardName string, POCConfig model.POCConfig, 
 		return errCreateClient
 	}
 
-	// 修改源IP
-	shellModifySourceIP := fmt.Sprintf("docker exec %s tcprewrite --fixcsum --endpoints=%s:%s -i %s%s -o %s%s -c %s%s",
-		viper.GetString("tcpreplayconfig.replaycontainername"),
-		sourceIP,
-		POCConfig.ToolBoxAddress,
-		viper.GetString("tcpreplayconfig.pcappath"),
-		originPcap,
-		viper.GetString("tcpreplayconfig.pcappath"),
-		tempPcap,
-		viper.GetString("tcpreplayconfig.pcappath"),
-		cachPcap,
-	)
-
-	cliConf.RunShell(shellModifySourceIP)
-	log.Println("修改源IP: ", shellModifySourceIP)
-
-	// 执行回放动作
 	shellExecReplay := fmt.Sprintf("docker exec %s tcpreplay -i %s %s%s",
-		viper.GetString("tcpreplayconfig.replaycontainername"),
+		viper.GetString(config+".replaycontainername"),
 		netcardName,
 		viper.GetString("tcpreplayconfig.pcappath"),
-		// viper.GetString("tcpreplayconfig.multiaccounttemp"),
-		tempPcap,
+		Pcap,
 	)
+
 	result := cliConf.RunShell(shellExecReplay)
 	log.Println("回放包结果: ", result)
 
@@ -531,7 +605,7 @@ func GetNetworkCardNameByIP(POCConfig model.POCConfig) (string, error) {
 }
 
 // 回放包
-func ReplayMultiAccount(IPList []string) error {
+func ReplayMultiAccount(IPType string, config string) error {
 	db := common.GetDB()
 	POCConfig, err := dao.SelectPOCConfig(db)
 	if err != nil {
@@ -544,20 +618,24 @@ func ReplayMultiAccount(IPList []string) error {
 		return fmt.Errorf("获取网卡名称失败")
 	}
 
+	pcapType := ""
+	if IPType == "InnerSourceIP" {
+		pcapType = viper.GetString(config + ".multiaccountInner")
+	}
+
+	if IPType == "ForiegnSourceIP" {
+		pcapType = viper.GetString(config + ".multiaccountForiegn")
+	}
+
 	// 回放包
-	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < 5; i++ {
-		err := ReplayPcap(
-			IPList[rand.Intn(len(IPList)-1)],
-			networkCardName,
-			POCConfig,
-			viper.GetString("tcpreplayconfig.multiaccountpcap"),
-			viper.GetString("tcpreplayconfig.multiaccountcach"),
-			viper.GetString("tcpreplayconfig.multiaccounttemp"),
-		)
-		if err != nil {
-			return err
-		}
+	err = ReplayPcap(
+		config,
+		networkCardName,
+		POCConfig,
+		pcapType,
+	)
+	if err != nil {
+		return err
 	}
 	return nil
 }

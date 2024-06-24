@@ -21,6 +21,39 @@ import 'nprogress/nprogress.css'
 
 import commonFun from './assets/js/common.js'
 
+
+// const noAuthAndCookieURL = [
+//   '/api/auth/custom/mock/vulnerability/SensitiveAPINotSec',
+//   '/api/auth/custom/mock/vulnerability/NoneSensitiveAPINotSec',
+//   '/api/auth/custom/mock/vulnerability/ws/v1/cluster/apps/new-application',
+//   '/api/auth/custom/mock/vulnerability/?reqType=ElasticSearch',
+//   '/api/auth/custom/mock/vulnerability/baizhi/_search/',
+//   '/api/auth/custom/mock/vulnerability/_nodes',
+//   '/api/auth/custom/mock/vulnerability/v1.40/images/json',
+//   '/api/auth/custom/mock/vulnerability/actuator/info',
+//   '/api/auth/custom/mock/vulnerability/jolokia/list',
+//   '/api/webservices/list',
+//   '/api/auth/custom/mock/vulnerability/v2/api-docs',
+//   '/api/auth/custom/mock/vulnerability/solr/admin/info/system',
+//   '/api/auth/custom/mock/vulnerability/api/v1/namespaces/pods',
+//   '/api/auth/custom/mock/vulnerability/pods/',
+//   '/api/auth/custom/mock/vulnerability/api/v1/settings/pinner',
+//   '/api/auth/custom/mock/vulnerability/graphql',
+//   '/api/auth/custom/mock/vulnerability/services',
+//   '/api/auth/custom/mock/vulnerability/ws_utc/resources/setting/keystore',
+//   '/api/auth/custom/mock/vulnerability/apisix/admin/migrate/export',
+//   '/api/auth/custom/mock/vulnerability/run',
+//   '/api/auth/custom/mock/vulnerability/actuator/gateway/routes/hacktest',
+//   '/api/auth/custom/mock/vulnerability/mailsms/s',
+//   '/api/auth/custom/mock/vulnerability/druid/sql.json?orderBy=SQL&orderType=desc&page=1&perPageCount=1000000',
+//   '/api/auth/custom/mock/vulnerability/v1/submissions/create',
+//   '/api/auth/custom/mock/vulnerability/customers/1',
+//   '/api/auth/custom/mock/vulnerability/apisix/batch-requests',
+//   '/api/auth/custom/mock/vulnerability/api/v1/secret/kube-system/kubernetes-dashboard-certs',
+//   '/api/auth/custom/mock/vulnerability/openapi.json',
+//   '/api/auth/custom/mock/vulnerability/user/admin/infolog.log'
+// ]
+
 // 允许携带cookie
 axios.defaults.withCredentials = true
 // 测试，生产环境，不同的请求的路径
@@ -38,7 +71,59 @@ axios.interceptors.request.use(config => {
   config.headers['Authorization'] =
     'Bearer ' + window.sessionStorage.getItem('token')
 
-  // 最后必须return这个config
+  // 所有请求内容不保存 或 缓存到 Internet的临时文件中
+  config.headers['Cache-Control'] = 'no-store'
+
+  if (config.url.includes('/api/auth/custom/mock/vulnerability/main/index.php')) {
+    config.headers.Referer = config.headers.Referer + '?password=12345678&username=admin123 '
+  }
+
+  if (config.url.includes('/api/auth/custom/mock/vulnerability/get')) {
+    config.headers.Cookie = 'jsessionid=1223212313'
+    config.headers.Origin = 'http://www.aliyun.com:8009'
+  }
+
+  if (config.url.includes('/api/auth/custom/mock/vulnerability/?reqType=ElasticSearch')) {
+    config.headers.Host = config.headers.Host + ':9200'
+  }
+
+  if (config.url.includes('/api/auth/custom/mock/vulnerability/pods/')) {
+    config.headers.Host = config.headers.Host + ':10250'
+  }
+
+
+  // if (noAuthAndCookieURL.includes(config.url)) {
+  //   // 指定API删除cookie
+  //   document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+  //   // 指定API删除Authorization
+  //   delete config.headers.Authorization
+  // }
+
+  
+
+  // if (config.url.endsWith('reqType=ElasticSearch')) {
+  //   config.headers.Host = 'localhost:9200'
+  // }
+
+  // if (config.url.includes('/api/auth/custom/mock/vulnerability/pods/')) {
+  //   config.url = 'http://localhost:10250/api/auth/custom/mock/vulnerability/pods/'
+  // }
+
+  // if (config.url == "/api/auth/custom/mock/securityevents/RequestTraverseAndReturnTooMuchSensitiveDataAbnormalTime?user=") {
+  //   var process = require('child_process')
+  //   var cmd = 'date';
+  //   process.exec(cmd, function(error, stdout, stderr){
+  //     console.log("error:"+error);
+  //     console.log("stdout:"+stdout);
+  //     console.log("stderr:"+stderr);
+  //   })
+  // }
+
+  // // 最后必须return这个config
+  // if (config.url == "http://10.74.4.46/api/auth/custom/mock/vulnerability/main/index.php") {
+  //   config.headers['Referer'] = 'http://10.74.4.46/?password=12345678&username=admin123'
+  // }
+
   return config
 })
 

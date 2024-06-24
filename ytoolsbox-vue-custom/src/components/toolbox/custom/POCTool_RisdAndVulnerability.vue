@@ -29,7 +29,7 @@
 
       <div class="toolTags">
         <el-tag type="info">{{ "POC" }}</el-tag>
-        <el-tag type="success">作者:{{ "颜桥宇" }}</el-tag>
+        <el-tag type="success">作者:{{ "颜桥宇,马喜庆" }}</el-tag>
       </div>
     </div>
   </el-card>

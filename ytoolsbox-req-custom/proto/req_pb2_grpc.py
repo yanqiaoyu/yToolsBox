@@ -16,10 +16,10 @@ class DSCServiceStub(object):
             channel: A grpc.Channel.
         """
         self.ModifyRiskThreshold = channel.unary_unary(
-            '/proto.DSCService/ModifyRiskThreshold',
-            request_serializer=req__pb2.ModifyRiskThresholdRequest.SerializeToString,
-            response_deserializer=req__pb2.ModifyRiskThresholdResponse.FromString,
-        )
+                '/proto.DSCService/ModifyRiskThreshold',
+                request_serializer=req__pb2.ModifyRiskThresholdRequest.SerializeToString,
+                response_deserializer=req__pb2.ModifyRiskThresholdResponse.FromString,
+                )
 
 
 class DSCServiceServicer(object):
@@ -35,36 +35,35 @@ class DSCServiceServicer(object):
 
 def add_DSCServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        'ModifyRiskThreshold': grpc.unary_unary_rpc_method_handler(
-            servicer.ModifyRiskThreshold,
-            request_deserializer=req__pb2.ModifyRiskThresholdRequest.FromString,
-            response_serializer=req__pb2.ModifyRiskThresholdResponse.SerializeToString,
-        ),
+            'ModifyRiskThreshold': grpc.unary_unary_rpc_method_handler(
+                    servicer.ModifyRiskThreshold,
+                    request_deserializer=req__pb2.ModifyRiskThresholdRequest.FromString,
+                    response_serializer=req__pb2.ModifyRiskThresholdResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'proto.DSCService', rpc_method_handlers)
+            'proto.DSCService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
+
  # This class is part of an EXPERIMENTAL API.
-
-
 class DSCService(object):
     """面向DSC的grpc服务
     """
 
     @staticmethod
     def ModifyRiskThreshold(request,
-                            target,
-                            options=(),
-                            channel_credentials=None,
-                            call_credentials=None,
-                            insecure=False,
-                            compression=None,
-                            wait_for_ready=None,
-                            timeout=None,
-                            metadata=None):
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
         return grpc.experimental.unary_unary(request, target, '/proto.DSCService/ModifyRiskThreshold',
-                                             req__pb2.ModifyRiskThresholdRequest.SerializeToString,
-                                             req__pb2.ModifyRiskThresholdResponse.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            req__pb2.ModifyRiskThresholdRequest.SerializeToString,
+            req__pb2.ModifyRiskThresholdResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

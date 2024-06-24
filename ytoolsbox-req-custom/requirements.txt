@@ -10,3 +10,4 @@ rsa==4.9
 six==1.16.0
 supervisor==4.2.4
 urllib3==1.26.10
+paramiko== 2.7.2

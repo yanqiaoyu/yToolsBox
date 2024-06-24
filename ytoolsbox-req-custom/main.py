@@ -2,6 +2,7 @@ from utils.LoggingUtils import LoggingHandler
 import urllib3
 import concurrent
 import grpc
+
 from proto import req_pb2_grpc, addDataClassify_pb2_grpc
 from grpc_service.DSCService import DSCService
 from grpc_service.addDataClassifyService import AddDataClassifyService
@@ -21,7 +22,6 @@ def serve():
         DSCService(), grpcServer)
     addDataClassify_pb2_grpc.add_AddDataClassifyServiceServicer_to_server(
         AddDataClassifyService(), grpcServer)
-
     # 指定端口并且非 ssl 模式
     LoggingHandler.info(f"Python GRPC服务端启动:{_HOST + ':' + _PORT}")
     grpcServer.add_insecure_port(_HOST + ':' + _PORT)

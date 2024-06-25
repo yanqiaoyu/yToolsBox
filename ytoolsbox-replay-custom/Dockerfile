@@ -4,5 +4,7 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
 RUN apk --update add --no-cache
 RUN apk add --no-cache tcpreplay
 RUN mkdir -p /pcap/
-ADD ./two_account.pcap /pcap/
-ADD ./two_account.cach /pcap/
+ADD ./InnerIPAll.pcap /pcap/
+ADD ./ForiegnIPAll.pcap /pcap/
+# ADD ./two_account.pcap /pcap/
+# ADD ./two_account.cach /pcap/

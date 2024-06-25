@@ -1,11 +1,11 @@
 # 数据库容器的版本
 export DB_TAG=v0.0.1
 # API容器的版本
-export API_TAG=v0.2.12
+export API_TAG=v3.0.18
 # 前端容器的版本
-export DASHBOARD_TAG=v0.2.12
+export DASHBOARD_TAG=v3.0.18
 # 对接大脑的容器的版本
-export REQ_TAG=v0.2.11
+export REQ_TAG=v3.0.18
 # 图像识别服务的版本
 export RECOGNIZE_TAG=v0.1
 # 回放服务的版本

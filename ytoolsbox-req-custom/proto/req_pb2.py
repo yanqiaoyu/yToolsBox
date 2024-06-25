@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\treq.proto\x12\x05proto\"r\n\x1aModifyRiskThresholdRequest\x12\x0e\n\x06\x64sc_ip\x18\x01 \x01(\t\x12\x16\n\x0e\x64sc_fe_account\x18\x02 \x01(\t\x12\x17\n\x0f\x64sc_fe_password\x18\x03 \x01(\t\x12\x13\n\x0bmodify_mode\x18\x04 \x01(\t\"9\n\x1bModifyRiskThresholdResponse\x12\x0c\n\x04\x44\x61ta\x18\x01 \x01(\t\x12\x0c\n\x04Meta\x18\x02 \x01(\t2l\n\nDSCService\x12^\n\x13ModifyRiskThreshold\x12!.proto.ModifyRiskThresholdRequest\x1a\".proto.ModifyRiskThresholdResponse\"\x00\x42\tZ\x07.;protob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\treq.proto\x12\x05proto\"\xa7\x01\n\x1aModifyRiskThresholdRequest\x12\x0e\n\x06\x64sc_ip\x18\x01 \x01(\t\x12\x16\n\x0e\x64sc_fe_account\x18\x02 \x01(\t\x12\x17\n\x0f\x64sc_fe_password\x18\x03 \x01(\t\x12\x18\n\x10\x64sc_back_account\x18\x04 \x01(\t\x12\x19\n\x11\x64sc_back_password\x18\x05 \x01(\t\x12\x13\n\x0bmodify_mode\x18\x06 \x01(\t\"9\n\x1bModifyRiskThresholdResponse\x12\x0c\n\x04\x44\x61ta\x18\x01 \x01(\t\x12\x0c\n\x04Meta\x18\x02 \x01(\t2l\n\nDSCService\x12^\n\x13ModifyRiskThreshold\x12!.proto.ModifyRiskThresholdRequest\x1a\".proto.ModifyRiskThresholdResponse\"\x00\x42\tZ\x07.;protob\x06proto3')
 
 
 
@@ -39,10 +39,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'Z\007.;proto'
-  _MODIFYRISKTHRESHOLDREQUEST._serialized_start=20
-  _MODIFYRISKTHRESHOLDREQUEST._serialized_end=134
-  _MODIFYRISKTHRESHOLDRESPONSE._serialized_start=136
-  _MODIFYRISKTHRESHOLDRESPONSE._serialized_end=193
-  _DSCSERVICE._serialized_start=195
-  _DSCSERVICE._serialized_end=303
+  _MODIFYRISKTHRESHOLDREQUEST._serialized_start=21
+  _MODIFYRISKTHRESHOLDREQUEST._serialized_end=188
+  _MODIFYRISKTHRESHOLDRESPONSE._serialized_start=190
+  _MODIFYRISKTHRESHOLDRESPONSE._serialized_end=247
+  _DSCSERVICE._serialized_start=249
+  _DSCSERVICE._serialized_end=357
 # @@protoc_insertion_point(module_scope)

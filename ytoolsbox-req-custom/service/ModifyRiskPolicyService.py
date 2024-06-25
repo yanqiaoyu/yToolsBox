@@ -99,9 +99,9 @@ class ModifyRiskPolicy():
         )
         self.r.put(f"https://{self.dsc_ip}/dashboard/risks/3", json=payload)
 
-        self.r.patch(
-            f"https://{self.dsc_ip}/dashboard/risks/3?is_active=true&model_type=normal")
-
+        # self.r.patch(
+        #     f"https://{self.dsc_ip}/dashboard/risks/3?is_active=true&model_type=normal")
+        
         # 4.境外IP有多个账号身份
         payload = self._set_risk_payload(
             name="境外IP有多个账号身份",
@@ -120,7 +120,7 @@ class ModifyRiskPolicy():
                 ]
             },
             filters={
-                "overseas": False
+                "overseas": True
             },
             model_name="multi_account_login_inborder_or_outborder"
         )
@@ -205,7 +205,7 @@ class ModifyRiskPolicy():
                             }
                         ],
                         "sensitive_relation": "or",
-                        "time_range": "single_req",
+                        "time_range": "15min",
                         "alarm_type": "distinct_data",
                         "sensitive_ids": [
                             10,
@@ -228,10 +228,7 @@ class ModifyRiskPolicy():
                     }
                 ]
             },
-            filters={
-                "overseas": False
-            },
-            model_name="mainstay_return_uniq_sensitive_cnt_over_limit_in_single_req"
+            model_name="mainstay_return_uniq_sensitive_cnt_over_limit_in_time_range"
         )
         self.r.put(f"https://{self.dsc_ip}/dashboard/risks/5", json=payload)
 
@@ -314,7 +311,7 @@ class ModifyRiskPolicy():
                             }
                         ],
                         "sensitive_relation": "or",
-                        "time_range": "single_req",
+                        "time_range": "15min",
                         "alarm_type": "distinct_data",
                         "sensitive_ids": [
                             10,
@@ -573,7 +570,7 @@ class ModifyRiskPolicy():
                 "conditions": [
                     {
                         "alarm_object": "over_threshold",
-                        "filter_threshold": 8,
+                        "filter_threshold": 4,
                         "time_range": "single_req",
                         "alarm_type": "data_type"
                     }
@@ -597,7 +594,7 @@ class ModifyRiskPolicy():
                 "conditions": [
                     {
                         "alarm_object": "over_threshold",
-                        "filter_threshold": 8,
+                        "filter_threshold": 4,
                         "time_range": "single_req",
                         "alarm_type": "data_type"
                     }
@@ -609,6 +606,64 @@ class ModifyRiskPolicy():
             model_name="mainstay_return_uniq_sensitive_type_over_limit_in_single_req"
         )
         self.r.put(f"https://{self.dsc_ip}/dashboard/risks/10", json=payload)
+
+        # 11 单个账号单次返回新类型的敏感数据
+        payload = self._set_risk_payload(
+            name="单个账号单次返回新类型的敏感数据",
+            description="单个账号单次返回新类型的敏感数据",
+            level="high",
+            model_cfg={
+                "mainstay_type": "account",              # 风险主体类型：账号
+                "mainstay_filter_type": "any",           # 风险主体过滤类型：不限
+                "mainstay_filter_data": [],              # 风险主体过滤数据（过滤风险主体）
+                "conditions": [                          # 触发条件
+                    {
+                        "time_range": "single_req",      # 检测周期：单次 
+                        "filter_threshold": 1,           # 触发的阈值（即发现1个新的敏感数据类型）
+                        "alarm_type": "data_type",       # 告警类型：返回数据类型
+                        "alarm_object": "over_new_type"  # 告警对象：出现新类型
+                    }
+                ]
+            },
+            filters={                                    # 过滤条件
+                "choose_condition": "app",               # 访问API：应用
+                "care_app": "any",                       # 关注哪些应用：不限
+                "care_api_group_ids": "any",             # 关注哪些API应用组id：不限
+                "care_api_ids": [],                      # 关注哪些API的id: 无
+                "sensitive_api": True                    # API类型 涉敏
+            },
+            model_name="mainstay_return_new_sensitive_type_over_limit_in_single_req"
+        )
+        self.r.put(f"https://{self.dsc_ip}/dashboard/risks/11", json=payload)
+
+        # 12 单个IP单次返回新类型的敏感数据
+        payload = self._set_risk_payload(
+            name="单个IP单次返回新类型的敏感数据",
+            description="单个IP单次返回新类型的敏感数据",
+            level="high",
+            model_cfg={
+                "mainstay_type": "ip",                   # 风险主体类型：ip
+                "mainstay_filter_type": "any",           # 风险主体过滤类型：不限
+                "mainstay_filter_data": [],              # 风险主体过滤数据（过滤风险主体）
+                "conditions": [
+                    {
+                        "time_range": "single_req",      # 检测周期：单次
+                        "filter_threshold": 1,           # 触发的阈值（即发现1个新的敏感数据类型）
+                        "alarm_type": "data_type",       # 告警类型：返回数据类型
+                        "alarm_object": "over_new_type"  # 告警对象：出现新类型
+                    }
+                ]
+            },
+            filters={                                    # 过滤条件
+                "choose_condition": "app",               # 访问API：应用
+                "care_app": "any",                       # 关注哪些应用：不限
+                "care_api_group_ids": "any",             # 关注哪些API应用组id：不限
+                "care_api_ids": [],                      # 关注哪些API的id: 无
+                "sensitive_api": True                    # API类型 涉敏
+            },
+            model_name="mainstay_return_new_sensitive_type_over_limit_in_single_req"
+        )
+        self.r.put(f"https://{self.dsc_ip}/dashboard/risks/12", json=payload)
 
         # 13
         payload = self._set_risk_payload(
@@ -624,7 +679,7 @@ class ModifyRiskPolicy():
                         "filter_threshold": 50,
                         "threshold_type": "assign_param_name",
                         "param_name": [
-                            "user"
+                            "userName"
                         ],
                         "time_range": "15min",
                         "alarm_type": "req_params"
@@ -652,7 +707,7 @@ class ModifyRiskPolicy():
                         "filter_threshold": 50,
                         "threshold_type": "assign_param_name",
                         "param_name": [
-                            "user"
+                            "userName"
                         ],
                         "time_range": "15min",
                         "alarm_type": "req_params"
@@ -859,10 +914,10 @@ class ModifyRiskPolicy():
         )
         self.r.put(f"https://{self.dsc_ip}/dashboard/risks/26", json=payload)
 
-        self.r.patch(
-            f"https://{self.dsc_ip}/dashboard/weaks/7?is_active=true")
-        self.r.patch(
-            f"https://{self.dsc_ip}/dashboard/weaks/11?is_active=true")
+        # self.r.patch(
+        #     f"https://{self.dsc_ip}/dashboard/weaks/7?is_active=true")
+        # self.r.patch(
+        #     f"https://{self.dsc_ip}/dashboard/weaks/11?is_active=true")
 
         payload = {"is_identity": True}
         self.r.put(
@@ -936,8 +991,8 @@ class ModifyRiskPolicy():
         )
         self.r.put(f"https://{self.dsc_ip}/dashboard/risks/3", json=payload)
 
-        self.r.patch(
-            f"https://{self.dsc_ip}/dashboard/risks/3?is_active=false&model_type=normal")
+        # self.r.patch(
+        #     f"https://{self.dsc_ip}/dashboard/risks/3?is_active=false&model_type=normal")
 
         # 4
         payload = self._set_risk_payload(
@@ -1375,11 +1430,11 @@ class ModifyRiskPolicy():
         )
         self.r.put(f"https://{self.dsc_ip}/dashboard/risks/26", json=payload)
 
-        self.r.patch(
-            f"https://{self.dsc_ip}/dashboard/weaks/7?is_active=false")
-        self.r.patch(
-            f"https://{self.dsc_ip}/dashboard/weaks/11?is_active=false")
-
+        # self.r.patch(
+        #     f"https://{self.dsc_ip}/dashboard/weaks/7?is_active=false")
+        # self.r.patch(
+        #     f"https://{self.dsc_ip}/dashboard/weaks/11?is_active=false")
+        
 
 if __name__ == "__main__":
     handler = ModifyRiskPolicy()

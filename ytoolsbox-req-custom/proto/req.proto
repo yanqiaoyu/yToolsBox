@@ -16,8 +16,12 @@ message ModifyRiskThresholdRequest{
     string dsc_fe_account = 2;
     // 数据安全大脑的前端密码
     string dsc_fe_password = 3;
+    // 数据安全大脑的后端账号
+    string dsc_back_account = 4;
+    // 数据安全大脑的后端密码
+    string dsc_back_password = 5;
     // 模式,是poc还是default
-    string modify_mode = 4;
+    string modify_mode = 6;
 }
 
 // 修改阈值的响应

@@ -5,7 +5,10 @@ FROM python:3.8-alpine AS build
 COPY requirements.txt /requirements.txt
 COPY /etc/supervisord.conf /etc/supervisord.conf
 COPY /tmp /tmp
-RUN pip install --no-cache-dir -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com -r /requirements.txt
+COPY /shell ./shell
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.cloud.tencent.com/g' /etc/apk/repositories
+RUN apk add --no-cache gcc make libc-dev libffi-dev
+RUN pip install --no-cache-dir -i http://mirrors.cloud.tencent.com/pypi/simple/ --trusted-host mirrors.cloud.tencent.com -r /requirements.txt
 RUN mkdir /ytoolsbox-req-custom
 COPY ./ /ytoolsbox-req-custom
 WORKDIR /ytoolsbox-req-custom

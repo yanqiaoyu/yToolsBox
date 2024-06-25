@@ -15,6 +15,28 @@
       >UP</div>
     </el-backtop>
     <el-timeline>
+      <el-timeline-item timestamp="2023/5/16" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 可通过工具盒中脆弱性与风险的POC工具触发6个风险: 单个账号单次返回新类型的敏感数据,单个IP单次返回新类型的敏感数据,请求参数值出现新类型,请求方法异常,	请求参数名缺失和请求参数出现非预期的参数名。
+          </p>
+          <p>
+            2. 可通过工具盒中安全事件的POC工具实现5个安全事件的告警: 发生探测攻击并在异常时间段频繁访问获取非预期敏感数据,通过恶意构造请求窃取额外敏感数据,API接口遭遇渗透攻击,通过恶意构造请求获取大量敏感数据和账号失陷并下载了大量敏感数据。
+          </p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="2023/4/11" placement="top">
+        <el-card>
+          <h4>更新内容</h4>
+          <p>
+            1. 为49个脆弱性添加swag接口文档,现在点击左上角的"POC工具盒"文字,即可跳转进入swag;
+          </p>
+          <p>
+            2. 修复在用户的大脑环境进行POC测试时,"一键调整风险/脆弱性阈值"操作未对用户自定义的配置信息进行备份的漏洞(后续不能还原用户自定义风险配置信息)
+          </p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="2023/01/13" placement="top">
         <el-card>
           <h4>更新内容</h4>

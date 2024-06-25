@@ -131,6 +131,8 @@
 // import qs from 'qs'
 import { faker } from '@faker-js/faker'
 // faker.setLocale('zh_CN')
+// import restoreservertime from '@util/restoreservertime'
+
 export default {
   data() {
     return {
@@ -237,41 +239,135 @@ export default {
     // 进行请求
     async DoRequest(name) {
       switch (name) {
+        // 1. 参数遍历获取大量敏感数据 安全事件包含的风险:
+        //    A:单个IP在一段时间内进行请求参数值遍历； B：单个IP在一段时间内返回大量敏感数据
         case '参数遍历获取大量敏感数据': {
           for (let index = 0; index < 100; index++) {
             await this.$http.get(
-              'custom/mock/securityevents/RequestTraverseAndReturnTooMuchSensitiveData?user=' +
-                faker.name.lastName()
+              'custom/mock/securityevents/RequestTraverseAndReturnTooMuchSensitiveData?userName=' +
+                faker.name.lastName() + faker.name.firstName()
             )
           }
           return 200
         }
+
         case '频繁访问获取大量敏感数据': {
+          // for (let index = 0; index < 100; index++) {
+          //   await this.$http.get(
+          //     'custom/mock/securityevents/RequestTraverseAndReturnTooMuchSensitiveData?userName=' +
+          //       faker.name.lastName()
+          //   )
+          // }
           return 200
         }
+
         case '异常时间段频繁访问获取大量敏感数据': {
+          // for (let index = 0; index < 100; index++) {
+          //   await this.$http.get(
+          //     'custom/mock/securityevents/RequestTraverseAndReturnTooMuchSensitiveData?userName=' +
+          //       faker.name.lastName()
+          //   )
+          // }
           return 200
         }
+
         case '发生探测攻击并通过参数遍历获取过量敏感数据': {
+          for (let index = 0; index < 100; index++) {
+            await this.$http.get(
+              'custom/mock/risk/SingleIPReturnTooMuch4XXPeriod'
+            )
+          }
+          for (let index = 0; index < 100; index++) {
+            await this.$http.get(
+              'custom/mock/risk/SingleIPRequestTraversePeriod?userName=' +
+                faker.name.lastName() + faker.name.firstName()
+            )
+          }
           return 200
         }
+
         case '发生探测攻击并通过频繁访问获取过量敏感数据': {
+          // for (let index = 0; index < 100; index++) {
+          //   await this.$http.get(
+          //     'custom/mock/risk/SingleIPReturnTooMuch4XXPeriod'
+          //   )
+          // }
+          // for (let index = 0; index < 100; index++) {
+          //   await this.$http.get(
+          //     'custom/mock/risk/SingleIPRequestTraversePeriod?userName=' +
+          //       faker.name.lastName() + faker.name.firstName()
+          //   )
+          // }
           return 200
         }
+
+        // 本次需要实现的安全事件-mxq-2023-3-7
+        // 6. 发生探测攻击并在异常时间段频繁访问获取非预期敏感数据 安全事件包含的风险：
         case '发生探测攻击并在异常时间段频繁访问获取非预期敏感数据': {
+          for (let index = 0; index < 100; index++) {
+            await this.$http.get(
+              'custom/mock/risk/SingleIPReturnTooMuch4XXPeriod'
+            )
+          }
+
+          for (let index = 0; index < 100; index++) {
+            await this.$http.get(
+              'custom/mock/risk/SingleIPVisitSameAPIAbnormalPeriod'
+            )
+          }
           return 200
         }
+
+        // 7. 通过恶意构造请求窃取额外敏感数据 安全事件包含的风险：
+        //      A:请求方法异常 or 请求参数名缺失 or 请求参数出现非预期的参数名 or 请求参数值出现新类型
+        //      B:单个IP单次返回新类型的敏感数据 or 单个IP单次返回过多敏感数据类型
+        //    安全事件触发条件：
+        //      A和B告警需要对应到相同的请求和响应包
         case '通过恶意构造请求窃取额外敏感数据': {
-          return 200
+          const { data: res } = await this.$http.get(
+            'custom/mock/risk/LackOfVarName?reqType=risk'
+          )
+          return res.meta.status_code
         }
+
+        // 8. API接口遭遇渗透攻击 安全事件包含的风险：
+        //      A:请求方法异常 or 请求参数名缺失 or 请求参数出现非预期的参数名 or 请求参数值出现新类型 or 单个IP在一段时间内进行路径遍历
+        //      B:单个IP在一段时间内大量4XX
+        //    安全事件触发条件：
+        //    （1）A中出现的事件和B中出现的事件需要同源IP/账号；
+        //    （2）A和B出现事件（窗）相差不超过6小时
         case 'API接口遭遇渗透攻击': {
+          // const { data: res } = await this.$http.get(
+          //   'custom/mock/risk/LackOfVarName?reqType=risk'
+          // )
           return 200
         }
+
+        // 9. 通过恶意构造请求获取大量敏感数据 安全事件包含的风险：
+        //      A：请求参数值出现新类型 or 请求参数名缺失 or 请求参数出现非预期的参数名;
+        //      B: 单个IP在一段时间内频繁访问同一API or 单个IP在异常时间内频繁访问同一API;
+        //      C: 单个IP在一段时间内返回大量敏感数据
         case '通过恶意构造请求获取大量敏感数据': {
+          // const { data: res } = await this.$http.get(
+          //   'custom/mock/risk/LackOfVarName?reqType=risk'
+          // )
           return 200
         }
+
+        // 10.账号失陷并下载了大量敏感数据 安全事件包含的风险：
+        //    A: 账号多地访问
+        //    B：单个账号在一段时间内返回大量敏感数据
         case '账号失陷并下载了大量敏感数据': {
-          return 200
+          //2.2
+          // const { data: res } = await this.$http.get(
+          //   'custom/mock/securityevents/OneAccountGetSensitiveData'
+          // )
+          // return res.meta.status_code
+          // 2.1
+          const { data: res } = await this.$http.get(
+            'custom/mock/risk/SingleAccountReturnNewTypeSensiDataOnce?reqType=securityevent'
+          )
+          return res.meta.status_code
         }
       }
     },
@@ -300,7 +396,7 @@ export default {
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消触发',
+            message: '',
           })
         })
     },

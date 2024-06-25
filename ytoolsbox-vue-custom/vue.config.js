@@ -1,4 +1,8 @@
 module.exports = {
+  filenameHashing: true,
+  productionSourceMap: true,
+  
+  publicPath:'./',
   pwa: {
     iconPaths: {
       favicon32: 'favicon.ico',

@@ -13,7 +13,7 @@
           >POC工具盒</a>
         </span>
 
-        <span style="font-size: 10px;">适配数据安全大脑3.0.11</span>
+        <span style="font-size: 10px;">适配数据安全大脑3.0.12</span>
       </div>
       <el-button type="warning" @click="logout">退出</el-button>
     </el-header>

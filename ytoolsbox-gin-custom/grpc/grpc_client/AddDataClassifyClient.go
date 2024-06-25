@@ -24,7 +24,7 @@ func AddDataClassify(dscConfig model.POCConfig) error {
 	// 新建grpc
 	grpcClient := proto.NewAddDataClassifyServiceClient(conn)
 	//设定请求超时时间 3s
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
 
 	// 下发任务

@@ -394,14 +394,14 @@
         },
         "/custom/mock/vulnerability/WeakPasswd": {
             "post": {
-                "description": "模拟登录弱密码",
+                "description": "模拟登录弱密码 或 存在空密码/空密钥问题 或 模拟万能密码注入",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "模拟脆弱性相关的接口"
                 ],
-                "summary": "模拟登录弱密码",
+                "summary": "模拟登录弱密码 或 存在空密码/空密钥问题",
                 "parameters": [
                     {
                         "type": "string",
@@ -507,6 +507,967 @@
                     }
                 }
             }
+        },
+        "/": {
+            "get": {
+                "description": "ElasticSearch根路径未授权访问, 模拟凭证长期生效",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "ElasticSearch根路径未授权访问, 模拟凭证长期生效",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/baizhi/_search/": {
+            "get": {
+                "description": "ElasticSearch查询数据接口未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "ElasticSearch查询数据接口未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/_nodes": {
+            "get": {
+                "description": "ElasticSearch节点目录未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "ElasticSearch节点目录未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1.40/images/json": {
+            "get": {
+                "description": "Docker部分路径未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Docker部分路径未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/actuator/info": {
+            "get": {
+                "description": "SpringBoot部分常见路径未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "SpringBoot部分常见路径未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/jolokia/list": {
+            "get": {
+                "description": "Jolokia未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Jolokia未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/webservices/list": {
+            "get": {
+                "description": "SonarQube未授权访问应用列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "SonarQube未授权访问应用列表",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/api-docs": {
+            "get": {
+                "description": "Swagger未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Swagger未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/solr/admin/info/system": {
+            "get": {
+                "description": "Solr未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Solr未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/GetDefualtOssInfo": {
+            "get": {
+                "description": "云主机Accesskey或Secret key泄漏",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "云主机Accesskey或Secret key泄漏",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/namespaces/pods": {
+            "get": {
+                "description": "Kubernetes API Server未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Kubernetes API Server未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/pods/": {
+            "get": {
+                "description": "Kubelet 未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Kubelet 未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/settings/pinner": {
+            "get": {
+                "description": "Kubernetes Dashboard面板未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Kubernetes Dashboard面板未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        
+        },
+        "/graphql": {
+            "post": {
+                "description": "GraphQL未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "GraphQL未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/sendmessage": {
+            "post": {
+                "description": "短信验证码出现在响应包中",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "短信验证码出现在响应包中",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/services": {
+            "post": {
+                "description": "Kong未授权访问漏洞（CVE-2020-11710）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Kong未授权访问漏洞（CVE-2020-11710）",
+                "responses": {
+                    "201": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/ws_utc/resources/setting/keystore": {
+            "post": {
+                "description": "Weblogic 未授权访问漏洞",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Weblogic 未授权访问漏洞",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },        
+        "/apisix/admin/migrate/export": {
+            "get": {
+                "description": "Apache APISIX Dashboard 认证绕过（CVE-2021-45232）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Apache APISIX Dashboard 认证绕过（CVE-2021-45232）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },        
+        "/dashboardUser": {
+            "get": {
+                "description": "Apache ShenYu Admin 身份验证绕过漏洞（CVE-2021-37580）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Apache ShenYu Admin 身份验证绕过漏洞（CVE-2021-37580）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },        
+        "/php/login.php": {
+            "get": {
+                "description": "Cookie没有添加HttpOnly属性",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Cookie没有添加HttpOnly属性",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },        
+        "/api/getUser": {
+            "get": {
+                "description": "开发环境涉敏API在公网暴露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "开发环境涉敏API在公网暴露",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },        
+        "/api/islogin": {
+            "get": {
+                "description": "JWT认证错误地使用了空加密算法",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "JWT认证错误地使用了空加密算法",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/main/index.php": {
+            "get": {
+                "description": "referer包含敏感信息",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "referer包含敏感信息",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "delete": {
+                "description": "危险方法未被禁用",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "危险方法未被禁用",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/authenticationserverservlet": {
+            "get": {
+                "description": "MessageSolution 企业邮件归档管理系统 EEA 存在信息泄露漏洞",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "MessageSolution 企业邮件归档管理系统 EEA 存在信息泄露漏洞",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/WebReport/ReportServer": {
+            "get": {
+                "description": "FineReport管理平台privilege.xml文件信息泄露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "FineReport管理平台privilege.xml文件信息泄露",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/a.php": {
+            "get": {
+                "description": "Tomcat tomcat-users.xml, Apache Axis axis2.xml, Glassfish domain.xml, Jenkins config.xml, Zimbra conf/localconfig.xml信息泄露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Tomcat tomcat-users.xml, Apache Axis axis2.xml, Glassfish domain.xml, Jenkins config.xml, Zimbra conf/localconfig.xml信息泄露",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/tmui/login.jsp/..;/tmui/locallb/workspace/a.php": {
+            "get": {
+                "description": "F5 BIG-IP 认证绕过（CVE-2020-5902）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "F5 BIG-IP 认证绕过（CVE-2020-5902）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/mgmt/tm/util/bash": {
+            "post": {
+                "description": "F5 BIG-IP 认证绕过（CVE-2022-1388）, F5 BIG-IP命令注入漏洞（CVE-2021-22986）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "F5 BIG-IP 认证绕过（CVE-2022-1388）, F5 BIG-IP命令注入漏洞（CVE-2021-22986）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/webapi/v1/system/accountmanage/account": {
+            "get": {
+                "description": "绿盟UTS综合威胁探针信息泄露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "绿盟UTS综合威胁探针信息泄露",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/_users/org.couchdb.user:vulhub": {
+            "put": {
+                "description": "Couchdb垂直权限绕过露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Couchdb垂直权限绕过露",
+                "responses": {
+                    "201": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/run": {
+            "post": {
+                "description": "XXL-Job远程命令执行漏洞",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "XXL-Job远程命令执行漏洞",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/actuator/gateway/routes/hacktest": {
+            "post": {
+                "description": "Spring Cloud Gateway代码注入漏洞（CVE-2022-22947）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Spring Cloud Gateway代码注入漏洞（CVE-2022-22947）",
+                "responses": {
+                    "201": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/project/up": {
+            "get": {
+                "description": "YApi未授权代码执行",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "YApi未授权代码执行",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/mailsms/s": {
+            "get": {
+                "description": "Coremail未授权访问（CNVD-2019-78549）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Coremail未授权访问（CNVD-2019-78549）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/druid/sql.json": {
+            "post": {
+                "description": "Druid敏感信息泄露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Druid敏感信息泄露",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/rest/api/latest/groupuserpicker": {
+            "get": {
+                "description": "Atlassian jira信息泄露漏洞(CVE-2019-8449)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Atlassian jira信息泄露漏洞(CVE-2019-8449)",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/submissions/create": {
+            "post": {
+                "description": "spark未授权命令执行漏洞",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "spark未授权命令执行漏洞",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/1": {
+            "patch": {
+                "description": "spring data rest 远程命令执行（CVE-2017-8046）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "spring data rest 远程命令执行（CVE-2017-8046）",
+                "responses": {
+                    "400": {
+                        "description": "返回失败",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/apisix/batch-requests": {
+            "post": {
+                "description": "Apache APISIX 远程代码执行漏洞（CVE-2022-24112）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Apache APISIX 远程代码执行漏洞（CVE-2022-24112）",
+                "responses": {
+                    "200": {
+                        "description": "返回失败",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SuccessResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/kylin/api/cubes/kylin_streaming_cube/learn_kylin/migrate": {
+            "put": {
+                "description": "kylin远程命令执行漏洞（CVE-2020-1956）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "kylin远程命令执行漏洞（CVE-2020-1956）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/secret/kube-system/kubernetes-dashboard-certs": {
+            "get": {
+                "description": "k8s Dashboard面板认证绕过漏洞（CVE-2018-18264）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "k8s Dashboard面板认证绕过漏洞（CVE-2018-18264）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            } 
+        },
+        "/DbAdminWSService/DbAdminWS": {
+            "post": {
+                "description": "Cisco Data Center Network Manager 认证绕过漏洞（CVE-2019-15977）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Cisco Data Center Network Manager 认证绕过漏洞（CVE-2019-15977）",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            } 
+        },
+        "/service/soap": {
+            "post": {
+                "description": "Zimbra 组件漏洞信息泄露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "Zimbra 组件漏洞信息泄露",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            } 
+        },
+        "/openapi.json": {
+            "get": {
+                "description": "API接口文档未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "API接口文档未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            } 
+        },
+        "/get": {
+            "get": {
+                "description": "CORS配置不当导致敏感信息泄露",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "CORS配置不当导致敏感信息泄露",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            } 
+        },
+        "/user": {
+            "get": {
+                "description": "HTTP Basic Authorization弱口令",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "HTTP Basic Authorization弱口令",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            } 
+        },
+        "/user/admin/infolog.log": {
+            "get": {
+                "description": "重要接口未授权访问",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "模拟脆弱性相关的接口"
+                ],
+                "summary": "重要接口未授权访问",
+                "responses": {
+                    "200": {
+                        "description": "返回成功",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FailResponseMeta"
+                        }
+                    }
+                }
+            } 
         }
     },
     "definitions": {

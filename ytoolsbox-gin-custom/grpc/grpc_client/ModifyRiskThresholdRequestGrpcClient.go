@@ -12,7 +12,7 @@ import (
 )
 
 func ModifyThreshold(mode string, dscConfig model.POCConfig) error {
-	//建立链接
+	//建立链接 yToolsBox-req-custom
 	conn, err := grpc.Dial("yToolsBox-req-custom:2468", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal("GRPC连接建立失败: ", err)
@@ -23,7 +23,7 @@ func ModifyThreshold(mode string, dscConfig model.POCConfig) error {
 	// 新建grpc
 	dscServiceClient := proto.NewDSCServiceClient(conn)
 	//设定请求超时时间 3s
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
 
 	// 修改阈值
@@ -31,6 +31,8 @@ func ModifyThreshold(mode string, dscConfig model.POCConfig) error {
 		DscIp:         dscConfig.DSCAddress,
 		DscFeAccount:  dscConfig.DSCWebUserName,
 		DscFePassword: dscConfig.DSCWebPassword,
+		DscBackAccount: dscConfig.DSCSSHUserName,
+		DscBackPassword: dscConfig.DSCPassword,
 		ModifyMode:    mode,
 	})
 	if err != nil {

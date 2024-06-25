@@ -54,12 +54,19 @@ func DeleteRiskAndVunlService(POCConfig model.POCConfig) (string, error) {
 		return "", fmt.Errorf(fmt.Sprintf("目标环境中没有%s容器", viper.GetString("cleanerconfig.siemcontainername")))
 	}
 
-	// 删除ck
-	result1 := cliConf.RunShell(fmt.Sprintf("docker exec %s clickhouse-client --host 0.0.0.0 --port 9876 -d hecate -m -q \"truncate table api_weak\"", ckContainerName))
-	result2 := cliConf.RunShell(fmt.Sprintf("docker exec %s clickhouse-client --host 0.0.0.0 --port 9876 -d hecate -m -q \"truncate table risk_log\"", ckContainerName))
+	ckPassword := cliConf.RunShell(fmt.Sprintf("sh getPassword.sh 2>&1 | sed -n '2p' | cut -d ':' -f 2 | tr -d '[:space:]'"))
+	//pgPassword := cliConf.RunShell(fmt.Sprintf("sh getPassword.sh 2>&1 | sed -n '3p' | cut -d ':' -f 2 | tr -d '[:space:]'"))
+
+	//删除ck
+	//result1 := cliConf.RunShell(fmt.Sprintf("docker exec %s clickhouse-client --host 0.0.0.0 --port 9876 -d hecate -m -q \"truncate table api_weak\"", ckContainerName))
+	//result2 := cliConf.RunShell(fmt.Sprintf("docker exec %s clickhouse-client --host 0.0.0.0 --port 9876 -d hecate -m -q \"truncate table risk_log\"", ckContainerName))
+
+	result1 := cliConf.RunShell(fmt.Sprintf("docker exec %s clickhouse-client --host 0.0.0.0 --port 9000 -u default --passowrd %s -d hecate -m -q \"truncate table api_weak\"", ckContainerName, ckPassword))
+	result2 := cliConf.RunShell(fmt.Sprintf("docker exec %s clickhouse-client --host 0.0.0.0 --port 9000 -u default --paddword %s -d hecate -m -q \"truncate table risk_log\"", ckContainerName, ckPassword))
 
 	// 删除db
-	result3 := cliConf.RunShell(fmt.Sprintf("docker exec %s psql -h 0.0.0.0 -p 5432 -U postgres -d dsc -c \"truncate table hecate.api_weak_count;truncate table hecate.risk_log_attr\"", dbContainerName))
+	//result3 := cliConf.RunShell(fmt.Sprintf("docker exec %s psql -h 0.0.0.0 -p 5432 -U postgres -d dsc -c \"truncate table hecate.api_weak_count;truncate table hecate.risk_log_attr\"", dbContainerName))
+	result3 := cliConf.RunShell(fmt.Sprintf("docker exec %s psql -h 0.0.0.0 -p 5432 -U admin -d dsc -c \"truncate table hecate.api_weak_count;truncate table hecate.risk_log_attr;\"", dbContainerName))
 
 	// 重启siem
 	result4 := cliConf.RunShell(fmt.Sprintf("docker exec %s supervisorctl restart api_log", siemContainerName))

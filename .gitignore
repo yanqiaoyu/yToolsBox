@@ -18,3 +18,8 @@
 ytoolsbox-gin-custom/main
 ytoolsbox-req-custom/1.png
 /ytoolsbox-gin-custom/.idea
+.idea/inspectionProfiles/Project_Default.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/yToolsBox.iml

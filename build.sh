@@ -17,7 +17,9 @@ export REPLAY_TAG=v0.0.1
 cd ./ytoolsbox-vue-custom
 npm run build
 cd ../
-docker-compose up -d
+# 只编译,不运行服务
+# docker-compose up -d
+docker-compose build
 docker push yanqiaoyu/ytoolsbox-api-custom:${API_TAG}
 docker push yanqiaoyu/ytoolsbox-dashboard-custom:${DASHBOARD_TAG}
 docker push yanqiaoyu/ytoolsbox-req-custom:${REQ_TAG}

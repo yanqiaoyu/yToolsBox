@@ -15,7 +15,63 @@ import (
 	"main/service"
 
 	"github.com/gin-gonic/gin"
+
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
 )
+
+// 定义一个结构体来表示请求和响应信息
+type RequestResponse struct {
+	Request struct {
+		Method string                 `json:"method"`
+		Body   map[string]interface{} `json:"body"`
+	} `json:"request"`
+	Response struct {
+		Status int                    `json:"status"`
+		Body   map[string]interface{} `json:"body"`
+	} `json:"response"`
+}
+
+// 从JSON文件中读取路由配置并注册
+func RegisterRoutesFromJSON(r *gin.RouterGroup, filePath string) {
+	// 读取JSON文件
+	data, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		log.Fatalf("无法读取文件: %v", err)
+	}
+
+	// 打印文件路径和内容
+	log.Printf("Reading routes from file: %s", filePath)
+	log.Printf("File content: %s", string(data))
+
+	// 解析JSON数据
+	var config map[string]RequestResponse
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		log.Fatalf("JSON解析错误: %v", err)
+	}
+ 	// 打印解析后的数据
+    log.Printf("Parsed config: %+v", config)
+	// 循环遍历请求信息并注册路由
+	for url, reqRes := range config {
+		switch reqRes.Request.Method {
+		case "GET":
+			r.GET(url, controller.HandleDynamicRequest)
+		case "POST":
+			r.POST(url, controller.HandleDynamicRequest)
+		case "PUT":
+			r.PUT(url, controller.HandleDynamicRequest)
+		case "DELETE":
+			r.DELETE(url, controller.HandleDynamicRequest)
+		default:
+			fmt.Printf("不支持的HTTP方法: %s\n", reqRes.Request.Method)
+		}
+		// 打印注册的路由
+        log.Printf("Registering route: %s %s", reqRes.Request.Method, url)
+	}
+}
 
 func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.Use(middleware.SaveAllTriggerLog())
@@ -23,6 +79,9 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	/* 用路由组重新归纳了一下路由 */
 	v1 := r.Group(URL_Prefix)
 	{
+		// 调用函数从JSON文件,动态注册路由
+		RegisterRoutesFromJSON(v1, "../ytoolsbox-db/multiple_http_json/http.json")
+
 		// r.POST(URL_Prefix + "/signup", controller.SignUp)
 		// 登录
 		v1.POST("/login", controller.Login)

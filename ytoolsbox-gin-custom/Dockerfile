@@ -23,7 +23,7 @@ COPY --from=development /go/src/yToolsBox-gin/tmp /tmp
 COPY --from=development /go/src/yToolsBox-gin/VulnerabilityXml ./VulnerabilityXml
 # 安装包文件
 # COPY --from=development /go/src/yToolsBox-gin/hecate_agent-v2.0.0.175-20211228.rpm .
-COPY --from=development /go/src/yToolsBox-gin/agent_installer.bin .
+#COPY --from=development /go/src/yToolsBox-gin/agent_installer.bin .
 RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
     apk add --no-cache --virtual .persistent-deps netcat-openbsd supervisor
     

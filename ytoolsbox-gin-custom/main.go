@@ -20,6 +20,7 @@ import (
 
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"main/controller"
 )
 
 // @title POC工具盒
@@ -56,6 +57,8 @@ func main() {
 }
 
 func InitConfig() {
+	// 加载路由配置
+    controller.LoadRouteConfig("../ytoolsbox-db/multiple_http_json/http.json")
 	// 获取当前的目录
 	workdir, _ := os.Getwd()
 	// 告诉viper配置文件的名称

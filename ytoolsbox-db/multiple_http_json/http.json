@@ -1,0 +1,579 @@
+{
+  "/user/1/login": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "password": "password123",
+        "ip_address": "192.168.1.1",
+        "device_id": "unique_device_id_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Login successful",
+        "token": "unique_token_12345"
+      }
+    }
+  },
+  "/user/1/logout": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "ip_address": "192.168.1.1"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Logout successful"
+      }
+    }
+  },
+  "/account/2/create": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "account_holder": "John Doe",
+        "password": "password123",
+        "email_address": "john.doe@qq.com"
+      }
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "message": "Account created successfully",
+        "account_id": "account_001"
+      }
+    }
+  },
+  "/account/2/details": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "account_holder": "John Doe"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "account_holder": "John Doe",
+        "id_number": "ID123456789",
+        "name": "John Doe",
+        "gender": "Male",
+        "birthday": "1990-01-01",
+        "address": "123 Main St, Springfield",
+        "email_address": "john.doe@qq.com",
+        "phone_number": "1234567890"
+      }
+    }
+  },
+  "/account/3/update": {
+    "request": {
+      "method": "PUT",
+      "body": {
+        "account_holder": "John Doe",
+        "id_number": "ID123456789",
+        "name": "Johnathan Doe",
+        "gender": "Male",
+        "birthday": "1990-01-01",
+        "address": "456 Elm St, Springfield",
+        "email_address": "johnathan.doe@qq.com",
+        "phone_number": "0987654321"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Account updated successfully"
+      }
+    }
+  },
+  "/transaction/4/initiate": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "transaction_amount": 100,
+        "transaction_date": "2023-10-10",
+        "transaction_type": "Withdrawal",
+        "payment_password": "paypassword123",
+        "account_number": "account_001"
+      }
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "message": "Transaction initiated successfully",
+        "transaction_id": "transaction_001"
+      }
+    }
+  },
+  "/transaction/5/status": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "transaction_amount": 100,
+        "transaction_date": "2023-10-10"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "transaction_amount": 100,
+        "transaction_status": "Completed",
+        "transaction_date": "2023-10-10"
+      }
+    }
+  },
+  "/transaction/6/history": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "account_number": "account_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "transaction_history": [
+          {
+            "transaction_id": "transaction_001",
+            "transaction_date": "2023-10-10",
+            "transaction_amount": 100,
+            "transaction_type": "Withdrawal"
+          },
+          {
+            "transaction_id": "transaction_002",
+            "transaction_date": "2023-10-11",
+            "transaction_amount": 200,
+            "transaction_type": "Deposit"
+          }
+        ]
+      }
+    }
+  },
+  "/investment/7/portfolio": {
+    "request": {
+      "method": "GET",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "money_market": "50000",
+        "bonds": "100000",
+        "investment_funds": "150000"
+      }
+    }
+  },
+  "/investment/8/analysis": {
+    "request": {
+      "method": "GET",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "total_risk_assets": "300000",
+        "investment_analysis_report": "Your investments are balanced and diversified."
+      }
+    }
+  },
+  "/loan/9/apply": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "loan_amount": 50000,
+        "loan_purpose": "Home Renovation",
+        "repayment_plan": "Monthly",
+        "borrower_info": {
+          "name": "John Doe",
+          "id_number": "ID123456789"
+        }
+      }
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "message": "Loan application submitted successfully",
+        "loan_id": "loan_001"
+      }
+    }
+  },
+  "/loan/10/status": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "loan_id": "loan_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "loan_balance": 48000,
+        "repayment_amount": 2000,
+        "repayment_date": "2023-11-01"
+      }
+    }
+  },
+  "/loan/11/repayment": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "repayment_amount": 2000,
+        "repayment_date": "2023-11-01"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Repayment successful",
+        "new_loan_balance": 46000
+      }
+    }
+  },
+  "/contract/12/create": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "contract_number": "contract_001",
+        "contract_amount": 100000,
+        "contract_term": "2 years",
+        "contract_type": "Service Agreement"
+      }
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "message": "Contract created successfully"
+      }
+    }
+  },
+  "/contract/13/details": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "contract_number": "contract_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "contract_status": "Active",
+        "contract_amount": 100000,
+        "contract_expiry_date": "2025-10-10",
+        "contract_start_date": "2023-10-10"
+      }
+    }
+  },
+  "/customer/14/profile": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "customer_id": "customer_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "name": "John Doe",
+        "gender": "Male",
+        "birthday": "1990-01-01",
+        "address": "123 Main St, Springfield",
+        "hometown": "Springfield",
+        "nationality": "American",
+        "ethnicity": "Caucasian",
+        "email_address": "john.doe@qq.com",
+        "phone_number": "1234567890"
+      }
+    }
+  },
+  "/customer/15/update": {
+    "request": {
+      "method": "PUT",
+      "body": {
+        "name": "Johnathan Doe",
+        "gender": "Male",
+        "birthday": "1990-01-01",
+        "address": "456 Elm St, Springfield",
+        "hometown": "Smallville",
+        "nationality": "American",
+        "ethnicity": "Caucasian",
+        "email_address": "johnathan.doe@qq.com",
+        "phone_number": "0987654321"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Profile updated successfully"
+      }
+    }
+  },
+  "/company/16/register": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "company_name": "Tech Innovators Inc.",
+        "credit_code": "1234567890",
+        "legal_representative": "Jane Smith",
+        "registered_capital": 1000000,
+        "industry_classification": "Technology",
+        "business_scope": "Software Development"
+      }
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "message": "Company registered successfully",
+        "company_id": "company_001"
+      }
+    }
+  },
+  "/company/17/details": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "company_id": "company_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "company_address": "456 Tech Park, Silicon Valley",
+        "company_name": "Tech Innovators Inc.",
+        "personnel_scale": "100-500",
+        "business_license": "BL1234567890",
+        "registered_capital": 1000000,
+        "industry_classification": "Technology",
+        "legal_representative": "Jane Smith"
+      }
+    }
+  },
+  "/bill/18/generate": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "bill_amount": 500,
+        "bill_date": "2023-10-01",
+        "payment_due_date": "2023-10-31"
+      }
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "message": "Bill generated successfully",
+        "bill_id": "bill_001"
+      }
+    }
+  },
+  "/bill/19/pay": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "payment_amount": 500,
+        "payment_date": "2023-10-10",
+        "account_number": "account_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Payment successful",
+        "new_balance": 0
+      }
+    }
+  },
+  "/report/20/monthly": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "month": "2023-09"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "monthly_report": {
+          "revenue": 100000,
+          "expenses": 50000,
+          "profit": 50000
+        },
+        "accounting_items": "Revenue, Expenses, Profit"
+      }
+    }
+  },
+  "/report/21/annual": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "year": "2023"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "annual_report": {
+          "revenue": 1200000,
+          "expenses": 600000,
+          "profit": 600000
+        },
+        "accounting_items": "Revenue, Expenses, Profit"
+      }
+    }
+  },
+  "/risk/22/assessment": {
+    "request": {
+      "method": "GET",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "risk_assessment_level": "Medium",
+        "risk_assessment_report": "Moderate risk noted in liquidity.",
+        "risk_management_measures": "Increase cash reserves."
+      }
+    }
+  },
+  "/compliance/23/check": {
+    "request": {
+      "method": "GET",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "compliance_checklist": "Annual financial audit.",
+        "compliance_check_report": "Compliant with financial regulations."
+      }
+    }
+  },
+  "/notification/24/send": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "sms": "Your OTP is 123456.",
+        "email": "Please verify your email address.",
+        "mms": "Promotional offers from our store."
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Notifications sent successfully"
+      }
+    }
+  },
+  "/notification/25/logs": {
+    "request": {
+      "method": "GET",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "notification_logs": [
+          {
+            "timestamp": "2023-10-01T10:00:00Z",
+            "notification_type": "SMS",
+            "status": "Sent"
+          },
+          {
+            "timestamp": "2023-10-01T11:00:00Z",
+            "notification_type": "Email",
+            "status": "Delivered"
+          },
+          {
+            "timestamp": "2023-10-01T12:00:00Z",
+            "notification_type": "MMS",
+            "status": "Failed"
+          }
+        ]
+      }
+    }
+  },
+  "/settings/26/preferences": {
+    "request": {
+      "method": "GET",
+      "body": {}
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "user_preferences": {
+          "language": "Chinese",
+          "theme": "Dark",
+          "notifications_enabled": true
+        }
+      }
+    }
+  },
+  "/settings/27/security": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "security_settings": {
+          "password": "new_password123",
+          "two_factor_auth": true
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Security settings updated successfully"
+      }
+    }
+  },
+  "/support/28/ticket": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "ticket_id": "ticket_001",
+        "ticket_status": "Open",
+        "ticket_description": "Issue with login system."
+      }
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "message": "Support ticket created successfully"
+      }
+    }
+  },
+  "/support/29/status": {
+    "request": {
+      "method": "GET",
+      "body": {
+        "ticket_id": "ticket_001"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "ticket_status": "In Progress",
+        "ticket_processing_time": "2023-10-10T10:00:00Z"
+      }
+    }
+  },
+  "/feedback/30/submit": {
+    "request": {
+      "method": "POST",
+      "body": {
+        "feedback_content": "Great service, very satisfied.",
+        "feedback_time": "2023-10-10T10:00:00Z",
+        "contact_information": {
+          "email": "customer@qq.com",
+          "phone": "1234567890"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Feedback submitted successfully"
+      }
+    }
+  }
+}

@@ -29,6 +29,13 @@ var DataLeakgeDB *gorm.DB
 
 var RiskAndVulnerabilityList = []model.RiskAndVulnerability{
 	{
+		Name:          "poc_tool", // 点击下拉框之后点击其中一个行业的名称，对应构建发送这个行业对应的http.json文件内容
+		Type:          "脆弱性",
+		Desc:          "点击触发，开启前后端之间的http请求",
+		Level:         "高危",
+		TriggerMethod: "点击下拉框中的某一个行业,会调用对应的http.json中的信息,模拟前端批量下发http请求.",
+	},
+	{
 		Name:          "url中存在密码信息",
 		Type:          "脆弱性",
 		Desc:          "接口认证方式不合理,登录功能采用GET方法传输账号密码,例如黑客可以通过中间人攻击等方式捕获用户的账号密码,导致账号密码泄露",

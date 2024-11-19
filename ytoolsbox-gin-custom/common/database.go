@@ -29,7 +29,7 @@ var DataLeakgeDB *gorm.DB
 
 var RiskAndVulnerabilityList = []model.RiskAndVulnerability{
 	{
-		Name:          "poc_tool", // 点击下拉框之后点击其中一个行业的名称，对应构建发送这个行业对应的http.json文件内容
+		Name:          "数据识别的请求与响应", // 点击下拉框之后点击其中一个行业的名称，对应构建发送这个行业对应的http.json文件内容
 		Type:          "脆弱性",
 		Desc:          "点击触发，开启前后端之间的http请求",
 		Level:         "高危",

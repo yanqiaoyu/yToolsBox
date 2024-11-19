@@ -80,7 +80,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	v1 := r.Group(URL_Prefix)
 	{
 		// 调用函数从JSON文件,动态注册路由
-		RegisterRoutesFromJSON(v1, "../ytoolsbox-db/multiple_http_json/http.json")
+		RegisterRoutesFromJSON(v1, "config/multiple_http_json/http.json")
 
 		// r.POST(URL_Prefix + "/signup", controller.SignUp)
 		// 登录

@@ -30,10 +30,10 @@ var DataLeakgeDB *gorm.DB
 var RiskAndVulnerabilityList = []model.RiskAndVulnerability{
 	{
 		Name:          "数据识别的请求与响应", // 点击下拉框之后点击其中一个行业的名称，对应构建发送这个行业对应的http.json文件内容
-		Type:          "脆弱性",
-		Desc:          "点击触发，开启前后端之间的http请求",
-		Level:         "高危",
-		TriggerMethod: "点击下拉框中的某一个行业,会调用对应的http.json中的信息,模拟前端批量下发http请求.",
+		Type:          "数据识别",
+		Desc:          "从浏览器发送http请求到POC工具的后台服务器。这里的报文包含了1个应用资产，30个API资产，合计1120次API请求。每个http请求对应一个特定的请求和响应报文，涵盖了用户、账户、交易、投资、贷款、合同、客户、公司、账单、报告、风险等多个数据类型。",
+		Level:         "低危",
+		TriggerMethod: "批量下发http请求，读取对应的http.json中的信息。",
 	},
 	{
 		Name:          "url中存在密码信息",

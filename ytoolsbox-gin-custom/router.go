@@ -43,8 +43,8 @@ func RegisterRoutesFromJSON(r *gin.RouterGroup, filePath string) {
 	}
 
 	// 打印文件路径和内容
-	log.Printf("Reading routes from file: %s", filePath)
-	log.Printf("File content: %s", string(data))
+	// log.Printf("Reading routes from file: %s", filePath)
+	// log.Printf("File content: %s", string(data))
 
 	// 解析JSON数据
 	var config map[string]RequestResponse
@@ -53,7 +53,7 @@ func RegisterRoutesFromJSON(r *gin.RouterGroup, filePath string) {
 		log.Fatalf("JSON解析错误: %v", err)
 	}
  	// 打印解析后的数据
-    log.Printf("Parsed config: %+v", config)
+    // log.Printf("Parsed config: %+v", config)
 	// 循环遍历请求信息并注册路由
 	for url, reqRes := range config {
 		switch reqRes.Request.Method {

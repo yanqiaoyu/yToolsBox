@@ -52,8 +52,8 @@ func RegisterRoutesFromJSON(r *gin.RouterGroup, filePath string) {
 	if err != nil {
 		log.Fatalf("JSON解析错误: %v", err)
 	}
- 	// 打印解析后的数据
-    log.Printf("Parsed config: %+v", config)
+	// 打印解析后的数据
+	log.Printf("Parsed config: %+v", config)
 	// 循环遍历请求信息并注册路由
 	for url, reqRes := range config {
 		switch reqRes.Request.Method {
@@ -69,7 +69,7 @@ func RegisterRoutesFromJSON(r *gin.RouterGroup, filePath string) {
 			fmt.Printf("不支持的HTTP方法: %s\n", reqRes.Request.Method)
 		}
 		// 打印注册的路由
-        log.Printf("Registering route: %s %s", reqRes.Request.Method, url)
+		log.Printf("Registering route: %s %s", reqRes.Request.Method, url)
 	}
 }
 
@@ -445,6 +445,22 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 		Risk.POST("/SingleAccountPathTraversePeriod/:name", controller.SingleAccountPathTraversePeriod)
 		// 26. 单个IP在一段时间内进行路径遍历
 		Risk.GET("/SingleIPPathTraversePeriod/:name", controller.SingleIPPathTraversePeriod)
+
+		//dspm
+		//个人访问任一应用的数据量超过历史基线
+		Risk.POST("/PersonGetAppDataMoreThanBaseLine", controller.PersonGetAppDataMoreThanBaseLine)
+
+		//ip短时间下载了大量的数据
+		//IPReturnsLargeAmountSensitiveDataInShortTime
+		Risk.POST("/IPReturnsLargeAmountSensitiveDataInShortTime", controller.IPReturnsLargeAmountSensitiveDataInShortTime)
+
+		//dspm-账号爆破成功
+		Risk.POST("/ParameterIterationLogin", controller.ParameterIteration)
+		//dspm-账号共享
+		Risk.POST("/AccountShare", controller.AccountShare)
+
+		//dspm-应用的账号数超过历史基线
+		Risk.POST("/AppAccountMoreThanBaseLine", controller.AppAccountMoreThanBaseLine)
 
 		/***
 			定制:以下是安全事件相关的业务接口

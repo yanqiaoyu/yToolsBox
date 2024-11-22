@@ -751,6 +751,48 @@ var RiskAndVulnerabilityList = []model.RiskAndVulnerability{
 		Level:         "高危",
 		TriggerMethod: "访问/api/auth/custom/mock/risk/SingleIPPathTraversePeriod/:name,频繁变换参数名",
 	},
+	{
+		Name:          "dspm-应用的账号数超过历史基线",
+		Type:          "风险",
+		Desc:          " 超范围授权:应用的账号数超过历史基线100%",
+		Level:         "高危",
+		TriggerMethod: "访问应用的账号超过历史基线100%",
+	},
+	{
+		Name:          "dspm-个人访问任一应用的数据量超过历史基线",
+		Type:          "风险",
+		Desc:          "偏离基线，某个ip或用户访问任一应用的数据量超过历史基线100%",
+		Level:         "高危",
+		TriggerMethod: "个人访问poc应用的数据量超过历史基线的100%",
+	},
+	//{
+	//	Name:          "dspm-源ip通过稀有的账号获取了大量数据",
+	//	Type:          "风险",
+	//	Desc:          "稀有行为，源ip通过稀有的账号获取了大量数据",
+	//	Level:         "高危",
+	//	TriggerMethod: "源ip通过稀有的账号获取了大量数据",
+	//},
+	{
+		Name:          "dspm-ip短时间下载了大量的数据",
+		Type:          "风险",
+		Desc:          "过量获取就是，某个ip短时间下载了大量的数据（15min获取了1000条以上）",
+		Level:         "高危",
+		TriggerMethod: "短时间下载了大量的数据（5min获取了1000条以上）",
+	},
+	{
+		Name:          "dspm-账号爆破成功",
+		Type:          "风险",
+		Desc:          "通过遍历验证码，账号爆破成功，登录进系统",
+		Level:         "高危",
+		TriggerMethod: "通过遍历验证码，账号爆破成功，登录进系统",
+	},
+	{
+		Name:          "dspm-疑似异地登录且获取了大量数据",
+		Type:          "风险",
+		Desc:          "账号存在大于等于三个源ip，疑似异地登录，且获取了大量数据",
+		Level:         "高危",
+		TriggerMethod: "账号存在大于等于三个源ip，疑似异地登录，且获取了大量数据",
+	},
 }
 
 var SecurityEventsList = []model.SecurityEvents{

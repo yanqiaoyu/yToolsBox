@@ -78,6 +78,7 @@ func UpdateDspmConfig() {
 
 	cons.DspmAddr = pocConfig.DSCAddress
 	cons.PocAddr = pocConfig.ToolBoxAddress
+	log.Printf("DspmAddr:%v;PocAddr:%v;config:%v\n", cons.DspmAddr, cons.PocAddr, config)
 	json.Unmarshal([]byte(config), &cons.DspmPwdConfig)
 }
 
@@ -121,19 +122,20 @@ func OpenPort(client *ssh.Client) error {
 		fmt.Sprintf(patchPortCmd, 30080),
 		fmt.Sprintf(patchPortCmd, 30181),
 	}
-	// 创建会话
-	session, err := client.NewSession()
-	if err != nil {
-		log.Printf("无法创建SSH会话: %v\n", err)
-		return err
-	}
-	defer session.Close()
+
 	var resultError error
 	for _, command := range cmdSlice {
+		// 创建会话
+		session, err := client.NewSession()
+		if err != nil {
+			log.Printf("无法创建SSH会话: %v\n", err)
+			return err
+		}
 		if err = session.Run(command); err != nil {
 			log.Printf("命令执行失败:%v\n", err)
 			resultError = err
 		}
+		session.Close()
 	}
 	return resultError
 }

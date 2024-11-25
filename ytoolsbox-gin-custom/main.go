@@ -10,6 +10,7 @@ package main
 
 import (
 	"main/common"
+	"main/dspm"
 	"main/middleware"
 	"os"
 
@@ -37,6 +38,8 @@ func main() {
 	common.InitDB()
 	common.InitDataLeakgeDB()
 	common.InitScheduler()
+	//加载远程配置到本地
+	dspm.UpdateDspmConfig()
 	// 3.初始化一个服务器
 	r := gin.Default()
 
@@ -58,7 +61,7 @@ func main() {
 
 func InitConfig() {
 	// 加载路由配置
-    controller.LoadRouteConfig("config/multiple_http_json/http.json")
+	controller.LoadRouteConfig("config/multiple_http_json/http.json")
 	// 获取当前的目录
 	workdir, _ := os.Getwd()
 	// 告诉viper配置文件的名称

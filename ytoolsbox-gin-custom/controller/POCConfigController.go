@@ -5,6 +5,7 @@ import (
 	"log"
 	"main/common"
 	"main/dao"
+	"main/dspm"
 	"main/dto"
 	grpcclient "main/grpc/grpc_client"
 	"main/model"
@@ -28,7 +29,6 @@ func GetPOCConfig(ctx *gin.Context) {
 		Meta := dto.SuccessResponseMeta{Message: "获取配置成功", StatusCode: 200}
 		response.Success(ctx, utils.Struct2MapViaJson(POCConfig), utils.Struct2MapViaJson(Meta))
 	}
-
 }
 
 // 保存POC配置
@@ -50,7 +50,9 @@ func PostPOCConfig(ctx *gin.Context) {
 		Meta := dto.SuccessResponseMeta{Message: "保存配置成功", StatusCode: 200}
 		response.Success(ctx, nil, utils.Struct2MapViaJson(Meta))
 	}
-
+	go func() {
+		dspm.UpdateDspmConfig()
+	}()
 }
 
 // 更新工具盒中的agent

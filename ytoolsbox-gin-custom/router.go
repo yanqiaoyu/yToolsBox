@@ -446,6 +446,22 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 		// 26. 单个IP在一段时间内进行路径遍历
 		Risk.GET("/SingleIPPathTraversePeriod/:name", controller.SingleIPPathTraversePeriod)
 
+		//dspm
+		//个人访问任一应用的数据量超过历史基线
+		Risk.POST("/PersonGetAppDataMoreThanBaseLine", controller.PersonGetAppDataMoreThanBaseLine)
+
+		//ip短时间下载了大量的数据
+		//IPReturnsLargeAmountSensitiveDataInShortTime
+		Risk.POST("/IPReturnsLargeAmountSensitiveDataInShortTime", controller.IPReturnsLargeAmountSensitiveDataInShortTime)
+
+		//dspm-账号爆破成功
+		Risk.POST("/ParameterIterationLogin", controller.ParameterIteration)
+		//dspm-账号共享
+		Risk.POST("/AccountShare", controller.AccountShare)
+
+		//dspm-应用的账号数超过历史基线
+		Risk.POST("/AppAccountMoreThanBaseLine", controller.AppAccountMoreThanBaseLine)
+
 		/***
 			定制:以下是安全事件相关的业务接口
 		***/

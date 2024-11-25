@@ -1,579 +1,596 @@
 {
-  "/user/1/login": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "password": "password123",
-        "ip_address": "192.168.1.1",
-        "device_id": "unique_device_id_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Login successful",
-        "token": "unique_token_12345"
-      }
-    }
-  },
-  "/user/1/logout": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "ip_address": "192.168.1.1"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Logout successful"
-      }
-    }
-  },
-  "/account/2/create": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "account_holder": "John Doe",
-        "password": "password123",
-        "email_address": "john.doe@qq.com"
-      }
-    },
-    "response": {
-      "status": 201,
-      "body": {
-        "message": "Account created successfully",
-        "account_id": "account_001"
-      }
-    }
-  },
-  "/account/2/details": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "account_holder": "John Doe"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "account_holder": "John Doe",
-        "id_number": "ID123456789",
-        "name": "John Doe",
-        "gender": "Male",
-        "birthday": "1990-01-01",
-        "address": "123 Main St, Springfield",
-        "email_address": "john.doe@qq.com",
-        "phone_number": "1234567890"
-      }
-    }
-  },
-  "/account/3/update": {
-    "request": {
-      "method": "PUT",
-      "body": {
-        "account_holder": "John Doe",
-        "id_number": "ID123456789",
-        "name": "Johnathan Doe",
-        "gender": "Male",
-        "birthday": "1990-01-01",
-        "address": "456 Elm St, Springfield",
-        "email_address": "johnathan.doe@qq.com",
-        "phone_number": "0987654321"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Account updated successfully"
-      }
-    }
-  },
-  "/transaction/4/initiate": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "transaction_amount": 100,
-        "transaction_date": "2023-10-10",
-        "transaction_type": "Withdrawal",
-        "payment_password": "paypassword123",
-        "account_number": "account_001"
-      }
-    },
-    "response": {
-      "status": 201,
-      "body": {
-        "message": "Transaction initiated successfully",
-        "transaction_id": "transaction_001"
-      }
-    }
-  },
-  "/transaction/5/status": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "transaction_amount": 100,
-        "transaction_date": "2023-10-10"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "transaction_amount": 100,
-        "transaction_status": "Completed",
-        "transaction_date": "2023-10-10"
-      }
-    }
-  },
-  "/transaction/6/history": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "account_number": "account_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "transaction_history": [
-          {
-            "transaction_id": "transaction_001",
-            "transaction_date": "2023-10-10",
-            "transaction_amount": 100,
-            "transaction_type": "Withdrawal"
-          },
-          {
-            "transaction_id": "transaction_002",
-            "transaction_date": "2023-10-11",
-            "transaction_amount": 200,
-            "transaction_type": "Deposit"
-          }
-        ]
-      }
-    }
-  },
-  "/investment/7/portfolio": {
-    "request": {
-      "method": "GET",
-      "body": {}
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "money_market": "50000",
-        "bonds": "100000",
-        "investment_funds": "150000"
-      }
-    }
-  },
-  "/investment/8/analysis": {
-    "request": {
-      "method": "GET",
-      "body": {}
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "total_risk_assets": "300000",
-        "investment_analysis_report": "Your investments are balanced and diversified."
-      }
-    }
-  },
-  "/loan/9/apply": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "loan_amount": 50000,
-        "loan_purpose": "Home Renovation",
-        "repayment_plan": "Monthly",
-        "borrower_info": {
-          "name": "John Doe",
-          "id_number": "ID123456789"
-        }
-      }
-    },
-    "response": {
-      "status": 201,
-      "body": {
-        "message": "Loan application submitted successfully",
-        "loan_id": "loan_001"
-      }
-    }
-  },
-  "/loan/10/status": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "loan_id": "loan_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "loan_balance": 48000,
-        "repayment_amount": 2000,
-        "repayment_date": "2023-11-01"
-      }
-    }
-  },
-  "/loan/11/repayment": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "repayment_amount": 2000,
-        "repayment_date": "2023-11-01"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Repayment successful",
-        "new_loan_balance": 46000
-      }
-    }
-  },
-  "/contract/12/create": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "contract_number": "contract_001",
-        "contract_amount": 100000,
-        "contract_term": "2 years",
-        "contract_type": "Service Agreement"
-      }
-    },
-    "response": {
-      "status": 201,
-      "body": {
-        "message": "Contract created successfully"
-      }
-    }
-  },
-  "/contract/13/details": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "contract_number": "contract_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "contract_status": "Active",
-        "contract_amount": 100000,
-        "contract_expiry_date": "2025-10-10",
-        "contract_start_date": "2023-10-10"
-      }
-    }
-  },
-  "/customer/14/profile": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "customer_id": "customer_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "name": "John Doe",
-        "gender": "Male",
-        "birthday": "1990-01-01",
-        "address": "123 Main St, Springfield",
-        "hometown": "Springfield",
-        "nationality": "American",
-        "ethnicity": "Caucasian",
-        "email_address": "john.doe@qq.com",
-        "phone_number": "1234567890"
-      }
-    }
-  },
-  "/customer/15/update": {
-    "request": {
-      "method": "PUT",
-      "body": {
-        "name": "Johnathan Doe",
-        "gender": "Male",
-        "birthday": "1990-01-01",
-        "address": "456 Elm St, Springfield",
-        "hometown": "Smallville",
-        "nationality": "American",
-        "ethnicity": "Caucasian",
-        "email_address": "johnathan.doe@qq.com",
-        "phone_number": "0987654321"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Profile updated successfully"
-      }
-    }
-  },
-  "/company/16/register": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "company_name": "Tech Innovators Inc.",
-        "credit_code": "1234567890",
-        "legal_representative": "Jane Smith",
-        "registered_capital": 1000000,
-        "industry_classification": "Technology",
-        "business_scope": "Software Development"
-      }
-    },
-    "response": {
-      "status": 201,
-      "body": {
-        "message": "Company registered successfully",
-        "company_id": "company_001"
-      }
-    }
-  },
-  "/company/17/details": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "company_id": "company_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "company_address": "456 Tech Park, Silicon Valley",
-        "company_name": "Tech Innovators Inc.",
-        "personnel_scale": "100-500",
-        "business_license": "BL1234567890",
-        "registered_capital": 1000000,
-        "industry_classification": "Technology",
-        "legal_representative": "Jane Smith"
-      }
-    }
-  },
-  "/bill/18/generate": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "bill_amount": 500,
-        "bill_date": "2023-10-01",
-        "payment_due_date": "2023-10-31"
-      }
-    },
-    "response": {
-      "status": 201,
-      "body": {
-        "message": "Bill generated successfully",
-        "bill_id": "bill_001"
-      }
-    }
-  },
-  "/bill/19/pay": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "payment_amount": 500,
-        "payment_date": "2023-10-10",
-        "account_number": "account_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Payment successful",
-        "new_balance": 0
-      }
-    }
-  },
-  "/report/20/monthly": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "month": "2023-09"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "monthly_report": {
-          "revenue": 100000,
-          "expenses": 50000,
-          "profit": 50000
+    "/user/login": {
+        "request": {
+            "method": "POST",
+            "url": "/user/login",
+            "body": {
+                "account": "user_account",
+                "password": "user_password",
+                "ip_address": "123.456.789.001"
+            }
         },
-        "accounting_items": "Revenue, Expenses, Profit"
-      }
-    }
-  },
-  "/report/21/annual": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "year": "2023"
-      }
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "token": "user_token_123456",
+                    "account": "user_account",
+                    "login_time": "2023-10-22T10:00:00Z"
+                }
+            }
+        }
     },
-    "response": {
-      "status": 200,
-      "body": {
-        "annual_report": {
-          "revenue": 1200000,
-          "expenses": 600000,
-          "profit": 600000
+    "/user/logout": {
+        "request": {
+            "method": "POST",
+            "url": "/user/logout",
+            "body": {
+                "account": "user_account",
+                "ip_address": "123.456.789.001",
+                "token": "user_token_123456"
+            }
         },
-        "accounting_items": "Revenue, Expenses, Profit"
-      }
-    }
-  },
-  "/risk/22/assessment": {
-    "request": {
-      "method": "GET",
-      "body": {}
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "risk_assessment_level": "Medium",
-        "risk_assessment_report": "Moderate risk noted in liquidity.",
-        "risk_management_measures": "Increase cash reserves."
-      }
-    }
-  },
-  "/compliance/23/check": {
-    "request": {
-      "method": "GET",
-      "body": {}
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "compliance_checklist": "Annual financial audit.",
-        "compliance_check_report": "Compliant with financial regulations."
-      }
-    }
-  },
-  "/notification/24/send": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "sms": "Your OTP is 123456.",
-        "email": "Please verify your email address.",
-        "mms": "Promotional offers from our store."
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Notifications sent successfully"
-      }
-    }
-  },
-  "/notification/25/logs": {
-    "request": {
-      "method": "GET",
-      "body": {}
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "notification_logs": [
-          {
-            "timestamp": "2023-10-01T10:00:00Z",
-            "notification_type": "SMS",
-            "status": "Sent"
-          },
-          {
-            "timestamp": "2023-10-01T11:00:00Z",
-            "notification_type": "Email",
-            "status": "Delivered"
-          },
-          {
-            "timestamp": "2023-10-01T12:00:00Z",
-            "notification_type": "MMS",
-            "status": "Failed"
-          }
-        ]
-      }
-    }
-  },
-  "/settings/26/preferences": {
-    "request": {
-      "method": "GET",
-      "body": {}
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "user_preferences": {
-          "language": "Chinese",
-          "theme": "Dark",
-          "notifications_enabled": true
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Logout successful"
+            }
         }
-      }
-    }
-  },
-  "/settings/27/security": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "security_settings": {
-          "password": "new_password123",
-          "two_factor_auth": true
+    },
+    "/user/register": {
+        "request": {
+            "method": "POST",
+            "url": "/user/register",
+            "body": {
+                "name": "张三",
+                "gender": "男",
+                "email": "zhangsan@qq.com",
+                "phone_number": "13800138000",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 201,
+            "body": {
+                "message": {
+                    "account": "user_account",
+                    "registration_time": "2023-10-22T10:05:00Z"
+                }
+            }
         }
-      }
     },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Security settings updated successfully"
-      }
-    }
-  },
-  "/support/28/ticket": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "ticket_id": "ticket_001",
-        "ticket_status": "Open",
-        "ticket_description": "Issue with login system."
-      }
-    },
-    "response": {
-      "status": 201,
-      "body": {
-        "message": "Support ticket created successfully"
-      }
-    }
-  },
-  "/support/29/status": {
-    "request": {
-      "method": "GET",
-      "body": {
-        "ticket_id": "ticket_001"
-      }
-    },
-    "response": {
-      "status": 200,
-      "body": {
-        "ticket_status": "In Progress",
-        "ticket_processing_time": "2023-10-10T10:00:00Z"
-      }
-    }
-  },
-  "/feedback/30/submit": {
-    "request": {
-      "method": "POST",
-      "body": {
-        "feedback_content": "Great service, very satisfied.",
-        "feedback_time": "2023-10-10T10:00:00Z",
-        "contact_information": {
-          "email": "customer@qq.com",
-          "phone": "1234567890"
+    "/user/15/profile": {
+        "request": {
+            "method": "GET",
+            "url": "/user/15/profile",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "name": "张三",
+                    "gender": "男",
+                    "address": "北京市海淀区",
+                    "email": "zhangsan@qq.com",
+                    "phone_number": "13800138000"
+                }
+            }
         }
-      }
     },
-    "response": {
-      "status": 200,
-      "body": {
-        "message": "Feedback submitted successfully"
-      }
+    "/user/10/updateProfile": {
+        "request": {
+            "method": "POST",
+            "url": "/user/10/updateProfile",
+            "body": {
+                "name": "李四",
+                "gender": "女",
+                "address": "北京市朝阳区",
+                "email": "lisi@qq.com",
+                "phone_number": "13900139000",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Profile updated successfully"
+            }
+        }
+    },
+    "/contract/7/create": {
+        "request": {
+            "method": "POST",
+            "url": "/contract/7/create",
+            "body": {
+                "contract_number": "CN1234567",
+                "start_date": "2023-10-22",
+                "end_date": "2024-10-22",
+                "amount": 100000,
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 201,
+            "body": {
+                "message": {
+                    "contract_number": "CN1234567",
+                    "create_date": "2023-10-22T10:10:00Z"
+                }
+            }
+        }
+    },
+    "/contract/13/get": {
+        "request": {
+            "method": "GET",
+            "url": "/contract/13/get",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "contract_number": "CN12345613",
+                    "status": "active",
+                    "amount": 200000,
+                    "term": "12 months"
+                }
+            }
+        }
+    },
+    "/contract/2/update": {
+        "request": {
+            "method": "POST",
+            "url": "/contract/2/update",
+            "body": {
+                "contract_number": "CN1234562",
+                "start_date": "2023-10-22",
+                "end_date": "2025-10-22",
+                "amount": 150000,
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Contract updated successfully"
+            }
+        }
+    },
+    "/contract/9/delete": {
+        "request": {
+            "method": "DELETE",
+            "url": "/contract/9/delete",
+            "body": {
+                "contract_number": "CN1234569",
+                "termination_date": "2023-10-22",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Contract deleted successfully"
+            }
+        }
+    },
+    "/company/5/add": {
+        "request": {
+            "method": "POST",
+            "url": "/company/5/add",
+            "body": {
+                "company_name": "新华有限公司",
+                "credit_code": "91110000100012345A",
+                "legal_representative": "王五",
+                "company_address": "北京市西城区",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 201,
+            "body": {
+                "message": {
+                    "company_name": "新华有限公司",
+                    "add_date": "2023-10-22T10:15:00Z"
+                }
+            }
+        }
+    },
+    "/company/11/update": {
+        "request": {
+            "method": "POST",
+            "url": "/company/11/update",
+            "body": {
+                "company_name": "光明有限责任公司",
+                "credit_code": "91110000100054321B",
+                "legal_representative": "赵六",
+                "company_address": "上海市浦东新区",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Company updated successfully"
+            }
+        }
+    },
+    "/company/3/delete": {
+        "request": {
+            "method": "DELETE",
+            "url": "/company/3/delete",
+            "body": {
+                "company_name": "大华有限责任公司",
+                "credit_code": "91110000100012345C",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Company deleted successfully"
+            }
+        }
+    },
+    "/company/18/get": {
+        "request": {
+            "method": "GET",
+            "url": "/company/18/get",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "company_name": "红星有限责任公司",
+                    "credit_code": "91110000100078945D",
+                    "legal_representative": "孙七",
+                    "company_address": "上海市徐汇区"
+                }
+            }
+        }
+    },
+    "/transaction/4/transfer": {
+        "request": {
+            "method": "POST",
+            "url": "/transaction/4/transfer",
+            "body": {
+                "transfer_amount": 5000,
+                "transaction_date": "2023-10-22T10:20:00Z",
+                "transaction_id": "TX12345678",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Transfer completed successfully"
+            }
+        }
+    },
+    "/transaction/16/history": {
+        "request": {
+            "method": "GET",
+            "url": "/transaction/16/history",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": [
+                    {
+                        "transaction_date": "2023-10-21",
+                        "amount": 3000,
+                        "type": "credit"
+                    },
+                    {
+                        "transaction_date": "2023-10-20",
+                        "amount": 2000,
+                        "type": "debit"
+                    }
+                ]
+            }
+        }
+    },
+    "/transaction/6/status": {
+        "request": {
+            "method": "GET",
+            "url": "/transaction/6/status",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "transaction_date": "2023-10-22",
+                    "amount": 1500,
+                    "status": "pending",
+                    "transaction_id": "TX12345679"
+                }
+            }
+        }
+    },
+    "/loan/8/apply": {
+        "request": {
+            "method": "POST",
+            "url": "/loan/8/apply",
+            "body": {
+                "loan_amount": 500000,
+                "loan_term": "24 months",
+                "loan_purpose": "Business expansion",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 201,
+            "body": {
+                "message": {
+                    "loan_id": "LN1234568",
+                    "apply_date": "2023-10-22T10:25:00Z"
+                }
+            }
+        }
+    },
+    "/loan/20/get": {
+        "request": {
+            "method": "GET",
+            "url": "/loan/20/get",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "loan_id": "LN12345620",
+                    "balance": 300000,
+                    "interest_rate": "5%"
+                }
+            }
+        }
+    },
+    "/loan/14/update": {
+        "request": {
+            "method": "POST",
+            "url": "/loan/14/update",
+            "body": {
+                "loan_id": "LN12345614",
+                "balance": 250000,
+                "interest_rate": "4.5%",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Loan updated successfully"
+            }
+        }
+    },
+    "/loan/12/repay": {
+        "request": {
+            "method": "POST",
+            "url": "/loan/12/repay",
+            "body": {
+                "loan_id": "LN12345612",
+                "repayment_amount": 10000,
+                "repayment_date": "2023-10-22",
+                "repayment_method": "Bank transfer",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Repayment completed successfully"
+            }
+        }
+    },
+    "/investment/1/start": {
+        "request": {
+            "method": "POST",
+            "url": "/investment/1/start",
+            "body": {
+                "investment_amount": 10000,
+                "investment_date": "2023-10-22",
+                "product_name": "Growth Fund",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 201,
+            "body": {
+                "message": {
+                    "investment_id": "IV1234561",
+                    "start_date": "2023-10-22T10:30:00Z"
+                }
+            }
+        }
+    },
+    "/investment/17/getStatus": {
+        "request": {
+            "method": "GET",
+            "url": "/investment/17/getStatus",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "product_name": "Income Fund",
+                    "investment_amount": 20000,
+                    "status": "active"
+                }
+            }
+        }
+    },
+    "/investment/19/withdraw": {
+        "request": {
+            "method": "POST",
+            "url": "/investment/19/withdraw",
+            "body": {
+                "product_name": "Balance Fund",
+                "investment_amount": 15000,
+                "withdrawal_date": "2023-10-22",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Withdrawal completed successfully"
+            }
+        }
+    },
+    "/report/2/generate": {
+        "request": {
+            "method": "POST",
+            "url": "/report/2/generate",
+            "body": {
+                "report_id": "RP1234562",
+                "generate_date": "2023-10-22",
+                "report_title": "Monthly Financial Report",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 201,
+            "body": {
+                "message": {
+                    "report_id": "RP1234562",
+                    "generate_date": "2023-10-22T10:35:00Z"
+                }
+            }
+        }
+    },
+    "/report/13/view": {
+        "request": {
+            "method": "GET",
+            "url": "/report/13/view",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": {
+                    "report_id": "RP12345613",
+                    "view_date": "2023-10-22",
+                    "report_title": "Quarterly Sales Report"
+                }
+            }
+        }
+    },
+    "/report/9/emailReport": {
+        "request": {
+            "method": "POST",
+            "url": "/report/9/emailReport",
+            "body": {
+                "report_id": "RP1234569",
+                "report_title": "Annual Performance Report",
+                "email_address": "example@qq.com",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Report emailed successfully"
+            }
+        }
+    },
+    "/notification/4/send": {
+        "request": {
+            "method": "POST",
+            "url": "/notification/4/send",
+            "body": {
+                "notification_id": "NT1234564",
+                "send_date": "2023-10-22",
+                "send_content": "Your transaction has been processed.",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Notification sent successfully"
+            }
+        }
+    },
+    "/notification/11/history": {
+        "request": {
+            "method": "GET",
+            "url": "/notification/11/history",
+            "body": {
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": [
+                    {
+                        "notification_id": "NT12345611",
+                        "send_date": "2023-10-21",
+                        "send_content": "Your account has been updated."
+                    },
+                    {
+                        "notification_id": "NT12345610",
+                        "send_date": "2023-10-20",
+                        "send_content": "Your loan application has been approved."
+                    }
+                ]
+            }
+        }
+    },
+    "/feedback/10/submit": {
+        "request": {
+            "method": "POST",
+            "url": "/feedback/10/submit",
+            "body": {
+                "feedback_id": "FB12345610",
+                "submit_date": "2023-10-22",
+                "feedback_content": "The new interface is user-friendly.",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Feedback submitted successfully"
+            }
+        }
+    },
+    "/feedback/7/reply": {
+        "request": {
+            "method": "POST",
+            "url": "/feedback/7/reply",
+            "body": {
+                "feedback_id": "FB1234567",
+                "reply_date": "2023-10-22",
+                "reply_content": "Thank you for your feedback.",
+                "token": "user_token_123456"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "message": "Reply sent successfully"
+            }
+        }
     }
-  }
 }
